@@ -1,9 +1,6 @@
 const { model, Schema } = require("mongoose");
-const bcrypt = require("bcrypt");
-const Offers = require("./Offers");
-const Order = require("./Order");
 
-const userSchema = {
+const restaurantSchema = {
   name: {
     type: String,
     required: true,
@@ -24,21 +21,18 @@ const userSchema = {
     maxLength: 13,
     minLength: 11,
   },
+  categories: [{ type: Schema.Types.ObjectId, ref: "Category" }],
   offers: [{ type: Schema.Types.ObjectId, ref: "Offers" }],
   orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
   menus: [{ type: Schema.Types.ObjectId, ref: "Menu" }],
 };
 
-const schema = new Schema(userSchema, {
+const schema = new Schema(restaurantSchema, {
   toJSON: {
     getters: true,
   },
   id: true,
 });
-
-schema.methods.checkPassword = async function (password) {
-  return bcrypt.compare(password, this.password);
-};
 
 const Restaurant = model("Restaurant", schema);
 

@@ -38,17 +38,4 @@ async function startApolloServer(typeDefs, resolvers) {
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 startApolloServer(typeDefs, resolvers);
-// const server = new ApolloServer({
-//   typeDefs,
-//   resolvers,
-//   context: authMiddleware,
-// });
-// const initApp = async () => {
-//   await server.start();
-//   server.applyMiddleware({ app });
-//   //   connect to db
-//   app.listen({ port: 4000 }, () =>
-//     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-//   );
-// };
-// initApp();
+

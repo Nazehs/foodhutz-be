@@ -37,6 +37,10 @@ const orderSchema = {
   actualDeliveryTime: {
     type: Date,
   },
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: "Category",
+  },
 };
 
 const schema = new Schema(orderSchema, {
