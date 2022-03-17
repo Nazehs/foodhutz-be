@@ -1,0 +1,78 @@
+Modules:
+user module(customer, driver):
+sign up
+login
+delete user
+update user
+get users
+get user
+reset password
+change status
+
+Order Module():
+modify Order(accept and reject included here)
+delete Order
+create order
+get user orders
+get all orders
+get single order
+
+
+Payment module(driver, customer):
+create Payment details
+delete Payment
+update payment
+get user payments
+get all payments
+get total earnings
+send withdrawal request 
+
+
+
+Trips Module:
+create a trip
+delete trip(admin)
+update a trip
+get a trip info
+get all trips
+near by restaurants
+
+
+
+Restaurant Module:
+create a Restaurant
+delete a Restaurant
+update a Restaurant
+get a Restaurant
+create a menu
+update a menu
+delete a menu
+get a menu
+create coupon sale
+delete a coupon sale
+update a coupon sale
+upload menu items
+delete menu items
+change status
+get items from a Restaurant
+get item info
+
+
+Chat Module:
+create a Chat
+get chats
+delete chats
+update chats
+
+Account Module:
+user favourites
+user address
+user preferences
+offers
+orders
+profile info
+
+
+Msc Items:
+contact us
+documents upload
