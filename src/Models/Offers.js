@@ -24,7 +24,7 @@ const offersSchema = {
     required: true,
   },
   offer_price: {
-    type: Schema.Types.Decimal128,
+    type: Schema.Types.Decimal,
     required: true,
   },
 };

@@ -1,6 +1,4 @@
 const { model, Schema } = require("mongoose");
-const bcrypt = require("bcrypt");
-
 const userSchema = {
   firstName: {
     type: String,
@@ -30,6 +28,9 @@ const userSchema = {
     required: true,
     maxLength: 100,
   },
+  // driver close to that that location should be able to get the notifications and it will
+  // only show only for who accepted it for the delivery
+  notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
   userType: {
     type: String,
     enum: ["DRIVER", "USER", "RESTAURANT"],
@@ -44,10 +45,17 @@ const userSchema = {
     type: Boolean,
     default: false,
   },
-  bankDetails: {
-    type: Schema.Types.ObjectId,
-    ref: "BankDetail",
+  status: {
+    type: Boolean,
+    default: false,
   },
+  bankDetails: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "BankDetail",
+    },
+  ],
+  orders: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
   trips: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
 };
 

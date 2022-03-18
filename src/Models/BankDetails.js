@@ -14,6 +14,10 @@ const bankSchema = {
     type: String,
     required: true,
   },
+  isDefault: {
+    type: Boolean,
+    required: true,
+  },
 };
 
 const schema = new Schema(bankSchema, {

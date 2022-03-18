@@ -7,9 +7,6 @@ const db = async () => {
         "mongodb://localhost:27017/foodhutz?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false",
       {
         useNewUrlParser: true,
-        //   useUnifiedTopology: true,
-        //   useFindAndModify: false,
-        //   useCreateIndex: true,
       }
     );
     console.log("Connection successful!");

@@ -1,7 +1,7 @@
 const { ApolloError } = require("apollo-server-express");
 const { Trip } = require("../models");
 
-const trips = async (_, { input }) => {
+const createTrip = async (_, { input }) => {
   try {
     await Trip.create(input);
 
@@ -12,4 +12,4 @@ const trips = async (_, { input }) => {
   }
 };
 
-module.exports = trips;
+module.exports = createTrip;

@@ -1,7 +1,7 @@
 const { ApolloError } = require("apollo-server-express");
 const { Restaurant } = require("../models");
 
-const restaurants = async (_, { input }) => {
+const createRestaurants = async (_, { input }) => {
   console.log(input);
   try {
     return await Restaurant.create(input);
@@ -11,4 +11,4 @@ const restaurants = async (_, { input }) => {
   }
 };
 
-module.exports = restaurants;
+module.exports = createRestaurants;
