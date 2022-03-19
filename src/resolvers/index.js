@@ -17,45 +17,45 @@ const dateScalar = new GraphQLScalarType({
   },
 });
 // create resolvers
-const login = require("./login");
-const signup = require("./signup");
-const createMenu = require("./createMenu");
-const createRestaurant = require("./createRestaurant");
-const createTrip = require("./createTrips");
-const createCategory = require("./createCategory");
-const createMeal = require("./createMeal");
-const createOffer = require("./createOffer");
-const createOrder = require("./createOrder");
+const login = require("./user/login");
+const signup = require("./user/signup");
+const createMenu = require("./menu/createMenu");
+const createRestaurant = require("./restaurant/createRestaurant");
+const createTrip = require("./trip/createTrips");
+const createCategory = require("./category/createCategory");
+const createMeal = require("./meal/createMeal");
+const createOffer = require("./offer/createOffer");
+const createOrder = require("./order/createOrder");
 
 // delete resolvers
-const deleteUser = require("./deleteUser");
-const deleteOffer = require("./deleteOffer");
-const deleteCategory = require("./deleteCategory");
-const deleteMeal = require("./deleteMeal");
-const deleteRestaurant = require("./deleteRestaurant");
-const deleteTrip = require("./deleteTrip");
+const deleteUser = require("./user/deleteUser");
+const deleteOffer = require("./offer/deleteOffer");
+const deleteCategory = require("./category/deleteCategory");
+const deleteMeal = require("./meal/deleteMeal");
+const deleteRestaurant = require("./restaurant/deleteRestaurant");
+const deleteTrip = require("./trip/deleteTrip");
 
 // query resolvers
-const getMeal = require("./getMeal");
-const getUser = require("./getUser");
-const getAllUsers = require("./getAllUsers");
-const getTrip = require("./getTrip");
-const getOrder = require("./getOrder");
-const getRestaurant = require("./getRestaurant");
-const getOffer = require("./getOffer");
-const getCategory = require("./getCategory");
-const getAllMenus = require("./getAllMenus");
-const getAllRestaurants = require("./getAllRestaurants");
-const getAllTrips = require("./getAllTrips");
-const getAllOrders = require("./getAllOrders");
+const getMeal = require("./meal/getMeal");
+const getUser = require("./user/getUser");
+const getAllUsers = require("./user/getAllUsers");
+const getTrip = require("./trip/getTrip");
+const getOrder = require("./order/getOrder");
+const getRestaurant = require("./restaurant/getRestaurant");
+const getOffer = require("./offer/getOffer");
+const getCategory = require("./category/getCategory");
+const getAllMenus = require("./menu/getAllMenus");
+const getAllRestaurants = require("./restaurant/getAllRestaurants");
+const getAllTrips = require("./trip/getAllTrips");
+const getAllOrders = require("./order/getAllOrders");
 // update resolvers
-const updateUser = require("./updateUser");
-const updateCategory = require("./updateCategory");
-const updateMeal = require("./updateMeal");
-const updateTrip = require("./updateTrip");
-const updateOffer = require("./updateOffer");
-const updateOrder = require("./updateOrder");
-const updateRestaurant = require("./updateRestaurant");
+const updateUser = require("./user/updateUser");
+const updateCategory = require("./category/updateCategory");
+const updateMeal = require("./meal/updateMeal");
+const updateTrip = require("./trip/updateTrip");
+const updateOffer = require("./offer/updateOffer");
+const updateOrder = require("./order/updateOrder");
+const updateRestaurant = require("./restaurant/updateRestaurant");
 
 const resolvers = {
   Date: dateScalar,

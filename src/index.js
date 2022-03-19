@@ -21,18 +21,6 @@ async function startApolloServer(typeDefs, resolvers) {
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
-  // new ApolloServer({
-  //   schema: makeExecutableSchema({
-  //     typeDefs: [...DateTimeTypeDefinition, typeDefs],
-  //     resolvers: {
-  //       ...DateTimeResolver,
-  //       resolvers,
-  //     },
-  //     context: authMiddleware,
-  //     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-  //   }),
-  // });
-
   // More required logic for integrating with Express
   await server.start();
   //   await db();
@@ -49,6 +37,7 @@ async function startApolloServer(typeDefs, resolvers) {
   await new Promise((resolve) =>
     httpServer.listen({ port: process.env.PORT || 4000 }, resolve)
   );
+  // console.log(url);
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 startApolloServer(typeDefs, resolvers);
