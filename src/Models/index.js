@@ -1,10 +1,20 @@
 const User = require("./User");
 const Menu = require("./Menu");
 const Offers = require("./Offers");
-const Orders = require("./Order");
+const Order = require("./Order");
 const Restaurant = require("./Restaurant");
-const Trips = require("./Trips");
+const Trip = require("./Trip");
 const Meal = require("./Meal");
 const Category = require("./Category");
 const BankDetails = require("./BankDetails");
-module.exports = { User, Orders, Offers, Menu, Trips, Meal, Restaurant };
+module.exports = {
+  User,
+  Order,
+  Offers,
+  Category,
+  BankDetails,
+  Menu,
+  Trip,
+  Meal,
+  Restaurant,
+};

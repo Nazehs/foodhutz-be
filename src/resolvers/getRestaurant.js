@@ -8,7 +8,11 @@ const getRestaurant = async (_, { restaurantId }, { user }) => {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
 
-    return await Restaurant.findById(restaurantId);
+    return await Restaurant.findById(restaurantId)
+      .populate("categories")
+      .populate("orders")
+      .populate("menus")
+      .populate("offers");
   } catch (error) {
     console.log(`[ERROR]: Failed to get restaurant details | ${error.message}`);
     throw new ApolloError("Failed to get restaurant details ");

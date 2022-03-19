@@ -2,9 +2,9 @@ const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
 const { User } = require("../models");
 
-const getUser = async (_, __, context) => {
+const getUser = async (_, __, { user }) => {
   try {
-    if (!context.user) {
+    if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
 

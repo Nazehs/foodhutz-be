@@ -14,8 +14,13 @@ const bankSchema = {
     type: String,
     required: true,
   },
+  sortCode: {
+    type: String,
+    required: true,
+  },
   isDefault: {
     type: Boolean,
+    default: false,
     required: true,
   },
 };

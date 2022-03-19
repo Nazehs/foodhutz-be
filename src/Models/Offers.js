@@ -1,5 +1,4 @@
 const { model, Schema } = require("mongoose");
-const bcrypt = require("bcrypt");
 
 const offersSchema = {
   name: {
@@ -7,23 +6,23 @@ const offersSchema = {
     required: true,
     maxLength: 50,
   },
-  date_active_from: {
+  dateActiveFrom: {
     type: Date,
     required: true,
   },
-  time_active_from: {
+  timeActiveFrom: {
     type: Date,
     required: true,
   },
-  time_active_to: {
+  timeActiveTo: {
     type: Date,
     required: true,
   },
-  date_active_to: {
+  dateActiveTo: {
     type: Date,
     required: true,
   },
-  offer_price: {
+  offerPrice: {
     type: Schema.Types.Decimal,
     required: true,
   },

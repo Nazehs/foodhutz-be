@@ -11,6 +11,10 @@ const restaurantSchema = {
     required: true,
     maxLength: 200,
   },
+  email: {
+    type: String,
+    maxLength: 50,
+  },
   city: {
     type: String,
     required: true,

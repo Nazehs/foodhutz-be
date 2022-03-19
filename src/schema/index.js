@@ -1,6 +1,7 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
+  scalar Date
   type User {
     id: ID!
     firstName: String!
@@ -22,6 +23,137 @@ const typeDefs = gql`
   }
   type Restaurant {
     id: ID!
+    name: String!
+    email: String!
+    city: String!
+    address: String!
+    phoneNumber: String!
+    categories: [Category]
+    orders: [Order]
+    offers: [Offer]
+    menus: [Menu]
+  }
+
+  type Order {
+    id: ID!
+    name: String!
+    restaurant: Restaurant
+    discount: Float
+    deliveryAddress: String!
+    actualDeliveryTime: Date!
+    category: ID!
+    comment: String!
+    customer: String!
+    estimatedDeliveryTime: Date
+    finalPrice: Float!
+    orderTime: Date!
+  }
+  type Offer {
+    id: ID!
+    name: String!
+    timeActiveTo: Date!
+    dateActiveFrom: Date!
+    timeActiveFrom: Date!
+    dateActiveTo: Date!
+    offerPrice: Float!
+  }
+
+  type Trip {
+    id: ID!
+    from: String!
+    to: String!
+    arrivalTime: Date!
+    startTime: Date!
+    order: ID
+  }
+  type Menu {
+    id: ID!
+    isActive: Boolean!
+    name: String!
+    category: String!
+    ingredients: [String!]
+    description: String!
+    price: Float!
+    recipes: [String]!
+  }
+  type BankDetail {
+    id: ID!
+    bankName: String!
+    fullName: String!
+    accountNumber: String!
+    sortCode: String!
+    isDefault: Boolean!
+  }
+  type Category {
+    name: String!
+    id: ID!
+  }
+  type Meal {
+    id: ID!
+  }
+  type AllOrders {
+    status: Int!
+    success: Boolean!
+    orders: [Order]
+  }
+
+  type AllMenus {
+    status: Int!
+    success: String
+    menus: [Menu]
+  }
+  type AllRestaurants {
+    status: Int!
+    success: Boolean!
+    restaurants: [Restaurant]
+  }
+  type AllCategory {
+    status: Int!
+    success: String
+    categories: [Category]
+  }
+  type AllTrips {
+    status: Int!
+    success: Boolean!
+    trips: [Trip]
+  }
+  type AllOffers {
+    status: Int!
+    success: String
+    offers: [Offer]
+  }
+  input CategoryInput {
+    name: String!
+  }
+  input MealInput {
+    id: ID!
+  }
+  input RestaurantInput {
+    name: String!
+    email: String!
+    city: String!
+    address: String!
+    phoneNumber: String!
+    categories: [ID]
+    orders: [ID]
+    offers: [ID]
+    menus: [ID]
+  }
+  input OfferInput {
+    name: String!
+    timeActiveTo: Date!
+    dateActiveFrom: Date!
+    timeActiveFrom: Date!
+    dateActiveTo: Date!
+    offerPrice: Float!
+  }
+  input OfferInputUpdate {
+    name: String
+    timeActiveTo: Date
+    dateActiveFrom: Date
+    timeActiveFrom: Date
+    dateActiveTo: Date
+    offerPrice: Float
   }
   input LoginInput {
     email: String!
@@ -47,43 +179,96 @@ const typeDefs = gql`
     password: String
   }
 
+  input TripInput {
+    from: String!
+    to: String!
+    arrivalTime: Date!
+    startTime: Date!
+    order: ID!
+  }
+  input TripUpdateInput {
+    from: String
+    to: String
+    arrivalTime: Date
+    startTime: Date
+    order: ID
+  }
+  input MenuInput {
+    isActive: Boolean!
+    name: String!
+    category: String!
+    ingredients: [String!]
+    description: String!
+    price: Float!
+    recipes: [String]!
+  }
+  input OrderInput {
+    name: String!
+    restaurant: ID!
+    discount: Float
+    deliveryAddress: String!
+    actualDeliveryTime: Date!
+    category: ID!
+    comment: String!
+    customer: String!
+    estimatedDeliveryTime: Date
+    finalPrice: Float!
+    orderTime: Date!
+  }
+  input MenuInputUpdate {
+    isActive: Boolean
+    name: String
+    category: String
+    ingredients: String
+    description: String
+    price: Float
+    recipes: [String]
+  }
   type Query {
     getUser(userId: ID!): User!
     getAllUsers: AllUsers
-    getMeal(mealId: ID!): String
-    getMenus: User!
-    getRestaurants: User!
-    getSingleRestaurant(id: ID!): User!
-    getCategory(mealId: ID!): String
-    getOffer(mealId: ID!): String
-    getTrip(mealId: ID!): String
-    getRestaurant(mealId: ID!): String
+    getMeal(mealId: ID!): Meal
+    getAllCategory: AllCategory
+    getAllMenus: AllMenus!
+    getAllTrips: AllTrips!
+    getAllOffers: AllMenus!
+    getAllOrders: AllOrders
+    getBankDetails(userId: ID): BankDetail
+    getRestaurants: Restaurant!
+    getAllRestaurants: AllRestaurants!
+    getCategory(categoryId: ID!): Category
+    getOffer(offerId: ID!): Offer
+    getTrip(tripId: ID!): Trip
+    getOrder(orderId: ID!): Order
+    getRestaurant(restaurantId: ID!): Restaurant
   }
   type Mutation {
     # update
     updateUser(input: UpdateUserInput!): Auth!
-    updateMenu(menuId: ID!, input: LoginInput): Auth!
-    updateRestaurant(menuId: ID!, input: LoginInput): Auth!
-    updateCategory(menuId: ID!, input: LoginInput): Auth!
-    updateTrip(menuId: ID!, input: LoginInput): Auth!
-    updateOffer(menuId: ID!, input: LoginInput): Auth!
-    updateMeal(menuId: ID!, input: LoginInput): Auth!
+    updateMenu(menuId: ID!, input: MenuInputUpdate): Menu!
+    updateRestaurant(restaurantId: ID!, input: RestaurantInput): Restaurant!
+    updateCategory(categoryId: ID!, input: CategoryInput): Category!
+    updateTrip(tripId: ID!, input: TripUpdateInput): Trip!
+    updateOffer(offerId: ID!, input: OfferInputUpdate): Offer!
+    updateMeal(mealId: ID!, input: LoginInput): Meal!
+    updateOrder(orderId: ID!): Order
     # delete
     deleteUser(userId: ID): Auth!
-    deleteOffer(userId: ID): Auth!
-    deleteCategory(userId: ID): Auth!
-    deleteMeal(userId: ID): Auth!
-    deleteRestaurant(userId: ID): Auth!
-    deleteTrip(userId: ID): Auth!
+    deleteOffer(offerId: ID): Offer!
+    deleteCategory(categoryId: ID): Category!
+    deleteMeal(mealId: ID): Meal!
+    deleteRestaurant(restaurantId: ID): Restaurant!
+    deleteTrip(tripId: ID): Trip!
     # create
     login(input: LoginInput!): Auth!
     signup(input: SignupInput!): Auth!
-    createMenu(input: String): Auth!
-    createCategory(input: String): Auth!
-    createMeal(input: String): Auth!
-    createOffer(input: String): Auth!
-    createRestaurant(input: String): Auth!
-    createTrip(input: String): Auth!
+    createMenu(input: MenuInput): Menu!
+    createCategory(input: CategoryInput): Category!
+    createMeal(input: String): Meal!
+    createOffer(input: OfferInput): Offer!
+    createRestaurant(input: RestaurantInput): Restaurant!
+    createTrip(input: TripInput): Trip!
+    createOrder(input: OrderInput): Order
   }
 `;
 

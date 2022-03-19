@@ -7,9 +7,8 @@ const createTrip = async (_, { input }) => {
 
     return await Trip.create(input);
   } catch (error) {
-    console.log(`[ERROR]: Failed to sign up | ${error.message}`);
-    throw new ApolloError("Failed to sign up");
+    console.log(`[ERROR]: Failed to create trip | ${error.message}`);
+    throw new ApolloError("Failed to create trip");
   }
 };
-
 module.exports = createTrip;

@@ -1,29 +1,25 @@
 const { model, Schema } = require("mongoose");
 
 const offersSchema = {
-  name: {
+  from: {
     type: String,
     required: true,
-    maxLength: 50,
   },
-  date_active_from: {
+  to: {
+    type: String,
+    required: true,
+  },
+  startTime: {
     type: Date,
     required: true,
   },
-  time_active_from: {
+  arrivalTime: {
     type: Date,
     required: true,
   },
-  time_active_to: {
-    type: Date,
-    required: true,
-  },
-  date_active_to: {
-    type: Date,
-    required: true,
-  },
-  offer_price: {
-    type: Schema.Types.Decimal,
+  order: {
+    type: Schema.Types.ObjectId,
+    ref: "Order",
     required: true,
   },
 };

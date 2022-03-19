@@ -21,17 +21,12 @@ const menuSchema = {
     required: true,
     maxLength: 50,
   },
-  recipes: {
-    type: [{ type: String }],
-    required: true,
-    maxLength: 50,
-  },
+  recipes: [{ type: String }],
   price: {
-    type: Schema.Types.Decimal128,
+    type: Schema.Types.Decimal,
     required: true,
-    maxLength: 12,
   },
-  status: {
+  isActive: {
     type: Boolean,
     default: false,
   },
