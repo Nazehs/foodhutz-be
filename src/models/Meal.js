@@ -23,7 +23,7 @@ const mealSchema = {
   },
   recipes: [{ type: String }],
   price: {
-    type: Schema.Types.Decimal,
+    type: Number,
     required: true,
     maxLength: 12,
   },

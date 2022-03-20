@@ -23,7 +23,7 @@ const offersSchema = {
     required: true,
   },
   offerPrice: {
-    type: Schema.Types.Decimal,
+    type: Number,
     required: true,
   },
 };

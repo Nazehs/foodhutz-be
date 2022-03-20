@@ -22,7 +22,7 @@ const menuSchema = {
   },
   recipes: [{ type: String }],
   price: {
-    type: Schema.Types.Decimal,
+    type: Number,
     required: true,
   },
   isActive: {
