@@ -41,9 +41,9 @@ const typeDefs = gql`
     discount: Float
     deliveryAddress: String!
     actualDeliveryTime: Date!
-    category: ID!
+    category: Category!
     comment: String!
-    customer: String!
+    customer: User!
     estimatedDeliveryTime: Date
     finalPrice: Float!
     orderTime: Date!
@@ -64,13 +64,13 @@ const typeDefs = gql`
     to: String!
     arrivalTime: Date!
     startTime: Date!
-    order: ID
+    order: Order
   }
   type Menu {
     id: ID!
     isActive: Boolean!
     name: String!
-    category: String!
+    category: Category!
     ingredients: [String!]
     description: String!
     price: Float!
@@ -85,8 +85,8 @@ const typeDefs = gql`
     isDefault: Boolean!
   }
   type Category {
-    name: String!
     id: ID!
+    name: String!
   }
   type Meal {
     id: ID!
@@ -109,7 +109,7 @@ const typeDefs = gql`
   }
   type AllCategory {
     status: Int!
-    success: String
+    success: Boolean!
     categories: [Category]
   }
   type AllTrips {
@@ -129,11 +129,11 @@ const typeDefs = gql`
     id: ID!
   }
   input RestaurantInput {
-    name: String!
-    email: String!
-    city: String!
-    address: String!
-    phoneNumber: String!
+    name: String
+    email: String
+    city: String
+    address: String
+    phoneNumber: String
     categories: [ID]
     orders: [ID]
     offers: [ID]
@@ -203,17 +203,17 @@ const typeDefs = gql`
     recipes: [String]!
   }
   input OrderInput {
-    name: String!
-    restaurant: ID!
+    name: String
+    restaurant: ID
     discount: Float
-    deliveryAddress: String!
-    actualDeliveryTime: Date!
-    category: ID!
-    comment: String!
-    customer: String!
+    deliveryAddress: String
+    actualDeliveryTime: Date
+    category: ID
+    comment: String
+    customer: ID
     estimatedDeliveryTime: Date
-    finalPrice: Float!
-    orderTime: Date!
+    finalPrice: Float
+    orderTime: Date
   }
   input MenuInputUpdate {
     isActive: Boolean
@@ -223,6 +223,13 @@ const typeDefs = gql`
     description: String
     price: Float
     recipes: [String]
+  }
+  input BankDetailInput {
+    bankName: String
+    fullName: String
+    accountNumber: String
+    sortCode: String
+    isDefault: Boolean
   }
   type Query {
     getUser(userId: ID!): User!
@@ -234,7 +241,6 @@ const typeDefs = gql`
     getAllOffers: AllMenus!
     getAllOrders: AllOrders
     getBankDetails(userId: ID): BankDetail
-    getRestaurants: Restaurant!
     getAllRestaurants: AllRestaurants!
     getCategory(categoryId: ID!): Category
     getOffer(offerId: ID!): Offer
@@ -245,13 +251,15 @@ const typeDefs = gql`
   type Mutation {
     # update
     updateUser(input: UpdateUserInput!): Auth!
-    updateMenu(menuId: ID!, input: MenuInputUpdate): Menu!
-    updateRestaurant(restaurantId: ID!, input: RestaurantInput): Restaurant!
-    updateCategory(categoryId: ID!, input: CategoryInput): Category!
-    updateTrip(tripId: ID!, input: TripUpdateInput): Trip!
-    updateOffer(offerId: ID!, input: OfferInputUpdate): Offer!
+    updateMenu(menuId: ID!, input: MenuInputUpdate!): Menu!
+    updateRestaurant(restaurantId: ID!, input: RestaurantInput!): Restaurant!
+    updateCategory(categoryId: ID!, input: CategoryInput!): Category!
+    updateTrip(tripId: ID!, input: TripUpdateInput!): Trip!
+    updateOffer(offerId: ID!, input: OfferInputUpdate!): Offer!
     updateMeal(mealId: ID!, input: LoginInput): Meal!
-    updateOrder(orderId: ID!): Order
+    updateOrder(orderId: ID!, input: OrderInput!): Order!
+    updateBankDetails(bankId: ID!, input: BankDetailInput!): BankDetail
+
     # delete
     deleteUser(userId: ID): Auth!
     deleteOffer(offerId: ID): Offer!
@@ -259,6 +267,8 @@ const typeDefs = gql`
     deleteMeal(mealId: ID): Meal!
     deleteRestaurant(restaurantId: ID): Restaurant!
     deleteTrip(tripId: ID): Trip!
+    deleteBankDetails(bankId: ID!): BankDetail
+    deleteMenu(menuId: ID!): Menu
     # create
     login(input: LoginInput!): Auth!
     signup(input: SignupInput!): Auth!
@@ -269,6 +279,7 @@ const typeDefs = gql`
     createRestaurant(input: RestaurantInput): Restaurant!
     createTrip(input: TripInput): Trip!
     createOrder(input: OrderInput): Order
+    createBankDetails(input: BankDetailInput): BankDetail
   }
 `;
 

@@ -19,6 +19,7 @@ async function startApolloServer(typeDefs, resolvers) {
     resolvers,
     context: authMiddleware,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    introspection: process.env.NODE_ENV !== "production",
   });
 
   // More required logic for integrating with Express

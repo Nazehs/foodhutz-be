@@ -8,9 +8,7 @@ const getUser = async (_, __, { user }) => {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
 
-    const user = await User.findById(context.user.id);
-
-    return user;
+    return await User.findById(user.id);
   } catch (error) {
     console.log(`[ERROR]: Failed to get user details | ${error.message}`);
     throw new ApolloError("Failed to get user details");

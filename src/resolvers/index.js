@@ -26,6 +26,7 @@ const createCategory = require("./category/createCategory");
 const createMeal = require("./meal/createMeal");
 const createOffer = require("./offer/createOffer");
 const createOrder = require("./order/createOrder");
+const createBankDetails = require("./bankDetails/createBankDetails");
 
 // delete resolvers
 const deleteUser = require("./user/deleteUser");
@@ -34,6 +35,8 @@ const deleteCategory = require("./category/deleteCategory");
 const deleteMeal = require("./meal/deleteMeal");
 const deleteRestaurant = require("./restaurant/deleteRestaurant");
 const deleteTrip = require("./trip/deleteTrip");
+const deleteBankDetails = require("./bankDetails/deleteBankDetails");
+const deleteMenu = require("./menu/deleteMenu");
 
 // query resolvers
 const getMeal = require("./meal/getMeal");
@@ -44,10 +47,13 @@ const getOrder = require("./order/getOrder");
 const getRestaurant = require("./restaurant/getRestaurant");
 const getOffer = require("./offer/getOffer");
 const getCategory = require("./category/getCategory");
+const getAllCategory = require("./category/getAllCategory");
 const getAllMenus = require("./menu/getAllMenus");
 const getAllRestaurants = require("./restaurant/getAllRestaurants");
 const getAllTrips = require("./trip/getAllTrips");
 const getAllOrders = require("./order/getAllOrders");
+const getBankDetails = require("./bankDetails/getBankDetails");
+const getAllOffers = require("./offer/getAllOffers");
 // update resolvers
 const updateUser = require("./user/updateUser");
 const updateCategory = require("./category/updateCategory");
@@ -56,7 +62,8 @@ const updateTrip = require("./trip/updateTrip");
 const updateOffer = require("./offer/updateOffer");
 const updateOrder = require("./order/updateOrder");
 const updateRestaurant = require("./restaurant/updateRestaurant");
-
+const updateBankDetails = require("./bankDetails/updateBankDetails");
+const updateMenu = require("./menu/updateMenu");
 const resolvers = {
   Date: dateScalar,
   Query: {
@@ -72,6 +79,10 @@ const resolvers = {
     getAllTrips,
     getAllOrders,
     getOrder,
+    getBankDetails,
+    getCategory,
+    getAllCategory,
+    getAllOffers,
   },
   Mutation: {
     // delete resolvers
@@ -81,6 +92,8 @@ const resolvers = {
     deleteMeal,
     deleteRestaurant,
     deleteTrip,
+    deleteBankDetails,
+    deleteMenu,
     // create resolvers
     login,
     signup,
@@ -91,6 +104,7 @@ const resolvers = {
     createOrder,
     createRestaurant,
     createTrip,
+    createBankDetails,
     // update resolvers
     updateUser,
     updateRestaurant,
@@ -99,6 +113,8 @@ const resolvers = {
     updateTrip,
     updateOffer,
     updateMeal,
+    updateMenu,
+    updateBankDetails,
   },
 };
 

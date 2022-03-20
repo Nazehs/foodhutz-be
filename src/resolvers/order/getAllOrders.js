@@ -13,7 +13,8 @@ const getAllOrder = async (_, { orderId }, { user }) => {
       success: true,
       orders: await Order.find(orderId)
         .populate("restaurant")
-        .populate("category"),
+        .populate("category")
+        .populate("customer"),
     };
   } catch (error) {
     console.log(`[ERROR]: Failed to get order details| ${error.message}`);

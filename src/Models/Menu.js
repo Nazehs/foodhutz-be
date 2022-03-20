@@ -7,9 +7,8 @@ const menuSchema = {
     maxLength: 225,
   },
   category: {
-    type: String,
-    required: true,
-    maxLength: 50,
+    type: Schema.Types.ObjectId,
+    ref: "Category",
   },
   description: {
     type: String,

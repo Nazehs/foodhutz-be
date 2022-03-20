@@ -1,14 +1,9 @@
 const { ApolloError } = require("apollo-server-express");
 const { User } = require("../../models");
 
-const deleteUser = async (_, { userId }) => {
+const deleteUser = async (_, { userId }, { user }) => {
   try {
-    await User.findByIdAndDelete(userId);
-    return {
-      success: true,
-      status: 0,
-      message: "User deleted successfully",
-    };
+    return await User.findByIdAndDelete(userId);
   } catch (error) {
     console.log(`[ERROR]: Failed to sign up | ${error.message}`);
     throw new ApolloError("Failed to sign up");

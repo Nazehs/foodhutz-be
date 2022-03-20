@@ -1,14 +1,12 @@
 const { ApolloError } = require("apollo-server-express");
-const { Trips } = require("../../models");
+const { Trip } = require("../../models");
 
-const deleteTrip = async (_, { tripId }) => {
+const deleteTrip = async (_, { tripId }, { user }) => {
   try {
-    await Trips.findByIdAndDelete(tripId);
-    return {
-      success: true,
-      status: 0,
-      message: "Trip deleted successfully",
-    };
+    if (!user) {
+      throw new AuthenticationError("Unauthorised to perform this operation");
+    }
+    return await Trip.findByIdAndDelete(tripId);
   } catch (error) {
     console.log(`[ERROR]: Failed delete trip | ${error.message}`);
     throw new ApolloError("Failed delete trip");
