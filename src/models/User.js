@@ -19,7 +19,7 @@ const userSchema = {
     type: String,
     required: true,
     minLength: 11,
-    maxLength: 13,
+    maxLength: 14,
   },
   gender: {
     type: String,
