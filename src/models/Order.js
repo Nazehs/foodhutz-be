@@ -42,6 +42,16 @@ const orderSchema = {
     type: Schema.Types.ObjectId,
     ref: "Category",
   },
+  orderStatus: {
+    type: [
+      "Completed Order",
+      "Ongoing Order",
+      "Upcoming Order",
+      "Out for Delivery",
+      "Picked",
+      "Pickup",
+    ],
+  },
 };
 
 const schema = new Schema(orderSchema, {
