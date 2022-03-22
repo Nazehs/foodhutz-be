@@ -8,9 +8,7 @@ const updateOrder = async (_, { orderId, input }, { user }) => {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
 
-    return await Order.findByIdAndUpdate(orderId, input, { new: true })
-      .populate("category")
-      .populate("customer");
+    return await Order.findById(orderId, input);
   } catch (error) {
     console.log(`[ERROR]: Failed to update order details| ${error.message}`);
     throw new ApolloError("Failed to update order details");
