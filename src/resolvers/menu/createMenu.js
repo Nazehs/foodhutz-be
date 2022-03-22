@@ -2,7 +2,6 @@ const { ApolloError } = require("apollo-server-express");
 const { Menu } = require("../../models");
 
 const createMenu = async (_, { input }) => {
-
   try {
     return await Menu.create(input);
   } catch (error) {

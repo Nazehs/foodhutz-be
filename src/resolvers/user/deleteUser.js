@@ -5,9 +5,13 @@ const deleteUser = async (_, { userId }, { user }) => {
   try {
     return await User.findByIdAndDelete(userId);
   } catch (error) {
-    console.log(`[ERROR]: Failed to sign up | ${error.message}`);
-    throw new ApolloError("Failed to sign up");
+    console.log(`[ERROR]: Failed to create trip | ${error.message}`);
+    throw new ApolloError("Failed to create trip");
   }
 };
+<<<<<<< HEAD:src/resolvers/user/deleteUser.js
 
 module.exports = deleteUser;
+=======
+module.exports = createTrip;
+>>>>>>> 26cafac (added new resolvers and schema):src/resolvers/createTrips.js

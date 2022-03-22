@@ -22,6 +22,18 @@ async function startApolloServer(typeDefs, resolvers) {
     introspection: process.env.NODE_ENV !== "production",
   });
 
+  // new ApolloServer({
+  //   schema: makeExecutableSchema({
+  //     typeDefs: [...DateTimeTypeDefinition, typeDefs],
+  //     resolvers: {
+  //       ...DateTimeResolver,
+  //       resolvers,
+  //     },
+  //     context: authMiddleware,
+  //     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  //   }),
+  // });
+
   // More required logic for integrating with Express
   await server.start();
   //   await db();
