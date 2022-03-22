@@ -7,9 +7,10 @@ const Trip = require("./Trip");
 const Meal = require("./Meal");
 const Category = require("./Category");
 const BankDetails = require("./BankDetails");
-const Otp = require("./Otp");
+const OTP = require("./Otp");
 const Notification = require("./Notification");
-const Complaints = require("./Complaints");
+const Complaint = require("./Complaints");
+const ContactUs = require("./ContactUs");
 const ReferAndEarn = require("./ReferAndEarn");
 const ReferralCode = require("./ReferralCode");
 module.exports = {
@@ -18,8 +19,14 @@ module.exports = {
   Offers,
   Category,
   BankDetails,
+  ReferralCode,
   Menu,
   Trip,
   Meal,
+  OTP,
+  ContactUs,
   Restaurant,
+  Notification,
+  Complaint,
+  ReferAndEarn,
 };

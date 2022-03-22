@@ -25,6 +25,7 @@ const menuSchema = {
     type: Number,
     required: true,
   },
+  images: [{ type: String }],
   isActive: {
     type: Boolean,
     default: false,

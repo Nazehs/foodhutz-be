@@ -20,6 +20,6 @@ const schema = new Schema(complaintsSchema, {
   id: true,
 });
 
-const Complaints = model("Complaint", schema);
+const Complaints = model("ContactUs", schema);
 
 module.exports = Complaints;
