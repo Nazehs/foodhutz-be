@@ -10,7 +10,7 @@ const updateReferralCode = async (_, { codeId, input }, { user }) => {
 
     return await ReferralCode.findByIdAndUpdate(codeId, input, {
       new: true,
-    }).populate("category");
+    }).populate("owner");
   } catch (error) {
     console.log(
       `[ERROR]: Failed to update referral code  details | ${error.message}`

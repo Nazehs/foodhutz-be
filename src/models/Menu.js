@@ -37,6 +37,7 @@ const schema = new Schema(menuSchema, {
     getters: true,
   },
   id: true,
+  timestamps: true,
 });
 
 const Menu = model("Menu", schema);

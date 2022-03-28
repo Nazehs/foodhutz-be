@@ -13,6 +13,7 @@ const schema = new Schema(categorySchema, {
     getters: true,
   },
   id: true,
+  timestamps: true,
 });
 
 const Category = model("Category", schema);

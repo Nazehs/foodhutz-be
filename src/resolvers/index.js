@@ -6,23 +6,29 @@ const createMenu = require("./menu/createMenu");
 const createRestaurant = require("./restaurant/createRestaurant");
 const createTrip = require("./trip/createTrips");
 const createCategory = require("./category/createCategory");
-const createMeal = require("./meal/createMeal");
 const createOffer = require("./offer/createOffer");
 const createOrder = require("./order/createOrder");
 const createBankDetails = require("./bankDetails/createBankDetails");
+const createReferAndEarn = require("./referAndEarn/createReferAndEarn");
+const createNotification = require("./notification/createNotification");
+const createComplaint = require("./complaint/createComplaint");
+const createContactUs = require("./contactus/createContactUs");
+const createReferralCode = require("./referralCode/createReferralCode");
 
 // delete resolvers
 const deleteUser = require("./user/deleteUser");
 const deleteOffer = require("./offer/deleteOffer");
 const deleteCategory = require("./category/deleteCategory");
-const deleteMeal = require("./meal/deleteMeal");
 const deleteRestaurant = require("./restaurant/deleteRestaurant");
 const deleteTrip = require("./trip/deleteTrip");
 const deleteBankDetails = require("./bankDetails/deleteBankDetails");
 const deleteMenu = require("./menu/deleteMenu");
-
+const deleteReferAndEarn = require("./referAndEarn/deleteReferAndEarn");
+const deleteNotification = require("./notification/deleteNotification");
+const deleteComplaint = require("./complaint/deleteComplaint");
+const deleteContactUs = require("./contactus/deleteContactUs");
+const deleteReferralCode = require("./referralCode/deleteReferralCode");
 // query resolvers
-const getMeal = require("./meal/getMeal");
 const getUser = require("./user/getUser");
 const getAllUsers = require("./user/getAllUsers");
 const getTrip = require("./trip/getTrip");
@@ -30,6 +36,16 @@ const getOrder = require("./order/getOrder");
 const getRestaurant = require("./restaurant/getRestaurant");
 const getOffer = require("./offer/getOffer");
 const getCategory = require("./category/getCategory");
+const getReferAndEarn = require("./referAndEarn/getReferAndEarn");
+const getNotification = require("./notification/getNotification");
+const getComplaint = require("./complaint/getComplaint");
+const getContactUs = require("./contactus/getContactUs");
+const getReferralCode = require("./referralCode/updateReferralCode");
+const getAllReferAndEarn = require("./referAndEarn/getAllReferAndEarn");
+const getAllNotification = require("./notification/getAllNotification");
+const getAllComplaint = require("./complaint/getAllComplaint");
+const getAllContactUs = require("./contactus/getAllContactUs");
+const getAllReferralCode = require("./referralCode/getAllReferralCode");
 const getAllCategory = require("./category/getAllCategory");
 const getAllMenus = require("./menu/getAllMenus");
 const getAllRestaurants = require("./restaurant/getAllRestaurants");
@@ -40,13 +56,18 @@ const getAllOffers = require("./offer/getAllOffers");
 // update resolvers
 const updateUser = require("./user/updateUser");
 const updateCategory = require("./category/updateCategory");
-const updateMeal = require("./meal/updateMeal");
 const updateTrip = require("./trip/updateTrip");
 const updateOffer = require("./offer/updateOffer");
 const updateOrder = require("./order/updateOrder");
 const updateRestaurant = require("./restaurant/updateRestaurant");
 const updateBankDetails = require("./bankDetails/updateBankDetails");
 const updateMenu = require("./menu/updateMenu");
+const updateReferAndEarn = require("./referAndEarn/updateReferAndEarn");
+const updateNotification = require("./notification/updateNotification");
+const updateComplaint = require("./complaint/updateComplaint");
+const updateContactUs = require("./contactus/updateContactUs");
+const updateReferralCode = require("./referralCode/updateReferralCode");
+const verifyOTP = require("./user/verifyOTP");
 
 const dateScalar = new GraphQLScalarType({
   name: "Date",
@@ -69,7 +90,7 @@ const resolvers = {
   Query: {
     getUser,
     getAllUsers,
-    getMeal,
+
     getOffer,
     getTrip,
     getRestaurant,
@@ -80,31 +101,54 @@ const resolvers = {
     getAllOrders,
     getOrder,
     getBankDetails,
+    getAllNotification,
+    getReferAndEarn,
+    getReferralCode,
+    getComplaint,
+    getNotification,
+    getContactUs,
     getCategory,
     getAllCategory,
     getAllOffers,
+    getAllComplaint,
+    getAllReferAndEarn,
+    getAllReferralCode,
+    getAllNotification,
+    getAllContactUs,
   },
   Mutation: {
     // delete resolvers
     deleteUser,
     deleteOffer,
     deleteCategory,
-    deleteMeal,
     deleteRestaurant,
     deleteTrip,
     deleteBankDetails,
     deleteMenu,
+    deleteContactUs,
+    deleteComplaint,
+    deleteNotification,
+    deleteReferralCode,
+    deleteReferAndEarn,
+    deleteComplaint,
+    deleteNotification,
+    deleteReferAndEarn,
+    deleteReferralCode,
     // create resolvers
     login,
     signup,
     createMenu,
     createCategory,
-    createMeal,
     createOffer,
     createOrder,
     createRestaurant,
     createTrip,
     createBankDetails,
+    createNotification,
+    createComplaint,
+    createReferAndEarn,
+    createContactUs,
+    createReferralCode,
     // update resolvers
     updateUser,
     updateRestaurant,
@@ -112,9 +156,14 @@ const resolvers = {
     updateOrder,
     updateTrip,
     updateOffer,
-    updateMeal,
     updateMenu,
+    updateComplaint,
+    updateContactUs,
+    updateNotification,
+    updateReferAndEarn,
+    updateReferralCode,
     updateBankDetails,
+    verifyOTP,
   },
 };
 

@@ -33,6 +33,7 @@ const schema = new Schema(offersSchema, {
     getters: true,
   },
   id: true,
+  timestamps: true,
 });
 
 const Offers = model("Offers", schema);

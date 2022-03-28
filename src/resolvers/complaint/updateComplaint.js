@@ -10,7 +10,23 @@ const updateComplaint = async (_, { complaintId, input }, { user }) => {
 
     return await Complaint.findByIdAndUpdate(complaintId, input, {
       new: true,
-    }).populate("category");
+    })
+      .populate("user")
+      .populate("order")
+      .populate({
+        path: "order",
+        populate: {
+          path: "restaurant",
+          model: "Restaurant",
+        },
+      })
+      .populate({
+        path: "order",
+        populate: {
+          path: "category",
+          model: "Category",
+        },
+      });
   } catch (error) {
     console.log(`[ERROR]: Failed toupdate menu  details | ${error.message}`);
     throw new ApolloError("Failed to update menu details");

@@ -10,8 +10,24 @@ const getAllNotification = async (_, __, { user }) => {
 
     return {
       status: 0,
-      menus: await Notification.find({}),
-      messages: "success",
+      notifications: await Notification.find({})
+        .populate("order")
+        .populate("user")
+        .populate({
+          path: "order",
+          populate: {
+            path: "restaurant",
+            model: "Restaurant",
+          },
+        })
+        .populate({
+          path: "order",
+          populate: {
+            path: "category",
+            model: "Category",
+          },
+        }),
+      success: true,
     };
   } catch (error) {
     console.log(

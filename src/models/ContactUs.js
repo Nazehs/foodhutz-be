@@ -1,7 +1,7 @@
 const { model, Schema } = require("mongoose");
 
 const complaintsSchema = {
-  content: {
+  message: {
     type: String,
   },
   user: {
@@ -18,6 +18,7 @@ const schema = new Schema(complaintsSchema, {
     getters: true,
   },
   id: true,
+  timestamps: true,
 });
 
 const Complaints = model("ContactUs", schema);

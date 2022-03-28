@@ -10,8 +10,24 @@ const getAllComplaint = async (_, __, { user }) => {
 
     return {
       status: 0,
-      menus: await Complaint.find({}),
-      messages: "success",
+      complaints: await Complaint.find({})
+        .populate({
+          path: "order",
+          populate: {
+            path: "restaurant",
+            model: "Restaurant",
+          },
+        })
+        .populate({
+          path: "order",
+          populate: {
+            path: "category",
+            model: "Category",
+          },
+        })
+        .populate("order")
+        .populate("user"),
+      success: true,
     };
   } catch (error) {
     console.log(`[ERROR]: Failed to get all complaints | ${error.message}`);

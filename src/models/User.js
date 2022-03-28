@@ -14,12 +14,20 @@ const userSchema = {
   username: {
     type: String,
     required: true,
+    unique: true,
   },
+  avatar: { type: String },
   phoneNumber: {
     type: String,
-    required: true,
     minLength: 11,
     maxLength: 14,
+    validate: {
+      validator: function (v) {
+        return /((\+44(\s\(0\)\s|\s0\s|\s)?)|0)7\d{3}(\s)?\d{6}/.test(v);
+      },
+      message: (props) => `${props.value} is not a valid phone number!`,
+    },
+    required: [true, "User phone number required"],
   },
   gender: {
     type: String,
@@ -28,6 +36,12 @@ const userSchema = {
     type: String,
     required: true,
     maxLength: 100,
+    unique: true,
+    validate: [validateEmail, "Please fill a valid email address"],
+    match: [
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      "Please fill a valid email address",
+    ],
   },
   // driver close to that that location should be able to get the notifications and it will
   // only show only for who accepted it for the delivery
@@ -65,7 +79,13 @@ const schema = new Schema(userSchema, {
     getters: true,
   },
   id: true,
+  timestamps: true,
 });
+
+function validateEmail(email) {
+  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return re.test(email);
+}
 
 schema.pre("save", async function (next) {
   console.log(this);

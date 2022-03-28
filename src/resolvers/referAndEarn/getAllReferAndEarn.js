@@ -10,8 +10,8 @@ const getAllReferAndEarn = async (_, __, { user }) => {
 
     return {
       status: 0,
-      menus: await ReferAndEarn.find({}),
-      messages: "success",
+      ReferAndEarnCodes: await ReferAndEarn.find({}).populate("user"),
+      success: true,
     };
   } catch (error) {
     console.log(`[ERROR]: Failed to get meal details | ${error.message}`);

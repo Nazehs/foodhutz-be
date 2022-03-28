@@ -1,9 +1,13 @@
-const { ApolloError } = require("apollo-server-express");
+const { ApolloError, AuthenticationError } = require("apollo-server-express");
 const { ReferAndEarn } = require("../../models");
 
 const createReferAndEarn = async (_, { input }, { user }) => {
   try {
-    return await ReferAndEarn.create(input);
+    if (!user) {
+      throw new AuthenticationError("Unauthorised to perform this operation");
+    }
+    const doc = await ReferAndEarn.create(input);
+    return await ReferAndEarn.findById(doc._id).populate("user");
   } catch (error) {
     console.log(
       `[ERROR]: Failed to create a refer and earn | ${error.message}`

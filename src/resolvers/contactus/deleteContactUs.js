@@ -2,13 +2,13 @@ const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
 const { ContactUs } = require("../../models");
 
-const deleteContactUs = async (_, { menuId }, { user }) => {
+const deleteContactUs = async (_, { messageId }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
 
-    return await ContactUs.findByIdAndDelete(menuId);
+    return await ContactUs.findByIdAndDelete(messageId);
   } catch (error) {
     console.log(
       `[ERROR]: Failed to delete  contact us message | ${error.message}`

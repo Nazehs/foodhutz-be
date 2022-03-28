@@ -10,8 +10,8 @@ const getAllContactUs = async (_, __, { user }) => {
 
     return {
       status: 0,
-      menus: await ContactUs.find({}),
-      messages: "success",
+      messages: await ContactUs.find({}).populate("user"),
+      success: true,
     };
   } catch (error) {
     console.log(`[ERROR]: Failed to get contact us details | ${error.message}`);

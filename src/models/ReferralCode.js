@@ -18,6 +18,7 @@ const schema = new Schema(notificationSchema, {
     getters: true,
   },
   id: true,
+  timestamps: true,
 });
 
 const ReferralCode = model("ReferralCode", schema);

@@ -30,6 +30,7 @@ const schema = new Schema(bankSchema, {
     getters: true,
   },
   id: true,
+  timestamps: true,
 });
 
 const bankDetails = model("BankDetail", schema);

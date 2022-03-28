@@ -10,8 +10,8 @@ const getAllReferralCode = async (_, __, { user }) => {
 
     return {
       status: 0,
-      menus: await ReferralCode.find({}),
-      messages: "success",
+      referralCodes: await ReferralCode.find({}).populate("owner"),
+      success: true,
     };
   } catch (error) {
     console.log(

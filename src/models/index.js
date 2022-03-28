@@ -4,10 +4,8 @@ const Offers = require("./Offers");
 const Order = require("./Order");
 const Restaurant = require("./Restaurant");
 const Trip = require("./Trip");
-const Meal = require("./Meal");
 const Category = require("./Category");
 const BankDetails = require("./BankDetails");
-const OTP = require("./Otp");
 const Notification = require("./Notification");
 const Complaint = require("./Complaints");
 const ContactUs = require("./ContactUs");
@@ -22,8 +20,6 @@ module.exports = {
   ReferralCode,
   Menu,
   Trip,
-  Meal,
-  OTP,
   ContactUs,
   Restaurant,
   Notification,

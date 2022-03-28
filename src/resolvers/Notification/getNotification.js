@@ -2,28 +2,24 @@ const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
 const { Notification } = require("../../models");
 
-const updateNotification = async (_, { notificationId, input }, { user }) => {
+const getNotification = async (_, { notificationId }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
 
-    return await Notification.findByIdAndUpdate(notificationId, input, {
-      new: true,
-    })
-      .populate("user")
-      .populate("trips")
-      .populate("orders")
+    return await Notification.findById(notificationId)
+      .populate("order")
       .populate("user")
       .populate({
-        path: "orders",
+        path: "order",
         populate: {
           path: "restaurant",
           model: "Restaurant",
         },
       })
       .populate({
-        path: "orders",
+        path: "order",
         populate: {
           path: "category",
           model: "Category",
@@ -31,10 +27,10 @@ const updateNotification = async (_, { notificationId, input }, { user }) => {
       });
   } catch (error) {
     console.log(
-      `[ERROR]: Failed to update Notification  details | ${error.message}`
+      `[ERROR]: Failed to get notification details| ${error.message}`
     );
-    throw new ApolloError("Failed to update Notification details");
+    throw new ApolloError("Failed to get notification details");
   }
 };
 
-module.exports = updateNotification;
+module.exports = getNotification;

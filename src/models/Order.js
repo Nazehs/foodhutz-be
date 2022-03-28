@@ -17,13 +17,13 @@ const orderSchema = {
     type: String,
   },
   discount: {
-    type: Schema.Types.Decimal,
+    type: Number,
   },
   actualDeliveryTime: {
     type: Date,
   },
   finalPrice: {
-    type: Schema.Types.Decimal,
+    type: Number,
   },
   comment: {
     type: String,
@@ -59,6 +59,7 @@ const schema = new Schema(orderSchema, {
     getters: true,
   },
   id: true,
+  timestamps: true,
 });
 
 const Order = model("Order", schema);

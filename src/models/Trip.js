@@ -29,6 +29,7 @@ const schema = new Schema(offersSchema, {
     getters: true,
   },
   id: true,
+  timestamps: true,
 });
 
 const Trip = model("Trip", schema);
