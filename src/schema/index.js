@@ -13,12 +13,41 @@ const typeDefs = gql`
     userType: String!
     orders: [Order]
     trips: [Trip]
+    dateOfJoin: Date
+  }
+  type Driver {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    username: String!
+    email: String!
+    avatar: String
+    phoneNumber: String!
+    userType: String!
+    trips: [Trip]
+    dateOfJoin: Date
+    vehicleType: String
+    vehicleNumber: String
+    documents: [Document]
+    tips: [Tips]
+  }
+  type Document {
+    name: String
+    url: String
+    status: String
+  }
+  type Tips {
+    amount: Float
+    order: Order!
   }
   type AllUsers {
     users: [User]
     message: String!
     status: Int!
+    currentPage: Int!
+    totalPages: Int!
     success: Boolean!
+    hasMore: Boolean!
   }
   type Auth {
     token: ID!
@@ -35,8 +64,13 @@ const typeDefs = gql`
     orders: [Order]
     offers: [Offer]
     menus: [Menu]
+    openingHours: [Hours]
   }
-
+  type Hours {
+    from: String
+    to: String
+    day: String
+  }
   type Order {
     id: ID!
     name: String!
@@ -45,11 +79,14 @@ const typeDefs = gql`
     deliveryAddress: String!
     actualDeliveryTime: Date!
     category: Category!
-    comment: String!
+    comment: String
     customer: User!
     estimatedDeliveryTime: Date
     finalPrice: Float!
     orderTime: Date!
+    deliveryBy: ID
+    orderStatus: String!
+    rating: Float
   }
   type Offer {
     id: ID!
@@ -59,8 +96,17 @@ const typeDefs = gql`
     timeActiveFrom: Date!
     dateActiveTo: Date!
     offerPrice: Float!
+    useBy: [Order]
+    category: Category
   }
-
+  type Payment {
+    amount: Float!
+    user: User
+    email: String
+    paymentType: String
+    fees: Float!
+    status: String!
+  }
   type Trip {
     id: ID!
     from: String!
@@ -68,6 +114,10 @@ const typeDefs = gql`
     arrivalTime: Date!
     startTime: Date!
     order: Order
+    amount: Float!
+    duration: Float
+    time: Float
+    tip: Float
   }
   type Menu {
     id: ID!
@@ -96,57 +146,97 @@ const typeDefs = gql`
   type AllOrders {
     status: Int!
     success: Boolean!
+    currentPage: Int!
+    totalPages: Int!
+    hasMore: Boolean!
     orders: [Order]
   }
 
   type AllMenus {
     status: Int!
     success: String
+    currentPage: Int!
+    totalPages: Int!
+    hasMore: Boolean!
     menus: [Menu]
   }
   type AllRestaurants {
-    status: Int!
+    currentPage: Int!
+    totalPages: Int!
+    hasMore: Boolean!
     success: Boolean!
     restaurants: [Restaurant]
   }
   type AllCategory {
-    status: Int!
+    currentPage: Int!
+    totalPages: Int!
+    hasMore: Boolean!
     success: Boolean!
+    status: Int!
     categories: [Category]
   }
   type AllTrips {
+    currentPage: Int!
+    totalPages: Int!
     status: Int!
     success: Boolean!
+    hasMore: Boolean!
     trips: [Trip]
   }
   type AllOffers {
     status: Int!
+    currentPage: Int!
+    totalPages: Int!
     success: Boolean!
+    hasMore: Boolean!
     offers: [Offer]
   }
   type AllReferralCode {
+    currentPage: Int!
+    totalPages: Int!
     status: Int!
+    hasMore: Boolean!
     success: Boolean!
     referralCodes: [ReferralCodeResponse]
   }
   type AllComplaints {
     status: Int!
     success: Boolean!
+    currentPage: Int!
+    totalPages: Int!
+    hasMore: Boolean!
     complaints: [ComplaintsResponse]
   }
   type AllContactUs {
     status: Int!
+    currentPage: Int!
+    totalPages: Int!
     success: Boolean!
+    hasMore: Boolean!
     messages: [ContactUsResponse]
+  }
+  type AllDrivers {
+    status: Int!
+    currentPage: Int!
+    totalPages: Int!
+    success: Boolean!
+    hasMore: Boolean!
+    drivers: [Driver]
   }
   type AllReferAndEarn {
     status: Int!
+    currentPage: Int!
+    totalPages: Int!
     success: Boolean!
+    hasMore: Boolean!
     ReferAndEarnCodes: [ReferAndEarnResponse]
   }
   type AllNotifications {
     status: Int!
+    currentPage: Int!
+    totalPages: Int!
     success: Boolean!
+    hasMore: Boolean!
     notifications: [NotificationResponse]
   }
   type OTPVerification {
@@ -191,6 +281,11 @@ const typeDefs = gql`
     message: String!
     order: ID!
   }
+  input NotificationInputUpdate {
+    user: ID
+    message: String
+    order: ID
+  }
   input CategoryInput {
     name: String!
   }
@@ -207,6 +302,22 @@ const typeDefs = gql`
     orders: [ID]
     offers: [ID]
     menus: [ID]
+  }
+  input PaymentInput {
+    amount: Float
+    user: ID!
+    email: String
+    paymentType: String
+    fees: Float!
+    status: String!
+  }
+  input PaymentInputUpdate {
+    amount: Float
+    user: ID
+    email: String
+    paymentType: String
+    fees: Float
+    status: String
   }
   input OfferInput {
     name: String!
@@ -313,22 +424,45 @@ const typeDefs = gql`
     value: Float!
     owner: ID!
   }
+  input ReferralCodeInputUpdate {
+    code: String
+    value: Float
+    owner: ID
+  }
   input ReferAndEarnInput {
     code: String!
     phoneNumber: String
     email: String
     user: ID!
   }
+  input ReferAndEarnInputUpdate {
+    code: String
+    phoneNumber: String
+    email: String
+    user: ID
+  }
   input ContactUsInput {
     queryType: String!
     user: ID!
     message: String!
+  }
+  input ContactUsInputUpdate {
+    queryType: String
+    user: ID
+    message: String
   }
   input ComplaintsInput {
     complaintType: String!
     user: ID!
     message: String!
     order: ID!
+  }
+
+  input ComplaintsInputUpdate {
+    complaintType: String
+    user: ID
+    message: String
+    order: ID
   }
   input NotificationInput {
     user: ID!
@@ -337,20 +471,22 @@ const typeDefs = gql`
   }
 
   type Query {
+    getAllUsers(limit: Int, skip: Int): AllUsers
+    getAllDrivers: AllDrivers
+    getAllCategory(limit: Int, skip: Int): AllCategory
+    getAllMenus(limit: Int, skip: Int): AllMenus!
+    getAllTrips(limit: Int, skip: Int): AllTrips!
+    getAllOffers(limit: Int, skip: Int): AllOffers!
+    getAllOrders(limit: Int, skip: Int): AllOrders
+    getAllComplaint(limit: Int, skip: Int): AllComplaints
+    getAllReferAndEarn(limit: Int, skip: Int): AllReferAndEarn
+    getAllReferralCode(limit: Int, skip: Int): AllReferralCode
+    getAllNotification(limit: Int, skip: Int): AllNotifications
+    getAllContactUs(limit: Int, skip: Int): AllContactUs
+    getAllRestaurants(limit: Int, skip: Int): AllRestaurants!
     getUser(userId: ID!): User!
-    getAllUsers: AllUsers
-    getAllCategory: AllCategory
-    getAllMenus: AllMenus!
-    getAllTrips: AllTrips!
-    getAllOffers: AllMenus!
-    getAllOrders: AllOrders
-    getAllComplaint: AllComplaints
-    getAllReferAndEarn: AllReferAndEarn
-    getAllReferralCode: AllReferralCode
-    getAllNotification: AllNotifications
-    getAllContactUs: AllContactUs
+    getDriver(userId: ID!): Driver!
     getBankDetails(userId: ID): BankDetail
-    getAllRestaurants: AllRestaurants!
     getCategory(categoryId: ID!): Category
     getOffer(offerId: ID!): Offer
     getTrip(tripId: ID!): Trip
@@ -363,51 +499,11 @@ const typeDefs = gql`
     getContactUs(messageId: ID!): ContactUsResponse
   }
   type Mutation {
-    # update
-    updateUser(input: UpdateUserInput!): Auth!
-    updateMenu(menuId: ID!, input: MenuInputUpdate!): Menu!
-    updateRestaurant(restaurantId: ID!, input: RestaurantInput!): Restaurant!
-    updateCategory(categoryId: ID!, input: CategoryInput!): Category!
-    updateTrip(tripId: ID!, input: TripUpdateInput!): Trip!
-    updateOffer(offerId: ID!, input: OfferInputUpdate!): Offer!
-    updateOrder(orderId: ID!, input: OrderInput!): Order!
-    updateBankDetails(bankId: ID!, input: BankDetailInput!): BankDetail
-    updateComplaint(
-      complaintId: ID!
-      input: ComplaintsInput!
-    ): ComplaintsResponse
-    updateContactUs(messageId: ID!, input: ContactUsInput!): ContactUsResponse
-    updateNotification(
-      notificationId: ID!
-      input: NotificationInput!
-    ): NotificationResponse
-    updateReferAndEarn(
-      referralId: ID!
-      input: ReferAndEarnInput!
-    ): ReferAndEarnResponse
-    updateReferralCode(
-      codeId: ID!
-      input: ReferralCodeInput!
-    ): ReferralCodeResponse
-    verifyOTP(input: OTPVerificationInput): OTPVerification
-
-    # delete
-    deleteUser(userId: ID): Auth!
-    deleteOffer(offerId: ID): Offer!
-    deleteCategory(categoryId: ID): Category!
-    deleteRestaurant(restaurantId: ID): Restaurant!
-    deleteTrip(tripId: ID): Trip!
-    deleteBankDetails(bankId: ID!): BankDetail
-    deleteMenu(menuId: ID!): Menu
-    deleteContactUs(messageId: ID!): ContactUsResponse
-    deleteComplaint(complaintId: ID!): ComplaintsResponse
-    deleteNotification(notificationId: ID!): NotificationResponse
-    deleteReferAndEarn(referralId: ID!): ReferAndEarnResponse
-    deleteReferralCode(codeId: ID): ReferralCodeResponse
-
     # create
     login(input: LoginInput!): Auth!
+    driverLogin(input: LoginInput!): Auth
     signup(input: SignupInput!): Auth!
+    driverSignup(input: SignupInput!): Auth!
     createMenu(input: MenuInput): Menu!
     createCategory(input: CategoryInput): Category!
     createOffer(input: OfferInput): Offer!
@@ -420,6 +516,53 @@ const typeDefs = gql`
     createReferAndEarn(input: ReferAndEarnInput): ReferAndEarnResponse
     createContactUs(input: ContactUsInput): ContactUsResponse
     createReferralCode(input: ReferralCodeInput): ReferralCodeResponse
+
+    # update
+    updateUser(input: UpdateUserInput!): Auth!
+    updateDriver(input: UpdateUserInput!): Auth!
+    updateMenu(menuId: ID!, input: MenuInputUpdate!): Menu!
+    updateRestaurant(restaurantId: ID!, input: RestaurantInput!): Restaurant!
+    updateCategory(categoryId: ID!, input: CategoryInput!): Category!
+    updateTrip(tripId: ID!, input: TripUpdateInput!): Trip!
+    updateOffer(offerId: ID!, input: OfferInputUpdate!): Offer!
+    updateOrder(orderId: ID!, input: OrderInput!): Order!
+    updateBankDetails(bankId: ID!, input: BankDetailInput!): BankDetail
+    updateComplaint(
+      complaintId: ID!
+      input: ComplaintsInputUpdate!
+    ): ComplaintsResponse
+    updateContactUs(
+      messageId: ID!
+      input: ContactUsInputUpdate!
+    ): ContactUsResponse
+    updateNotification(
+      notificationId: ID!
+      input: NotificationInputUpdate!
+    ): NotificationResponse
+    updateReferAndEarn(
+      referralId: ID!
+      input: ReferAndEarnInputUpdate!
+    ): ReferAndEarnResponse
+    updateReferralCode(
+      codeId: ID!
+      input: ReferralCodeInputUpdate!
+    ): ReferralCodeResponse
+    verifyOTP(input: OTPVerificationInput): OTPVerification
+    verifyDriverOTP(input: OTPVerificationInput): OTPVerification
+    # delete
+    deleteUser(userId: ID): Auth!
+    deleteDriver(userId: ID): Auth!
+    deleteOffer(offerId: ID): Offer!
+    deleteCategory(categoryId: ID): Category!
+    deleteRestaurant(restaurantId: ID): Restaurant!
+    deleteTrip(tripId: ID): Trip!
+    deleteBankDetails(bankId: ID!): BankDetail
+    deleteMenu(menuId: ID!): Menu
+    deleteContactUs(messageId: ID!): ContactUsResponse
+    deleteComplaint(complaintId: ID!): ComplaintsResponse
+    deleteNotification(notificationId: ID!): NotificationResponse
+    deleteReferAndEarn(referralId: ID!): ReferAndEarnResponse
+    deleteReferralCode(codeId: ID): ReferralCodeResponse
   }
 `;
 

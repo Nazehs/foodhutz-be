@@ -1,6 +1,6 @@
 const { model, Schema } = require("mongoose");
 const bcrypt = require("bcrypt");
-const userSchema = {
+const driverSchema = {
   firstName: {
     type: String,
     required: true,
@@ -32,10 +32,6 @@ const userSchema = {
   gender: {
     type: String,
   },
-  isOnline: {
-    type: Boolean,
-    default: false,
-  },
   email: {
     type: String,
     required: true,
@@ -50,11 +46,7 @@ const userSchema = {
   // driver close to that that location should be able to get the notifications and it will
   // only show only for who accepted it for the delivery
   notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
-  userType: {
-    type: String,
-    enum: ["USER", "RESTAURANT"],
-    default: "USER",
-  },
+
   password: {
     type: String,
     required: true,
@@ -74,10 +66,21 @@ const userSchema = {
       ref: "BankDetail",
     },
   ],
-  orders: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
+  tips: [],
+  vehicleType: { type: String },
+  vehicleNumber: { type: String },
+  dateOfJoin: { type: Date, default: Date.now() },
+  trips: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
+  documents: [
+    {
+      name: { type: String },
+      status: { type: ["Incomplete", "Completed"], default: "Incomplete" },
+      url: { type: String },
+    },
+  ],
 };
 
-const schema = new Schema(userSchema, {
+const schema = new Schema(driverSchema, {
   toJSON: {
     getters: true,
   },
@@ -103,6 +106,6 @@ schema.methods.checkPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-const User = model("User", schema);
+const Driver = model("Driver", schema);
 
-module.exports = User;
+module.exports = Driver;

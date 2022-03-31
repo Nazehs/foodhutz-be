@@ -1,8 +1,8 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
-const { User } = require("../../models");
+const { Driver } = require("../../models");
 
-const getAllUsers = async (_, { limit = 10, skip = 0 }, { user }) => {
+const getAllDrivers = async (_, { limit = 10, skip = 0 }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
@@ -11,13 +11,13 @@ const getAllUsers = async (_, { limit = 10, skip = 0 }, { user }) => {
       throw new ApolloError("Provide a valid limit");
     }
 
-    const docs = await User.find().skip(skip).limit(limit);
-    const usersCount = await User.count();
+    const docs = await Driver.find().skip(skip).limit(limit);
+    const usersCount = await Driver.count();
     const totalPages = Math.ceil(usersCount / limit);
     const currentPage = Math.ceil(usersCount % (skip + 1));
 
     return {
-      users: docs,
+      drivers: docs,
       status: 0,
       message: "success",
       success: true,
@@ -31,4 +31,4 @@ const getAllUsers = async (_, { limit = 10, skip = 0 }, { user }) => {
   }
 };
 
-module.exports = getAllUsers;
+module.exports = getAllDrivers;

@@ -10,12 +10,12 @@ const updateReferAndEarn = async (_, { referralId, input }, { user }) => {
 
     return await ReferAndEarn.findByIdAndUpdate(referralId, input, {
       new: true,
-    })
-      .populate("userReferred")
-      .populate("user");
+    }).populate("user");
   } catch (error) {
-    console.log(`[ERROR]: Failed toupdate menu  details | ${error.message}`);
-    throw new ApolloError("Failed to update menu details");
+    console.log(
+      `[ERROR]: Failed to update refer and earn  details | ${error.message}`
+    );
+    throw new ApolloError("Failed to update refer and earn details");
   }
 };
 

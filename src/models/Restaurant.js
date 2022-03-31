@@ -25,6 +25,8 @@ const restaurantSchema = {
     maxLength: 13,
     minLength: 11,
   },
+  status: { type: ["Online", "Offline"] },
+  openingHours: [{ from: String, to: String, day: String }],
   categories: [{ type: Schema.Types.ObjectId, ref: "Category" }],
   offers: [{ type: Schema.Types.ObjectId, ref: "Offers" }],
   orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],

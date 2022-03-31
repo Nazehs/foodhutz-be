@@ -7,7 +7,7 @@ const updateComplaint = async (_, { complaintId, input }, { user }) => {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
-
+    console.log(complaintId, input);
     return await Complaint.findByIdAndUpdate(complaintId, input, {
       new: true,
     })

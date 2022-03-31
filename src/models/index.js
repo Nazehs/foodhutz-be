@@ -11,6 +11,9 @@ const Complaint = require("./Complaints");
 const ContactUs = require("./ContactUs");
 const ReferAndEarn = require("./ReferAndEarn");
 const ReferralCode = require("./ReferralCode");
+const Driver = require("./Driver");
+const Tips = require("./Tip");
+const Payment = require("./Payment");
 module.exports = {
   User,
   Order,
@@ -18,11 +21,14 @@ module.exports = {
   Category,
   BankDetails,
   ReferralCode,
+  Payment,
   Menu,
+  Driver,
   Trip,
   ContactUs,
   Restaurant,
   Notification,
   Complaint,
+  Tips,
   ReferAndEarn,
 };

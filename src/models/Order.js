@@ -42,15 +42,29 @@ const orderSchema = {
     type: Schema.Types.ObjectId,
     ref: "Category",
   },
+  deliveryBy: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+  rating: {
+    type: Number,
+    default: 0,
+  },
   orderStatus: {
-    type: [
+    type: String,
+    enum: [
       "Completed Order",
       "Ongoing Order",
       "Upcoming Order",
       "Out for Delivery",
       "Picked",
       "Pickup",
+      "New",
+      "Accepted",
+      "Rejected",
+      "Cancelled",
     ],
+    default: "New",
   },
 };
 

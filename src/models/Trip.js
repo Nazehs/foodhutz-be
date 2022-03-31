@@ -13,6 +13,9 @@ const offersSchema = {
     type: Date,
     required: true,
   },
+  amount: {
+    type: Number,
+  },
   arrivalTime: {
     type: Date,
     required: true,
@@ -21,6 +24,15 @@ const offersSchema = {
     type: Schema.Types.ObjectId,
     ref: "Order",
     required: true,
+  },
+  distance: {
+    type: Number,
+  },
+  duration: {
+    type: String,
+  },
+  tip: {
+    type: Number,
   },
 };
 

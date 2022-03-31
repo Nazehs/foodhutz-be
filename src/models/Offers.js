@@ -6,6 +6,10 @@ const offersSchema = {
     required: true,
     maxLength: 50,
   },
+  category: {
+    type: Schema.Types.ObjectID,
+    ref: "Category",
+  },
   dateActiveFrom: {
     type: Date,
     required: true,
@@ -26,6 +30,12 @@ const offersSchema = {
     type: Number,
     required: true,
   },
+  useBy: [
+    {
+      type: Schema.Types.ObjectID,
+      ref: "Order",
+    },
+  ],
 };
 
 const schema = new Schema(offersSchema, {

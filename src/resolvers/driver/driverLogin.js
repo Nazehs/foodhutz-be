@@ -1,17 +1,17 @@
 const { AuthenticationError } = require("apollo-server-express");
 
-const { User } = require("../../models");
+const { Driver } = require("../../models");
 const { signToken } = require("../../utils/auth");
 
-const login = async (_, { input }) => {
+const driverLogin = async (_, { input }) => {
   try {
     let user;
     if (input.email) {
-      user = await User.findOne({ email: input.email });
+      user = await Driver.findOne({ email: input.email });
     }
 
     if (input.phoneNumber) {
-      user = await User.findOne({ phoneNumber: input.phoneNumber });
+      user = await Driver.findOne({ phoneNumber: input.phoneNumber });
     }
 
     if (!user) {
@@ -35,4 +35,4 @@ const login = async (_, { input }) => {
   }
 };
 
-module.exports = login;
+module.exports = driverLogin;

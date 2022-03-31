@@ -12,18 +12,17 @@ const updateNotification = async (_, { notificationId, input }, { user }) => {
       new: true,
     })
       .populate("user")
-      .populate("trips")
-      .populate("orders")
+      .populate("order")
       .populate("user")
       .populate({
-        path: "orders",
+        path: "order",
         populate: {
           path: "restaurant",
           model: "Restaurant",
         },
       })
       .populate({
-        path: "orders",
+        path: "order",
         populate: {
           path: "category",
           model: "Category",

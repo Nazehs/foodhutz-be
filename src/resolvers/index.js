@@ -1,6 +1,8 @@
 const { GraphQLScalarType, Kind } = require("graphql");
 // create resolvers
 const login = require("./user/login");
+const driverLogin = require("./driver/driverLogin");
+const driverSignup = require("./driver/driverSignup");
 const signup = require("./user/signup");
 const createMenu = require("./menu/createMenu");
 const createRestaurant = require("./restaurant/createRestaurant");
@@ -17,6 +19,7 @@ const createReferralCode = require("./referralCode/createReferralCode");
 
 // delete resolvers
 const deleteUser = require("./user/deleteUser");
+const deleteDriver = require("./driver/deleteDriver");
 const deleteOffer = require("./offer/deleteOffer");
 const deleteCategory = require("./category/deleteCategory");
 const deleteRestaurant = require("./restaurant/deleteRestaurant");
@@ -30,6 +33,8 @@ const deleteContactUs = require("./contactus/deleteContactUs");
 const deleteReferralCode = require("./referralCode/deleteReferralCode");
 // query resolvers
 const getUser = require("./user/getUser");
+const getDriver = require("./driver/getDriver");
+const getAllDrivers = require("./driver/getAllDrivers");
 const getAllUsers = require("./user/getAllUsers");
 const getTrip = require("./trip/getTrip");
 const getOrder = require("./order/getOrder");
@@ -68,6 +73,8 @@ const updateComplaint = require("./complaint/updateComplaint");
 const updateContactUs = require("./contactus/updateContactUs");
 const updateReferralCode = require("./referralCode/updateReferralCode");
 const verifyOTP = require("./user/verifyOTP");
+const verifyDriverOTP = require("./driver/verifyDriverOTP");
+const updateDriver = require("./driver/updateDriver");
 
 const dateScalar = new GraphQLScalarType({
   name: "Date",
@@ -90,7 +97,8 @@ const resolvers = {
   Query: {
     getUser,
     getAllUsers,
-
+    getDriver,
+    getAllDrivers,
     getOffer,
     getTrip,
     getRestaurant,
@@ -119,6 +127,7 @@ const resolvers = {
   Mutation: {
     // delete resolvers
     deleteUser,
+    deleteDriver,
     deleteOffer,
     deleteCategory,
     deleteRestaurant,
@@ -137,6 +146,8 @@ const resolvers = {
     // create resolvers
     login,
     signup,
+    driverLogin,
+    driverSignup,
     createMenu,
     createCategory,
     createOffer,
@@ -152,6 +163,7 @@ const resolvers = {
     // update resolvers
     updateUser,
     updateRestaurant,
+    updateDriver,
     updateCategory,
     updateOrder,
     updateTrip,
@@ -164,6 +176,7 @@ const resolvers = {
     updateReferralCode,
     updateBankDetails,
     verifyOTP,
+    verifyDriverOTP,
   },
 };
 
