@@ -6,6 +6,7 @@ const createReferralCode = async (_, { input }, { user }) => {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
+    input.owner = user.id;
     const doc = await ReferralCode.create(input);
     return await ReferralCode.findById(doc._id).populate("owner");
   } catch (error) {

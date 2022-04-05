@@ -6,6 +6,7 @@ const createReferAndEarn = async (_, { input }, { user }) => {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
+    input.user = user.id;
     const doc = await ReferAndEarn.create(input);
     return await ReferAndEarn.findById(doc._id).populate("user");
   } catch (error) {

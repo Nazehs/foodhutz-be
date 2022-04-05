@@ -4,6 +4,7 @@ const { Order } = require("../../models");
 
 const getAllOrder = async (_, { limit = 10, skip = 0 }, { user }) => {
   try {
+    console.log("here");
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
@@ -12,10 +13,21 @@ const getAllOrder = async (_, { limit = 10, skip = 0 }, { user }) => {
     }
     const ordersCount = await Order.count();
     const docs = await Order.find({})
+      .populate("orderItems")
+      .populate({
+        path: "orderItems",
+        populate: { path: "restaurant", model: "StoreOwner" },
+      })
+      .populate({
+        path: "orderItems",
+        populate: { path: "category", model: "Category" },
+      })
+      .populate({
+        path: "orderItems",
+        populate: { path: "customer", model: "User" },
+      })
       .skip(skip)
-      .limit(limit)
-      .populate("restaurant")
-      .populate("category");
+      .limit(limit);
 
     const totalPages = Math.ceil(ordersCount / limit);
     const currentPage = Math.ceil(ordersCount % (skip + 1));

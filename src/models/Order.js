@@ -1,23 +1,17 @@
 const { model, Schema } = require("mongoose");
+const OrderItem = require("./OrderItem");
 
 const orderSchema = {
-  name: {
-    type: String,
-    required: true,
-    maxLength: 50,
-  },
-  restaurant: {
-    type: Schema.Types.ObjectId,
-    ref: "Restaurant",
-  },
   orderTime: {
     type: Date,
+    default: Date.now(),
   },
   deliveryAddress: {
     type: String,
   },
   discount: {
     type: Number,
+    default: 0,
   },
   actualDeliveryTime: {
     type: Date,
@@ -28,23 +22,14 @@ const orderSchema = {
   comment: {
     type: String,
   },
-  customer: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
+  subtotal: { type: Number },
+  orderItems: [OrderItem],
+
   estimatedDeliveryTime: {
     type: Date,
   },
   actualDeliveryTime: {
     type: Date,
-  },
-  category: {
-    type: Schema.Types.ObjectId,
-    ref: "Category",
-  },
-  deliveryBy: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
   },
   rating: {
     type: Number,

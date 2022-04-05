@@ -16,6 +16,10 @@ const driverSchema = {
     required: true,
     unique: true,
   },
+  userType: {
+    type: String,
+    default: "DRIVER",
+  },
   avatar: { type: String },
   phoneNumber: {
     type: String,
@@ -57,8 +61,9 @@ const driverSchema = {
     default: false,
   },
   status: {
-    type: Boolean,
-    default: false,
+    type: String,
+    enum: ["Offline", "Online"],
+    default: "Offline",
   },
   bankDetails: [
     {

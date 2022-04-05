@@ -1,6 +1,6 @@
 const { model, Schema } = require("mongoose");
 
-const offersSchema = {
+const CouponsSchema = {
   from: {
     type: String,
     required: true,
@@ -11,14 +11,14 @@ const offersSchema = {
   },
   startTime: {
     type: Date,
-    required: true,
+    // required: true,
   },
   amount: {
     type: Number,
   },
   arrivalTime: {
     type: Date,
-    required: true,
+    // required: true,
   },
   order: {
     type: Schema.Types.ObjectId,
@@ -26,7 +26,7 @@ const offersSchema = {
     required: true,
   },
   distance: {
-    type: Number,
+    type: String,
   },
   duration: {
     type: String,
@@ -34,9 +34,12 @@ const offersSchema = {
   tip: {
     type: Number,
   },
+  status: {
+    type: String,
+  },
 };
 
-const schema = new Schema(offersSchema, {
+const schema = new Schema(CouponsSchema, {
   toJSON: {
     getters: true,
   },

@@ -1,14 +1,17 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
-const { Category } = require("../../models");
+const { Category, StoreOwner } = require("../../models");
 
-const createCategory = async (_, { input }, context) => {
+const createCategory = async (_, { input }, { user }) => {
   try {
-    if (!context.user) {
+    if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
-
-    return await Category.create(input);
+    const doc = await Category.create(input);
+    await StoreOwner.findByIdAndUpdate(user.id, {
+      $push: { categories: doc._id },
+    });
+    return doc;
   } catch (error) {
     console.log(`[ERROR]: Failed to create category | ${error.message}`);
     throw new ApolloError("Failed to create category");

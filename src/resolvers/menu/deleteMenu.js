@@ -1,14 +1,18 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
-const { Menu } = require("../../models");
+const { Menu, StoreOwner } = require("../../models");
 
 const deleteMenu = async (_, { menuId }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
+    const doc = await Menu.findByIdAndDelete(menuId);
+    await StoreOwner.findByIdAndUpdate(user.id, {
+      $pull: { menus: doc._id },
+    });
 
-    return await Menu.findByIdAndDelete(menuId);
+    return doc;
   } catch (error) {
     console.log(`[ERROR]: Failed to delete menu  details | ${error.message}`);
     throw new ApolloError("Failed to delete menu details");

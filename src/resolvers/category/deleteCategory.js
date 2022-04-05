@@ -1,14 +1,17 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
-const { Category } = require("../../models");
+const { Category, StoreOwner } = require("../../models");
 
-const deleteCategory = async (_, { categoryId }, context) => {
+const deleteCategory = async (_, { categoryId }, { user }) => {
   try {
-    if (!context.user) {
+    if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
-
-    return await Category.findById(categoryId);
+    const doc = await Category.findByIdAndDelete(categoryId);
+    await StoreOwner.findByIdAndUpdate(user.id, {
+      $pull: { categories: doc._id },
+    });
+    return doc;
   } catch (error) {
     console.log(`[ERROR]: Failed to delete category | ${error.message}`);
     throw new ApolloError("Failed to delete category");

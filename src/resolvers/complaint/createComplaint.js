@@ -6,6 +6,7 @@ const createComplaint = async (_, { input }, { user }) => {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
+    input.user = user.id;
     const doc = await Complaint.create(input);
     return await Complaint.findById(doc.id)
       .populate("user")

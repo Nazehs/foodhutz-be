@@ -1,7 +1,7 @@
 const { model, Schema } = require("mongoose");
 const bcrypt = require("bcrypt");
 const OrderItem = require("./OrderItem");
-const userSchema = {
+const storeOwnerSchema = {
   firstName: {
     type: String,
     required: true,
@@ -17,6 +17,7 @@ const userSchema = {
     required: true,
     unique: true,
   },
+  city: { type: String, required: true },
   avatar: { type: String },
   phoneNumber: {
     type: String,
@@ -29,13 +30,6 @@ const userSchema = {
       message: (props) => `${props.value} is not a valid phone number!`,
     },
     required: [true, "User phone number required"],
-  },
-  gender: {
-    type: String,
-  },
-  isOnline: {
-    type: Boolean,
-    default: false,
   },
   email: {
     type: String,
@@ -51,11 +45,6 @@ const userSchema = {
   // driver close to that that location should be able to get the notifications and it will
   // only show only for who accepted it for the delivery
   notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
-  userType: {
-    type: String,
-    enum: ["USER", "RESTAURANT"],
-    default: "USER",
-  },
   password: {
     type: String,
     required: true,
@@ -69,16 +58,33 @@ const userSchema = {
     type: Boolean,
     default: false,
   },
+  userType: { type: String, default: "RESTAURANT" },
   bankDetails: [
     {
       type: Schema.Types.ObjectId,
       ref: "BankDetail",
     },
   ],
+  storeName: { type: String },
+  storeAddress: { type: String, required: true },
+  postCode: { type: String },
+  businessType: {
+    type: String,
+    enum: ["Chef", "Restaurant", "Super Market", "Caterer"],
+    default: "Restaurant",
+    required: true,
+  },
+  dateOfJoin: { type: Date, default: Date.now() },
+  documents: [{ type: Schema.Types.ObjectId, ref: "Document `" }],
+  status: { type: String, enum: ["Online", "Offline"], default: "Offline" },
+  openingHours: [{ from: String, to: String, day: String }],
+  categories: [{ type: Schema.Types.ObjectId, ref: "Category" }],
+  coupon: [{ type: Schema.Types.ObjectId, ref: "Coupon" }],
   orders: [OrderItem],
+  menus: [{ type: Schema.Types.ObjectId, ref: "Menu" }],
 };
 
-const schema = new Schema(userSchema, {
+const schema = new Schema(storeOwnerSchema, {
   toJSON: {
     getters: true,
   },
@@ -96,7 +102,6 @@ schema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 10);
   }
-
   next();
 });
 
@@ -104,6 +109,6 @@ schema.methods.checkPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-const User = model("User", schema);
+const Store = model("StoreOwner", schema);
 
-module.exports = User;
+module.exports = Store;

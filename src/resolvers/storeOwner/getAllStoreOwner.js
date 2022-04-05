@@ -1,30 +1,32 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
-const { Offers } = require("../../models");
+const { StoreOwner } = require("../../models");
 
-const getAllOffers = async (_, { skip = 0, limit = 10 }, { user }) => {
+const getAllStoreOwner = async (_, { limit = 10, skip = 0 }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
-    
-    const docs = await Offers.find({}).skip(skip).limit(limit);
-    const docsCount = await Offers.count();
+    const docs = await StoreOwner.find()
+      .populate("categories")
+      .populate("orders")
+      .populate("menus")
+      .populate("coupon");
+    const docsCount = await StoreOwner.count();
     const totalPages = Math.ceil(docsCount / limit);
     const currentPage = Math.ceil(docsCount % (skip + 1));
-
     return {
       status: 0,
       success: true,
-      offers: docs,
+      stores: docs,
       currentPage: currentPage == 0 ? currentPage + 1 : currentPage,
       totalPages,
       hasMore: docsCount >= limit + 1,
     };
   } catch (error) {
-    console.log(`[ERROR]: Failed to get offer details| ${error.message}`);
-    throw new ApolloError("Failed to get offer details");
+    console.log(`[ERROR]: Failed to get all StoreOwner | ${error.message}`);
+    throw new ApolloError("Failed to get all StoreOwner ");
   }
 };
 
-module.exports = getAllOffers;
+module.exports = getAllStoreOwner;

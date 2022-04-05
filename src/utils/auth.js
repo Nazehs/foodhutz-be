@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken");
 const secret = process.env.APP_SECRET;
 const expiration = "12h";
 
-const signToken = ({ firstName, lastName, email, username, id }) => {
-  const payload = { firstName, lastName, email, username, id };
+const signToken = ({ firstName, lastName, email, username, id, userType }) => {
+  const payload = { firstName, lastName, email, username, id, userType };
   return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
 };
 

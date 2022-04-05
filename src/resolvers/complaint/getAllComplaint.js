@@ -2,7 +2,7 @@ const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
 const { Complaint } = require("../../models");
 
-const getAllComplaint = async (_, { limit=10, skip=0 }, { user }) => {
+const getAllComplaint = async (_, { limit = 10, skip = 0 }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
@@ -16,6 +16,7 @@ const getAllComplaint = async (_, { limit=10, skip=0 }, { user }) => {
     const docs = await Complaint.find({})
       .skip(skip)
       .limit(limit)
+      .populate("order")
       .populate({
         path: "order",
         populate: {
@@ -30,7 +31,6 @@ const getAllComplaint = async (_, { limit=10, skip=0 }, { user }) => {
           model: "Category",
         },
       })
-      .populate("order")
       .populate("user");
 
     const totalPages = Math.ceil(complaintsCount / limit);

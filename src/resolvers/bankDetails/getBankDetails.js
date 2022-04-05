@@ -1,7 +1,7 @@
 const { ApolloError } = require("apollo-server-express");
 const { BankDetails } = require("../../models");
 
-const getBankDetails = async (_, { bankId, input }, { user }) => {
+const getBankDetails = async (_, { bankId }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
