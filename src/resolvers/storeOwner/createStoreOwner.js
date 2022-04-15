@@ -1,7 +1,7 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 const { StoreOwner, Driver, User } = require("../../models");
 const { signToken } = require("../../utils/auth");
-
+const { sentSMS } = require("../../utils/sms");
 const createStoreOwner = async (_, { input }) => {
   try {
     const isUserExisting =
@@ -9,7 +9,7 @@ const createStoreOwner = async (_, { input }) => {
       (await User.findOne({ email: input.email })) ||
       (await StoreOwner.findOne({ email: input.email }));
     if (!isUserExisting) {
-      await sentSMS(input.phoneNumber);
+      await sentSms(input.phoneNumber);
       const user = await await StoreOwner.create(input);
       return {
         token: signToken(user),
