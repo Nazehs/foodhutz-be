@@ -28,7 +28,12 @@ const storeOwnerSchema = {
     maxLength: 14,
     validate: {
       validator: function (v) {
-        return /((\+44(\s\(0\)\s|\s0\s|\s)?)|0)7\d{3}(\s)?\d{6}/.test(v);
+        return (
+          /((\+44(\s\(0\)\s|\s0\s|\s)?)|0)7\d{3}(\s)?\d{6}/.test(v) ||
+          /(^(\+)?234[\( ]?[0-9]{3}\)? ?[0-9]{3}[\- ]?[0-9]{4})|(^[0-9]{4}[\- ]?[0-9]{3}[\- ]?[0-9]{4})|(^01 ?[0-9]{3} ?[0-9]{4})|(^\+234 1 [0-9]{3} [0-9]{4})/.test(
+            v
+          )
+        );
       },
       message: (props) => `${props.value} is not a valid phone number!`,
     },
