@@ -9,7 +9,7 @@ const createStoreOwner = async (_, { input }) => {
       (await User.findOne({ email: input.email })) ||
       (await StoreOwner.findOne({ email: input.email }));
     if (!isUserExisting) {
-      await sentSms(input.phoneNumber);
+      await sentSMS(input.phoneNumber);
       const user = await await StoreOwner.create(input);
       return {
         token: signToken(user),
