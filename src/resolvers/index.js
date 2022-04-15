@@ -84,7 +84,7 @@ const verifyDriverOTP = require("./driver/verifyDriverOTP");
 const updateDriver = require("./driver/updateDriver");
 const tripControl = require("./trip/tripControl");
 const updateStoreOwner = require("./storeOwner/updateStoreOwner");
-
+const getCurrentLocation = require("./location/getCurrentLocation");
 const dateScalar = new GraphQLScalarType({
   name: "Date",
   description: "Date custom scalar type",
@@ -173,6 +173,7 @@ const resolvers = {
     createContactUs,
     createReferralCode,
     createStoreOwner,
+    getCurrentLocation,
     // update resolvers
     updateUser,
     updateDriver,

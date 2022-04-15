@@ -28,6 +28,7 @@ const typeDefs = gql`
     username: String!
     email: String!
     avatar: String
+    address: String!
     phoneNumber: String!
     userType: String!
     trips: [Trip]
@@ -39,21 +40,14 @@ const typeDefs = gql`
   }
 
   type StoreOwnerResponse {
-    id: ID!
-    firstName: String!
-    lastName: String!
-    username: String!
-    email: String!
-    avatar: String
-    phoneNumber: String!
+    token: String!
+    user: User!
     businessType: String!
-    dateOfJoin: Date
     notifications: [NotificationResponse]
     termsAccepted: Boolean
     status: String!
     documents: [DocumentResponse]
     categories: [Category]
-    orders: [Order]
     coupon: [Coupon]
     menus: [Menu]
     openingHours: [Hours]
@@ -351,6 +345,7 @@ const typeDefs = gql`
     phoneNumber: String!
     password: String
     businessType: String!
+    city:String!
     storeName: String!
     postCode: String!
     storeAddress: String!
@@ -453,6 +448,8 @@ const typeDefs = gql`
     phoneNumber: String
     userType: String
     email: String!
+    avatar: String
+    address: String
     password: String!
   }
 
@@ -616,6 +613,7 @@ const typeDefs = gql`
     createContactUs(input: ContactUsInput): ContactUsResponse
     createReferralCode(input: ReferralCodeInput): ReferralCodeResponse
     createStoreOwner(input: StoreOwnerInput): StoreOwnerResponse
+    getCurrentLocation(input: String): String
     # update
     updateUser(input: UpdateUserInput!): Auth!
     updateDriver(input: UpdateUserInput!): Auth!

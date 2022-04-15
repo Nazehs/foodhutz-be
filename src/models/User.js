@@ -1,25 +1,37 @@
 const { model, Schema } = require("mongoose");
 const bcrypt = require("bcrypt");
 const OrderItem = require("./OrderItem");
+const geocoder = require("../utils/geoCoder");
+const locationSchema = require("./LocationSchema");
+const getGeoLocation = require("../utils/googleGeoCoder");
 const userSchema = {
   firstName: {
     type: String,
     required: true,
     maxLength: 50,
+    trim: true,
   },
   lastName: {
     type: String,
     required: true,
     maxLength: 50,
+    trim: true,
   },
   username: {
     type: String,
     required: true,
     unique: true,
+    trim: true,
   },
   avatar: { type: String },
+  address: { type: String },
+  // location: {
+  //   type: locationSchema,
+  // },
   phoneNumber: {
     type: String,
+    trim: true,
+    unique: true,
     minLength: 11,
     maxLength: 14,
     validate: {
@@ -42,6 +54,7 @@ const userSchema = {
     required: true,
     maxLength: 100,
     unique: true,
+    trim: true,
     validate: [validateEmail, "Please fill a valid email address"],
     match: [
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
@@ -60,6 +73,7 @@ const userSchema = {
     type: String,
     required: true,
     minLength: 8,
+    trim: true,
   },
   termsAccepted: {
     type: Boolean,
@@ -96,7 +110,26 @@ schema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 10);
   }
+  // // GEOCODE THE CODE
+  // const {
+  //   data: { results },
+  // } = await getGeoLocation(this.address);
+  // console.log(loc.data.results[0]);
 
+  // this.location = {
+  //   type: "Point",
+  //   coordinates: [
+  //     results[0].geometry.location.lng,
+  //     results[0].geometry.location.lat,
+  //   ],
+  //   formattedAddress: results[0].formatted_address,
+  //   postCode:
+  //     results[0].address_components[results[0].address_components.length - 1]
+  //       .short_name,
+  //   city: results[0].address_components[2].long_name,
+  // };
+
+  // this.address = results[0].formatted_address;
   next();
 });
 

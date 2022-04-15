@@ -1,12 +1,14 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 const { StoreOwner } = require("../../models");
+const { signToken } = require("../../utils/auth");
 
-const createStoreOwner = async (_, { input }, { user }) => {
+const createStoreOwner = async (_, { input }) => {
   try {
-    if (!user) {
-      throw new AuthenticationError("Unauthorised to perform this operation");
-    }
-    return await StoreOwner.create(input);
+    const user = await await StoreOwner.create(input);
+    return {
+      token: signToken(user),
+      user,
+    };
   } catch (error) {
     console.log(`[ERROR]: Failed to create StoreOwner | ${error.message}`);
     throw new ApolloError("Failed to create StoreOwner");

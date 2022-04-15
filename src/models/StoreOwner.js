@@ -1,6 +1,9 @@
 const { model, Schema } = require("mongoose");
 const bcrypt = require("bcrypt");
 const OrderItem = require("./OrderItem");
+const geocoder = require("../utils/geoCoder");
+const locationSchema = require("./LocationSchema");
+const getGeoLocation = require("../utils/googleGeoCoder");
 const storeOwnerSchema = {
   firstName: {
     type: String,
@@ -67,6 +70,10 @@ const storeOwnerSchema = {
   ],
   storeName: { type: String },
   storeAddress: { type: String, required: true },
+  address: { type: String },
+  // location: {
+  //   type: locationSchema,
+  // },
   postCode: { type: String },
   businessType: {
     type: String,
@@ -102,6 +109,25 @@ schema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 10);
   }
+  // GEOCODE THE CODE
+  // const {
+  //   data: { results },
+  // } = await getGeoLocation(this.storeAddress);
+
+  // this.location = {
+  //   type: "Point",
+  //   coordinates: [
+  //     results[0].geometry.location.lng,
+  //     results[0].geometry.location.lat,
+  //   ],
+  //   formattedAddress: results[0].formatted_address,
+  //   postCode:
+  //     results[0].address_components[results[0].address_components.length - 1]
+  //       .short_name,
+  //   city: results[0].address_components[2].long_name,
+  // };
+
+  // this.address = results[0].formatted_address;
   next();
 });
 

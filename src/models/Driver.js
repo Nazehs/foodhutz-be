@@ -1,5 +1,7 @@
 const { model, Schema } = require("mongoose");
 const bcrypt = require("bcrypt");
+const locationSchema = require("./LocationSchema");
+const geocoder = require("../utils/geoCoder");
 const driverSchema = {
   firstName: {
     type: String,
@@ -71,6 +73,10 @@ const driverSchema = {
       ref: "BankDetail",
     },
   ],
+  address: { type: String },
+  // location: {
+  //   type: locationSchema,
+  // },
   tips: [],
   vehicleType: { type: String },
   vehicleNumber: { type: String },
@@ -99,10 +105,40 @@ function validateEmail(email) {
 }
 
 schema.pre("save", async function (next) {
-  console.log(this);
+  // HASH THE PASSWORD
   if (this.isNew || this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 10);
   }
+
+  // GEOCODE THE CODE
+  // const {
+  //   data: { results },
+  // } = await getGeoLocation(this.address);
+  // console.log(loc.data.results[0]);
+
+  // // await geocoder.geocode(this.address);
+  // console.log(loc);
+  // this.location = {
+  //   type: "Point",
+  //   coordinates: [
+  //     results[0].geometry.location.lng,
+  //     results[0].geometry.location.lat,
+  //   ],
+  //   formattedAddress: results[0].formatted_address,
+  //   postCode:
+  //     results[0].address_components[results[0].address_components.length - 1]
+  //       .short_name,
+  //   city: results[0].address_components[2].long_name,
+  // };
+  // this.location = {
+  //   type: "Point",
+  //   coordinates: [loc[0].longitude, loc[0].latitude],
+  //   formattedAddress: loc[0].formattedAddress,
+  //   postCode: loc[0].zipcode,
+  //   city: loc[0].city,
+  // };
+
+  // this.address = results[0].formatted_address;
 
   next();
 });

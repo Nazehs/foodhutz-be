@@ -3,6 +3,7 @@ const { model, Schema } = require("mongoose");
 const complaintsSchema = {
   message: {
     type: String,
+    trim: true,
   },
   user: {
     type: Schema.Types.ObjectID,
