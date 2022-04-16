@@ -10,7 +10,7 @@ const typeDefs = gql`
   }
 
   type User {
-    id: ID!
+    id: ID
     firstName: String!
     lastName: String!
     username: String!
@@ -40,15 +40,23 @@ const typeDefs = gql`
   }
 
   type StoreOwnerResponse {
-    token: String!
-    user: User!
+    id: ID
+    firstName: String!
+    lastName: String!
+    username: String!
+    email: String!
+    avatar: String
+    phoneNumber: String!
+    userType: String!
+    orders: [Order]
+    dateOfJoin: Date
     businessType: String!
     notifications: [NotificationResponse]
     termsAccepted: Boolean
     status: String!
     documents: [DocumentResponse]
     categories: [Category]
-    coupon: [Coupon]
+    coupons: [Coupon]
     menus: [Menu]
     openingHours: [Hours]
     storeName: String
@@ -91,7 +99,7 @@ const typeDefs = gql`
     userType: String!
     categories: [Category]
     orders: [Order]
-    coupon: [Coupon]
+    coupons: [Coupon]
     menus: [Menu]
     openingHours: [Hours]
   }
@@ -345,7 +353,7 @@ const typeDefs = gql`
     phoneNumber: String!
     password: String
     businessType: String!
-    city:String!
+    city: String!
     storeName: String!
     postCode: String!
     storeAddress: String!

@@ -12,7 +12,7 @@ const getStoreOwner = async (_, { storeId }, { user }) => {
       .populate("categories")
       .populate("orders")
       .populate("menus")
-      .populate("coupon");
+      .populate("coupons");
   } catch (error) {
     console.log(`[ERROR]: Failed to get StoreOwner details | ${error.message}`);
     throw new ApolloError("Failed to get StoreOwner details ");

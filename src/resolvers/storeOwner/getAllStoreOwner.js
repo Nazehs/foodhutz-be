@@ -10,8 +10,10 @@ const getAllStoreOwner = async (_, { limit = 10, skip = 0 }, { user }) => {
     const docs = await StoreOwner.find()
       .populate("categories")
       .populate("orders")
+      .populate("bankDetails")
       .populate("menus")
-      .populate("coupon");
+      .populate("coupons");
+
     const docsCount = await StoreOwner.count();
     const totalPages = Math.ceil(docsCount / limit);
     const currentPage = Math.ceil(docsCount % (skip + 1));

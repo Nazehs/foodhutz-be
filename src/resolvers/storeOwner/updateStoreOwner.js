@@ -14,7 +14,7 @@ const updateStoreOwner = async (_, { storeId, input }, { user }) => {
       .populate("categories")
       .populate("orders")
       .populate("menus")
-      .populate("coupon");
+      .populate("coupons");
   } catch (error) {
     console.log(`[ERROR]: Failed to update StoreOwner | ${error.message}`);
     throw new ApolloError("Failed to update StoreOwner ");

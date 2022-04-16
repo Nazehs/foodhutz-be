@@ -91,7 +91,7 @@ const storeOwnerSchema = {
   status: { type: String, enum: ["Online", "Offline"], default: "Offline" },
   openingHours: [{ from: String, to: String, day: String }],
   categories: [{ type: Schema.Types.ObjectId, ref: "Category" }],
-  coupon: [{ type: Schema.Types.ObjectId, ref: "Coupon" }],
+  coupons: [{ type: Schema.Types.ObjectId, ref: "Coupon" }],
   orders: [OrderItem],
   menus: [{ type: Schema.Types.ObjectId, ref: "Menu" }],
 };

@@ -9,7 +9,7 @@ const createCoupon = async (_, { input }, { user }) => {
     }
     const doc = await Coupon.create(input);
     await StoreOwner.findByIdAndUpdate(user.id, {
-      $push: { coupon: doc._id },
+      $push: { coupons: doc._id },
     });
     return doc;
   } catch (error) {

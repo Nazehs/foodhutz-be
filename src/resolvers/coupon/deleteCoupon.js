@@ -9,7 +9,7 @@ const deleteCoupons = async (_, { CouponId }, { user }) => {
     }
     const doc = await Coupon.findByIdAndDelete(CouponId);
     await StoreOwner.findByIdAndUpdate(user.id, {
-      $pull: { coupon: doc._id },
+      $pull: { coupons: doc._id },
     });
     return doc;
   } catch (error) {
