@@ -41,6 +41,7 @@ const typeDefs = gql`
 
   type StoreOwnerResponse {
     id: ID
+    token: String!
     firstName: String!
     lastName: String!
     username: String!
