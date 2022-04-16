@@ -20,7 +20,7 @@ const getAllStoreOwner = async (_, { limit = 10, skip = 0 }, { user }) => {
     return {
       status: 0,
       success: true,
-      stores: docs,
+      users: docs,
       currentPage: currentPage == 0 ? currentPage + 1 : currentPage,
       totalPages,
       hasMore: docsCount >= limit + 1,

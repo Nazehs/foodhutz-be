@@ -21,27 +21,8 @@ const typeDefs = gql`
     orders: [Order]
     dateOfJoin: Date
   }
-  type Driver {
-    id: ID!
-    firstName: String!
-    lastName: String!
-    username: String!
-    email: String!
-    avatar: String
-    address: String!
-    phoneNumber: String!
-    userType: String!
-    trips: [Trip]
-    dateOfJoin: Date
-    vehicleType: String
-    vehicleNumber: String
-    documents: [DocumentResponse]
-    tips: [Tips]
-  }
-
-  type StoreOwnerResponse {
+  type StoreUser {
     id: ID
-    token: String!
     firstName: String!
     lastName: String!
     username: String!
@@ -64,6 +45,28 @@ const typeDefs = gql`
     postCode: String!
     storeAddress: String
     bankDetails: [BankDetail]
+  }
+  type Driver {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    username: String!
+    email: String!
+    avatar: String
+    address: String!
+    phoneNumber: String!
+    userType: String!
+    trips: [Trip]
+    dateOfJoin: Date
+    vehicleType: String
+    vehicleNumber: String
+    documents: [DocumentResponse]
+    tips: [Tips]
+  }
+
+  type StoreOwnerResponse {
+    token: String!
+    user: StoreUser!
   }
   type DocumentResponse {
     name: String
@@ -269,7 +272,7 @@ const typeDefs = gql`
     totalPages: Int!
     success: Boolean!
     hasMore: Boolean!
-    stores: [StoreOwnerResponse]
+    users: [StoreUser]
   }
   type AllDrivers {
     status: Int!
@@ -587,7 +590,7 @@ const typeDefs = gql`
     getAllContactUs(limit: Int, skip: Int): AllContactUs
     # getAllRestaurants(limit: Int, skip: Int): AllRestaurants!
     getAllStoreOwners: AllStoresOwners
-    getStoreOwner(storeId: ID!): StoreOwnerResponse
+    getStoreOwner(storeId: ID!): StoreUser
     getUser(userId: ID!): User!
     getDriver(userId: ID!): Driver!
     getBankDetails(bankId: ID): BankDetail
@@ -634,10 +637,7 @@ const typeDefs = gql`
     updateOrder(orderId: ID!, input: OrderInput!): Order!
     orderControl(orderId: ID!, status: String): Order!
     tripControl(tripId: ID!, status: String): Trip!
-    updateStoreOwner(
-      storeId: ID!
-      input: StoreOwnerInputUpdate!
-    ): StoreOwnerResponse!
+    updateStoreOwner(storeId: ID!, input: StoreOwnerInputUpdate!): StoreUser!
     updateBankDetails(bankId: ID!, input: BankDetailInput!): BankDetail
     updateComplaint(
       complaintId: ID!
@@ -665,7 +665,7 @@ const typeDefs = gql`
     deleteUser(userId: ID): Auth!
     deleteDriver(userId: ID): Auth!
     deleteCoupon(CouponId: ID): Coupon!
-    deleteStoreOwner(storeId: ID): StoreOwnerResponse
+    deleteStoreOwner(storeId: ID): StoreUser
     deleteCategory(categoryId: ID): Category!
     # deleteRestaurant(restaurantId: ID): Restaurant!
     deleteTrip(tripId: ID): Trip!
