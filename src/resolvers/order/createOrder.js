@@ -13,7 +13,7 @@ const createOrder = async (_, { input }, { user }) => {
       $push: { orders: doc._id },
     });
     await User.findByIdAndUpdate(user.id, {
-      $push: { orders: orderItems[0] },
+      $push: { orders: doc.orderItems[0] },
     });
 
     return await Order.findById(doc._id)
