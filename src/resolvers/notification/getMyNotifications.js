@@ -1,30 +1,38 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
-const { Notification } = require("../../models");
+const { StoreOwner, User, Driver } = require("../../models");
 
 const getMyNotifications = async (_, __, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
+    let docs;
+    if (user.userType === "USER") {
+      docs = await User.findById(user.id)
+        .sort("desc")
+        .populate("notifications");
+    }
+    if (user.userType === "RESTAURANT") {
+      docs = StoreOwner.findById(user.id)
+        .sort("desc")
+        .populate("notifications");
+    }
+    if (user.userType === "DRIVER") {
+      docs = Driver.findById(user.id).sort("desc").populate("notifications");
+    }
+    const notificationsCount = docs.notifications.length;
 
-    return await Notification.findById(user.id)
-      .populate("order")
-      .populate("user")
-      .populate({
-        path: "order",
-        populate: {
-          path: "restaurant",
-          model: "Restaurant",
-        },
-      })
-      .populate({
-        path: "order",
-        populate: {
-          path: "category",
-          model: "Category",
-        },
-      });
+    const totalPages = Math.ceil(notificationsCount / limit);
+    const currentPage = Math.ceil(notificationsCount % (skip + 1));
+    return {
+      status: 0,
+      success: true,
+      currentPage: currentPage == 0 ? currentPage + 1 : currentPage,
+      totalPages,
+      hasMore: notificationsCount >= limit + 1,
+      notifications: docs.notifications,
+    };
   } catch (error) {
     console.log(
       `[ERROR]: Failed to get my notification  details| ${error.message}`

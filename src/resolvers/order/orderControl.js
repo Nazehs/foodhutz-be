@@ -33,12 +33,13 @@ const orderControl = async (_, { orderId, status }, { user }) => {
         from: doc?.orderItems[0]?.restaurantAddress || " No address",
       };
       //   create a trip
-      const tripDoc = await Trip.create(trip);
+      // trip.user = user.id;
+      // const tripDoc = await Trip.create(trip);
       //   create a notification
       const notificationDoc = await Notification.create({
         message: "New order available for you",
-        user: doc.user,
-        order: doc.order,
+        user: doc.user._id,
+        order: doc.order._id,
       });
       //   push notifications to driver list of notification
       await Driver.updateMany(

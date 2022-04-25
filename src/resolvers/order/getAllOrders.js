@@ -13,6 +13,7 @@ const getAllOrder = async (_, { limit = 10, skip = 0 }, { user }) => {
     }
     const ordersCount = await Order.count();
     const docs = await Order.find({})
+      .sort("desc")
       .populate("orderItems")
       .populate({
         path: "orderItems",
