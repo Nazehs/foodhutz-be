@@ -9,8 +9,9 @@ const createOrder = async (_, { input }, { user }) => {
     input.customer = user.id;
     const doc = await Order.create(input);
     console.log(doc._id);
+    // this should push to respective restaurants
     await StoreOwner.findByIdAndUpdate(doc.orderItems[0].restaurant, {
-      $push: { orders: doc._id },
+      $push: { orders: doc.orderItems[0] },
     });
     await User.findByIdAndUpdate(user.id, {
       $push: { orders: doc.orderItems[0] },

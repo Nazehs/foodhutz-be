@@ -458,7 +458,6 @@ const typeDefs = gql`
     lastName: String!
     username: String!
     phoneNumber: String
-    userType: String
     email: String!
     avatar: String
     address: String
@@ -470,7 +469,6 @@ const typeDefs = gql`
     lastName: String
     username: String
     phoneNumber: String
-    userType: String
     email: String
     password: String
   }

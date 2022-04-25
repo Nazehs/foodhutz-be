@@ -16,9 +16,9 @@ const getMyTrips = async (_, { limit = 10, skip = 0 }, { user }) => {
       status: 0,
       success: true,
       currentPage: currentPage == 0 ? currentPage + 1 : currentPage,
-      totalPages,
+      totalPages: totalPages == 0 ? totalPages + 1 : totalPages,
       hasMore: tripsCount >= limit + 1,
-      trips: docs.orders,
+      trips: docs.trips,
     };
 
     // return await Trip.findById(user.id).populate("order");
