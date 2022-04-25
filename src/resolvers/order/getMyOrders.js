@@ -15,7 +15,7 @@ const getMyOrders = async (_, __, { user }) => {
       docs = await User.findById(user.id).sort("desc").populate("orders");
     }
     if (user.userType === "RESTAURANT") {
-      docs = StoreOwner.findById(user.id).sort("desc").populate("orders");
+      docs = await StoreOwner.findById(user.id).sort("desc").populate("orders");
     }
     console.log("docs", docs);
     const ordersCount = docs.orders.length;

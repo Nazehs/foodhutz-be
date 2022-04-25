@@ -14,12 +14,14 @@ const getMyNotifications = async (_, __, { user }) => {
         .populate("notifications");
     }
     if (user.userType === "RESTAURANT") {
-      docs = StoreOwner.findById(user.id)
+      docs = await StoreOwner.findById(user.id)
         .sort("desc")
         .populate("notifications");
     }
     if (user.userType === "DRIVER") {
-      docs = Driver.findById(user.id).sort("desc").populate("notifications");
+      docs = await Driver.findById(user.id)
+        .sort("desc")
+        .populate("notifications");
     }
     const notificationsCount = docs.notifications.length;
 
