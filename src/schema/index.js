@@ -598,6 +598,9 @@ const typeDefs = gql`
     getCoupon(CouponId: ID!): Coupon
     getTrip(tripId: ID!): Trip
     getOrder(orderId: ID!): Order
+    getMyNotifications: AllNotifications
+    getMyOrders: AllOrders
+    getMyTrips: AllTrips
     # getRestaurant(restaurantId: ID!): Restaurant
     getReferAndEarn(referralId: ID!): ReferAndEarnResponse
     getReferralCode(codeId: ID!): ReferralCodeResponse

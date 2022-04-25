@@ -7,7 +7,6 @@ const storeOwnerLogin = require("./storeOwner/storeOwnerLogin");
 const driverSignup = require("./driver/driverSignup");
 const userSignup = require("./user/signup");
 const createMenu = require("./menu/createMenu");
-const createRestaurant = require("./restaurant/createRestaurant");
 const createTrip = require("./trip/createTrips");
 const createCategory = require("./category/createCategory");
 const createCoupon = require("./coupon/createCoupon");
@@ -25,7 +24,6 @@ const deleteUser = require("./user/deleteUser");
 const deleteDriver = require("./driver/deleteDriver");
 const deleteCoupon = require("./coupon/deleteCoupon");
 const deleteCategory = require("./category/deleteCategory");
-const deleteRestaurant = require("./restaurant/deleteRestaurant");
 const deleteTrip = require("./trip/deleteTrip");
 const deleteBankDetails = require("./bankDetails/deleteBankDetails");
 const deleteMenu = require("./menu/deleteMenu");
@@ -43,11 +41,11 @@ const getAllUsers = require("./user/getAllUsers");
 const getTrip = require("./trip/getTrip");
 const getOrder = require("./order/getOrder");
 const getStoreOwner = require("./storeOwner/getStoreOwner");
-const getRestaurant = require("./restaurant/getRestaurant");
 const getCoupon = require("./coupon/getCoupon");
 const getCategory = require("./category/getCategory");
 const getReferAndEarn = require("./referAndEarn/getReferAndEarn");
 const getNotification = require("./notification/getNotification");
+const getMyNotifications = require("./notification/getMyNotifications");
 const getComplaint = require("./complaint/getComplaint");
 const getContactUs = require("./contactus/getContactUs");
 const getReferralCode = require("./referralCode/updateReferralCode");
@@ -58,9 +56,10 @@ const getAllContactUs = require("./contactus/getAllContactUs");
 const getAllReferralCode = require("./referralCode/getAllReferralCode");
 const getAllCategory = require("./category/getAllCategory");
 const getAllMenus = require("./menu/getAllMenus");
-const getAllRestaurants = require("./restaurant/getAllRestaurants");
 const getAllTrips = require("./trip/getAllTrips");
+const getMyTrips = require("./trip/getMyTrips");
 const getAllOrders = require("./order/getAllOrders");
+const getMyOrders = require("./order/getMyOrders");
 const getBankDetails = require("./bankDetails/getBankDetails");
 const getAllCoupons = require("./coupon/getAllCoupons");
 const getAllStoreOwners = require("./storeOwner/getAllStoreOwner");
@@ -71,7 +70,6 @@ const updateTrip = require("./trip/updateTrip");
 const updateCoupon = require("./coupon/updateCoupon");
 const updateOrder = require("./order/updateOrder");
 const orderControl = require("./order/orderControl");
-const updateRestaurant = require("./restaurant/updateRestaurant");
 const updateBankDetails = require("./bankDetails/updateBankDetails");
 const updateMenu = require("./menu/updateMenu");
 const updateReferAndEarn = require("./referAndEarn/updateReferAndEarn");
@@ -123,6 +121,9 @@ const resolvers = {
     getReferralCode,
     getComplaint,
     getNotification,
+    getMyNotifications,
+    getMyOrders,
+    getMyTrips,
     getContactUs,
     getCategory,
     getAllCategory,
