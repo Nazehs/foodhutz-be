@@ -2,7 +2,7 @@ const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
 const { StoreOwner, User, Driver } = require("../../models");
 
-const getMyNotifications = async (_, __, { user }) => {
+const getMyNotifications = async (_, { limit = 10, skip = 0 }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");

@@ -1,7 +1,7 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 const { Driver } = require("../../models");
 
-const getMyTrips = async (_, __, { user }) => {
+const getMyTrips = async (_, { limit = 10, skip = 0 }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
