@@ -10,13 +10,15 @@ const getMyOrders = async (_, __, { user }) => {
 
     // return await Order.findById({ customer: user.id });
     let docs;
+    console.log("user", user);
     if (user.userType === "USER") {
       docs = await User.findById(user.id).sort("desc").populate("orders");
     }
     if (user.userType === "RESTAURANT") {
       docs = StoreOwner.findById(user.id).sort("desc").populate("orders");
     }
-    const ordersCount = docs.notifications.length;
+    console.log("docs", docs);
+    const ordersCount = docs.orders.length;
 
     const totalPages = Math.ceil(ordersCount / limit);
     const currentPage = Math.ceil(ordersCount % (skip + 1));
