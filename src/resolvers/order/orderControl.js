@@ -23,15 +23,15 @@ const orderControl = async (_, { orderId, status }, { user }) => {
     if (status.toLowerCase() == "accepted") {
       // fire for driver/dispatch request/notification
       console.log(doc);
-      const trip = {
-        to: doc?.deliveryAddress,
-        orderStatus: status,
-        duration: doc?.deliveryAddress,
-        order: doc._id,
-        tip: 0,
-        distance: "30 KM",
-        from: doc?.orderItems[0]?.restaurantAddress || " No address",
-      };
+      // const trip = {
+      //   to: doc?.deliveryAddress,
+      //   orderStatus: status,
+      //   duration: doc?.deliveryAddress,
+      //   order: doc._id,
+      //   tip: 0,
+      //   distance: "30 KM",
+      //   from: doc?.orderItems[0]?.restaurantAddress || " No address",
+      // };
       //   create a trip
       // trip.user = user.id;
       // const tripDoc = await Trip.create(trip);
