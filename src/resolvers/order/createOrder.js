@@ -6,7 +6,7 @@ const createOrder = async (_, { input }, { user }) => {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
-    input.customer = user.id;
+    input.user = user.id;
     const doc = await Order.create(input);
     console.log(doc._id);
     // this should push to respective restaurants

@@ -16,6 +16,10 @@ const orderSchema = {
   actualDeliveryTime: {
     type: Date,
   },
+  user: {
+    type: Schema.Types.ObjectID,
+    ref: "User",
+  },
   finalPrice: {
     type: Number,
   },
