@@ -1,5 +1,5 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
-const { Order, Restaurant, StoreOwner, User } = require("../../models");
+const { Order, StoreOwner, User } = require("../../models");
 
 const createOrder = async (_, { input }, { user }) => {
   try {
