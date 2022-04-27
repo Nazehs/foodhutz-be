@@ -46,7 +46,7 @@ const orderControl = async (_, { orderId, status }, { user }) => {
         {},
         { $push: { notifications: notificationDoc._id } }
       );
-      console.log(tripDoc);
+      // console.log(tripDoc);
     }
 
     return doc;
