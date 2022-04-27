@@ -19,7 +19,7 @@ const orderControl = async (_, { orderId, status }, { user }) => {
         orderStatus: status,
       },
       { new: true }
-    );
+    ).populate("user");
     if (status.toLowerCase() == "accepted") {
       // fire for driver/dispatch request/notification
       console.log(doc);
@@ -39,7 +39,7 @@ const orderControl = async (_, { orderId, status }, { user }) => {
       const notificationDoc = await Notification.create({
         message: "New order available for you",
         user: doc.user._id,
-        order: doc.order._id,
+        order: doc._id,
       });
       //   push notifications to driver list of notification
       await Driver.updateMany(
