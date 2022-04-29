@@ -43,7 +43,7 @@ const tripControl = async (_, { tripId, status }, { user }) => {
           },
         });
       //   update the order with the driver
-      const orderDoc = Order.findByIdAndUpdate(doc.order, {
+      await Order.findByIdAndUpdate(doc.order, {
         $set: { deliveryBy: user.id },
       });
 
@@ -51,6 +51,9 @@ const tripControl = async (_, { tripId, status }, { user }) => {
       await Driver.findByIdAndUpdate(user.id, { $push: { trips: doc._id } });
       return doc;
     }
+    // else{
+    //   return await Driver.findByIdAndUpdate(user.id, { $pull: { notification: doc._id } });
+    // }
   } catch (error) {
     console.log(`[ERROR]: Failed to update  trip | ${error.message}`);
     throw new ApolloError("Failed to update  trip status");

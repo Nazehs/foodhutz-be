@@ -166,8 +166,8 @@ const typeDefs = gql`
     startTime: Date!
     order: Order
     amount: Float!
-    duration: Float
-    time: Float
+    duration: String
+    distance: String
     tip: Float
   }
   type Menu {
