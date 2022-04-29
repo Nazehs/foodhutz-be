@@ -6,7 +6,15 @@ const getMyTrips = async (_, { limit = 10, skip = 0 }, { user }) => {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
-    const docs = await Driver.findById(user.id).populate("trips");
+    const docs = await Driver.findById(user.id)
+      .populate("trips")
+      .populate({
+        path: "trips",
+        populate: {
+          path: "order",
+          model: "Order",
+        },
+      });
 
     const tripsCount = docs.trips.length;
 
