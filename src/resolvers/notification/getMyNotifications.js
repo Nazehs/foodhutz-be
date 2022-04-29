@@ -10,20 +10,22 @@ const getMyNotifications = async (_, { limit = 10, skip = 0 }, { user }) => {
     let docs;
     if (user.userType === "USER") {
       docs = await User.findById(user.id)
-        .sort("desc")
-        .populate("notifications");
+        .populate("notifications")
+        .sort("desc");
     }
     if (user.userType === "RESTAURANT") {
       docs = await StoreOwner.findById(user.id)
-        .sort("desc")
-        .populate("notifications");
+        .populate("notifications")
+        .sort("desc");
     }
     if (user.userType === "DRIVER") {
       docs = await Driver.findById(user.id)
-        .sort("desc")
-        .populate("notifications");
+        .populate("notifications")
+        .sort("desc");
     }
     const notificationsCount = docs.notifications.length;
+    console.log(user);
+    console.log(docs);
 
     const totalPages = Math.ceil(notificationsCount / limit);
     const currentPage = Math.ceil(notificationsCount % (skip + 1));
