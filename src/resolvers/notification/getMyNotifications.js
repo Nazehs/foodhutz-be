@@ -13,6 +13,20 @@ const getMyNotifications = async (_, { limit = 10, skip = 0 }, { user }) => {
         .populate("notifications")
         .populate("user")
         .populate("order")
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "order",
+            model: "Order",
+          },
+        })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "user",
+            model: "User",
+          },
+        })
         .sort("desc");
     }
     if (user.userType === "RESTAURANT") {
@@ -20,13 +34,39 @@ const getMyNotifications = async (_, { limit = 10, skip = 0 }, { user }) => {
         .populate("notifications")
         .populate("user")
         .populate("order")
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "order",
+            model: "Order",
+          },
+        })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "user",
+            model: "User",
+          },
+        })
         .sort("desc");
     }
     if (user.userType === "DRIVER") {
       docs = await Driver.findById(user.id)
         .populate("notifications")
-        .populate("user")
-        .populate("order")
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "order",
+            model: "Order",
+          },
+        })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "user",
+            model: "User",
+          },
+        })
         .sort("desc");
     }
     const notificationsCount = docs.notifications.length;
