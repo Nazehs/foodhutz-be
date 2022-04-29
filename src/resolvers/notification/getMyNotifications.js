@@ -27,6 +27,17 @@ const getMyNotifications = async (_, { limit = 10, skip = 0 }, { user }) => {
             model: "User",
           },
         })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "user",
+            model: "User",
+            populate: {
+              path: "order",
+              model: "Order",
+            },
+          },
+        })
         .sort("desc");
     }
     if (user.userType === "RESTAURANT") {
