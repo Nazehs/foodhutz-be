@@ -11,16 +11,22 @@ const getMyNotifications = async (_, { limit = 10, skip = 0 }, { user }) => {
     if (user.userType === "USER") {
       docs = await User.findById(user.id)
         .populate("notifications")
+        .populate("user")
+        .populate("order")
         .sort("desc");
     }
     if (user.userType === "RESTAURANT") {
       docs = await StoreOwner.findById(user.id)
         .populate("notifications")
+        .populate("user")
+        .populate("order")
         .sort("desc");
     }
     if (user.userType === "DRIVER") {
       docs = await Driver.findById(user.id)
         .populate("notifications")
+        .populate("user")
+        .populate("order")
         .sort("desc");
     }
     const notificationsCount = docs.notifications.length;
