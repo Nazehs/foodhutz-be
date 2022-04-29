@@ -12,11 +12,13 @@ const bankSchema = {
   },
   accountNumber: {
     type: String,
+    minLength: 8,
     required: true,
   },
   sortCode: {
     type: String,
     required: true,
+    minLength: 6,
   },
   isDefault: {
     type: Boolean,
