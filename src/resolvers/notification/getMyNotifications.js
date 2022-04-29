@@ -33,7 +33,7 @@ const getMyNotifications = async (_, { limit = 10, skip = 0 }, { user }) => {
             path: "user",
             model: "User",
             populate: {
-              path: "order",
+              path: "orders",
               model: "Order",
             },
           },
