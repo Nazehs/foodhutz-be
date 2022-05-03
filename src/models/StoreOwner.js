@@ -87,12 +87,13 @@ const storeOwnerSchema = {
     required: true,
   },
   dateOfJoin: { type: Date, default: Date.now() },
+  description: { type: String },
   documents: [{ type: Schema.Types.ObjectId, ref: "Document `" }],
   status: { type: String, enum: ["Online", "Offline"], default: "Offline" },
   openingHours: [{ from: String, to: String, day: String }],
   categories: [{ type: Schema.Types.ObjectId, ref: "Category" }],
   coupons: [{ type: Schema.Types.ObjectId, ref: "Coupon" }],
-  orders: [OrderItem],
+  orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
   menus: [{ type: Schema.Types.ObjectId, ref: "Menu" }],
 };
 

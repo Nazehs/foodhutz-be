@@ -16,10 +16,12 @@ const Tips = require("./Tip");
 const Payment = require("./Payment");
 const StoreOwner = require("./StoreOwner");
 const Document = require("./Document");
+const Feedback = require("./Feedback");
 module.exports = {
   User,
   Order,
   Coupon,
+  Feedback,
   Category,
   Document,
   BankDetails,

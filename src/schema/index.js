@@ -31,6 +31,7 @@ const typeDefs = gql`
     phoneNumber: String!
     userType: String!
     orders: [Order]
+    description: String
     dateOfJoin: Date
     businessType: String!
     notifications: [NotificationResponse]
@@ -258,6 +259,14 @@ const typeDefs = gql`
     hasMore: Boolean!
     complaints: [ComplaintsResponse]
   }
+  type AllFeedbacks {
+    status: Int!
+    success: Boolean!
+    currentPage: Int!
+    totalPages: Int!
+    hasMore: Boolean!
+    feedbacks: [FeedbacksResponse]
+  }
   type AllContactUs {
     status: Int!
     currentPage: Int!
@@ -329,6 +338,15 @@ const typeDefs = gql`
     message: String!
     order: Order
   }
+  type FeedbacksResponse {
+    id: ID!
+    stars: Float!
+    user: User
+    driver: Driver
+    restaurant: StoreUser
+    message: String
+    order: Order
+  }
   type NotificationResponse {
     id: ID!
     user: User!
@@ -359,6 +377,7 @@ const typeDefs = gql`
     businessType: String!
     city: String!
     storeName: String!
+    description: String
     postCode: String!
     storeAddress: String!
   }
@@ -390,6 +409,7 @@ const typeDefs = gql`
     openingHours: [HoursInput]
     storeName: String
     postCode: String
+    description: String
     storeAddress: String
   }
   input RestaurantInput {
@@ -430,6 +450,7 @@ const typeDefs = gql`
     dateActiveFrom: Date!
     timeActiveFrom: Date!
     dateActiveTo: Date!
+    category: ID!
     CouponPrice: Float!
   }
   input DocumentInput {
@@ -445,6 +466,7 @@ const typeDefs = gql`
     timeActiveTo: Date
     dateActiveFrom: Date
     timeActiveFrom: Date
+    category: ID
     dateActiveTo: Date
     CouponPrice: Float
   }
@@ -564,6 +586,20 @@ const typeDefs = gql`
     message: String
     order: ID
   }
+
+  input FeedbacksInput {
+    stars: Float!
+    driver: ID
+    restaurant: ID
+    message: String
+    order: ID!
+  }
+
+  input FeedbacksInputUpdate {
+    stars: Float
+    message: String
+    order: ID
+  }
   input NotificationInput {
     user: ID!
     message: String!
@@ -582,6 +618,7 @@ const typeDefs = gql`
     getAllCoupons(limit: Int, skip: Int): AllCoupons!
     getAllOrders(limit: Int, skip: Int): AllOrders
     getAllComplaint(limit: Int, skip: Int): AllComplaints
+    getAllFeedback(limit: Int, skip: Int): AllFeedbacks
     getAllReferAndEarn(limit: Int, skip: Int): AllReferAndEarn
     getAllReferralCode(limit: Int, skip: Int): AllReferralCode
     getAllNotification(limit: Int, skip: Int): AllNotifications
@@ -599,10 +636,13 @@ const typeDefs = gql`
     getMyNotifications: AllNotifications
     getMyOrders: AllOrders
     getMyTrips: AllTrips
+    getStoreOwnerAggregate: StoreUser
     # getRestaurant(restaurantId: ID!): Restaurant
     getReferAndEarn(referralId: ID!): ReferAndEarnResponse
     getReferralCode(codeId: ID!): ReferralCodeResponse
     getComplaint(complaintId: ID!): ComplaintsResponse
+    getFeedback(feedbackId: ID!): FeedbacksResponse
+    getMyFeedback: AllFeedbacks
     getNotification(notificationId: ID!): NotificationResponse
     getContactUs(messageId: ID!): ContactUsResponse
   }
@@ -622,6 +662,7 @@ const typeDefs = gql`
     createBankDetails(input: BankDetailInput): BankDetail
     createNotification(input: NotificationInput): NotificationResponse
     createComplaint(input: ComplaintsInput): ComplaintsResponse
+    createFeedback(input: FeedbacksInput): FeedbacksResponse
     createReferAndEarn(input: ReferAndEarnInput): ReferAndEarnResponse
     createContactUs(input: ContactUsInput): ContactUsResponse
     createReferralCode(input: ReferralCodeInput): ReferralCodeResponse
@@ -644,6 +685,10 @@ const typeDefs = gql`
       complaintId: ID!
       input: ComplaintsInputUpdate!
     ): ComplaintsResponse
+    updateFeedback(
+      feedbackId: ID!
+      input: FeedbacksInputUpdate!
+    ): FeedbacksResponse
     updateContactUs(
       messageId: ID!
       input: ContactUsInputUpdate!
@@ -674,6 +719,7 @@ const typeDefs = gql`
     deleteMenu(menuId: ID!): Menu
     deleteContactUs(messageId: ID!): ContactUsResponse
     deleteComplaint(complaintId: ID!): ComplaintsResponse
+    deleteFeedback(feedbackId: ID!): FeedbacksResponse
     deleteNotification(notificationId: ID!): NotificationResponse
     deleteReferAndEarn(referralId: ID!): ReferAndEarnResponse
     deleteReferralCode(codeId: ID): ReferralCodeResponse

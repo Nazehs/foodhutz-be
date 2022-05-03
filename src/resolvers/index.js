@@ -15,6 +15,7 @@ const createBankDetails = require("./bankDetails/createBankDetails");
 const createReferAndEarn = require("./referAndEarn/createReferAndEarn");
 const createNotification = require("./notification/createNotification");
 const createComplaint = require("./complaint/createComplaint");
+const createFeedback = require("./feedback/createFeedback");
 const createContactUs = require("./contactus/createContactUs");
 const createReferralCode = require("./referralCode/createReferralCode");
 const createStoreOwner = require("./storeOwner/createStoreOwner");
@@ -30,6 +31,7 @@ const deleteMenu = require("./menu/deleteMenu");
 const deleteReferAndEarn = require("./referAndEarn/deleteReferAndEarn");
 const deleteNotification = require("./notification/deleteNotification");
 const deleteComplaint = require("./complaint/deleteComplaint");
+const deleteFeedback = require("./feedback/deleteFeedback");
 const deleteContactUs = require("./contactus/deleteContactUs");
 const deleteReferralCode = require("./referralCode/deleteReferralCode");
 const deleteStoreOwner = require("./storeOwner/deleteStoreOwner");
@@ -41,17 +43,21 @@ const getAllUsers = require("./user/getAllUsers");
 const getTrip = require("./trip/getTrip");
 const getOrder = require("./order/getOrder");
 const getStoreOwner = require("./storeOwner/getStoreOwner");
+const getStoreOwnerAggregate = require("./storeOwner/getAggregate");
 const getCoupon = require("./coupon/getCoupon");
 const getCategory = require("./category/getCategory");
 const getReferAndEarn = require("./referAndEarn/getReferAndEarn");
 const getNotification = require("./notification/getNotification");
 const getMyNotifications = require("./notification/getMyNotifications");
 const getComplaint = require("./complaint/getComplaint");
+const getFeedback = require("./feedback/getFeedback");
 const getContactUs = require("./contactus/getContactUs");
 const getReferralCode = require("./referralCode/updateReferralCode");
 const getAllReferAndEarn = require("./referAndEarn/getAllReferAndEarn");
 const getAllNotification = require("./notification/getAllNotification");
 const getAllComplaint = require("./complaint/getAllComplaint");
+const getAllFeedback = require("./feedback/getAllFeedbacks");
+const getMyFeedback = require("./feedback/getMyFeedback");
 const getAllContactUs = require("./contactus/getAllContactUs");
 const getAllReferralCode = require("./referralCode/getAllReferralCode");
 const getAllCategory = require("./category/getAllCategory");
@@ -75,6 +81,7 @@ const updateMenu = require("./menu/updateMenu");
 const updateReferAndEarn = require("./referAndEarn/updateReferAndEarn");
 const updateNotification = require("./notification/updateNotification");
 const updateComplaint = require("./complaint/updateComplaint");
+const updateFeedback = require("./feedback/updateFeedback");
 const updateContactUs = require("./contactus/updateContactUs");
 const updateReferralCode = require("./referralCode/updateReferralCode");
 const verifyOTPUser = require("./user/verifyOTP");
@@ -115,11 +122,13 @@ const resolvers = {
     getAllOrders,
     getOrder,
     getStoreOwner,
+    getStoreOwnerAggregate,
     getBankDetails,
     getAllNotification,
     getReferAndEarn,
     getReferralCode,
     getComplaint,
+    getFeedback,
     getNotification,
     getMyNotifications,
     getMyOrders,
@@ -129,6 +138,8 @@ const resolvers = {
     getAllCategory,
     getAllCoupons,
     getAllComplaint,
+    getAllFeedback,
+    getMyFeedback,
     getAllReferAndEarn,
     getAllReferralCode,
     getAllNotification,
@@ -150,7 +161,7 @@ const resolvers = {
     deleteNotification,
     deleteReferralCode,
     deleteReferAndEarn,
-    deleteComplaint,
+    deleteFeedback,
     deleteNotification,
     deleteReferAndEarn,
     deleteReferralCode,
@@ -170,6 +181,7 @@ const resolvers = {
     createBankDetails,
     createNotification,
     createComplaint,
+    createFeedback,
     createReferAndEarn,
     createContactUs,
     createReferralCode,
@@ -185,6 +197,7 @@ const resolvers = {
     updateCoupon,
     updateMenu,
     updateComplaint,
+    updateFeedback,
     updateContactUs,
     updateNotification,
     updateReferAndEarn,

@@ -11,7 +11,10 @@ const getAllDrivers = async (_, { limit = 10, skip = 0 }, { user }) => {
       throw new ApolloError("Provide a valid limit");
     }
 
-    const docs = await Driver.find().skip(skip).limit(limit);
+    const docs = await Driver.find()
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
     const usersCount = await Driver.count();
     const totalPages = Math.ceil(usersCount / limit);
     const currentPage = Math.ceil(usersCount % (skip + 1));
