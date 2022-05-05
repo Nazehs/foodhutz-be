@@ -78,6 +78,11 @@ const driverSchema = {
       ref: "BankDetail",
     },
   ],
+  fullName: {
+    type: String,
+    maxLength: 70,
+    trim: true,
+  },
   address: { type: String },
   // location: {
   //   type: locationSchema,

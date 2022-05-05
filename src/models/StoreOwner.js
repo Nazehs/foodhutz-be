@@ -73,6 +73,11 @@ const storeOwnerSchema = {
       ref: "BankDetail",
     },
   ],
+  fullName: {
+    type: String,
+    maxLength: 70,
+    trim: true,
+  },
   storeName: { type: String },
   storeAddress: { type: String, required: true },
   address: { type: String },

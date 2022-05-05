@@ -13,8 +13,13 @@ const userSchema = {
   },
   lastName: {
     type: String,
-    required: true,
+    // required: true,
     maxLength: 50,
+    trim: true,
+  },
+  fullName: {
+    type: String,
+    maxLength: 70,
     trim: true,
   },
   username: {

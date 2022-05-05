@@ -13,9 +13,10 @@ const typeDefs = gql`
     id: ID
     firstName: String!
     lastName: String!
-    username: String!
+    username: String
     email: String!
     avatar: String
+    fullName: String
     phoneNumber: String!
     userType: String!
     orders: [Order]
@@ -26,6 +27,7 @@ const typeDefs = gql`
     firstName: String!
     lastName: String!
     username: String!
+    fullName: String
     email: String!
     avatar: String
     phoneNumber: String!
@@ -52,6 +54,7 @@ const typeDefs = gql`
     firstName: String!
     lastName: String!
     username: String!
+    fullName: String
     email: String!
     avatar: String
     address: String!
@@ -370,6 +373,7 @@ const typeDefs = gql`
     firstName: String!
     lastName: String!
     username: String!
+    fullName: String
     email: String!
     avatar: String
     phoneNumber: String!
@@ -393,6 +397,7 @@ const typeDefs = gql`
     firstName: String
     lastName: String
     username: String
+    fullName: String
     email: String
     avatar: String
     password: String
@@ -478,7 +483,8 @@ const typeDefs = gql`
   input SignupInput {
     firstName: String!
     lastName: String!
-    username: String!
+    username: String
+    fullName: String
     phoneNumber: String
     email: String!
     avatar: String
@@ -490,6 +496,7 @@ const typeDefs = gql`
     firstName: String
     lastName: String
     username: String
+    fullName: String
     phoneNumber: String
     email: String
     password: String
