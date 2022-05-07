@@ -8,8 +8,6 @@ const signup = async (_, { input }) => {
   try {
     const isUserExisting = await User.findOne({ email: input.email });
     if (!isUserExisting) {
-      await sentSMS(input.phoneNumber);
-
       const user = await User.create(input);
       return {
         token: signToken(user),

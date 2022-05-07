@@ -5,12 +5,11 @@ const { StoreOwner } = require("../../models");
 
 const getAggregate = async (_, __, { user }) => {
   try {
-    if (!user) {
-      throw new AuthenticationError("Unauthorised to perform this operation");
-    }
-    // console.log(user);
+    // if (!user) {
+    //   throw new AuthenticationError("Unauthorised to perform this operation");
+    // }
 
-    const doc = await StoreOwner.aggregate([
+    return await StoreOwner.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(user.id) } },
       {
         $lookup: {
@@ -180,9 +179,9 @@ const getAggregate = async (_, __, { user }) => {
       },
     ]);
 
-    console.log(JSON.stringify(doc));
+    // console.log(JSON.stringify(doc));
 
-    return doc;
+    // return doc;
   } catch (error) {
     console.log(`[ERROR]: Failed to get aggregate details | ${error.message}`);
     throw new ApolloError("Failed to get aggregate details ");

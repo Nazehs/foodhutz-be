@@ -2,6 +2,7 @@ const { GraphQLScalarType, Kind } = require("graphql");
 const { GraphQLUpload } = require("graphql-upload");
 // create resolvers
 const userLogin = require("./user/login");
+const sendOTP = require("./user/sendOTP");
 const driverLogin = require("./driver/driverLogin");
 const storeOwnerLogin = require("./storeOwner/storeOwnerLogin");
 const driverSignup = require("./driver/driverSignup");
@@ -43,7 +44,7 @@ const getAllUsers = require("./user/getAllUsers");
 const getTrip = require("./trip/getTrip");
 const getOrder = require("./order/getOrder");
 const getStoreOwner = require("./storeOwner/getStoreOwner");
-const getStoreOwnerAggregate = require("./storeOwner/getAggregate");
+const getStoreOwnerAggregate = require("./storeOwner/getStoreAggregate");
 const getCoupon = require("./coupon/getCoupon");
 const getCategory = require("./category/getCategory");
 const getReferAndEarn = require("./referAndEarn/getReferAndEarn");
@@ -206,6 +207,7 @@ const resolvers = {
     updateStoreOwner,
     verifyOTPUser,
     verifyDriverOTP,
+    sendOTP,
   },
 };
 

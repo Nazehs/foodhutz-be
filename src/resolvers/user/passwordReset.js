@@ -6,7 +6,6 @@ const userPasswordReset = async (_, { email, phoneNumber }) => {
     if (email) {
       const user = await User.find({ phoneNumber });
       if (user) {
-        console.log(user);
         await sentSMS(user.phoneNumber);
       }
       throw new ApolloError("Failed to reset password");

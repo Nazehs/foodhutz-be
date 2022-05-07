@@ -11,12 +11,12 @@ const typeDefs = gql`
 
   type User {
     id: ID
-    firstName: String!
-    lastName: String!
+    firstName: String
+    lastName: String
     username: String
     email: String!
     avatar: String
-    fullName: String
+    fullName: String!
     phoneNumber: String!
     userType: String!
     orders: [Order]
@@ -315,6 +315,12 @@ const typeDefs = gql`
     isValid: Boolean!
     message: String!
   }
+
+  type OTPResponse {
+    status: Int!
+    success: Boolean!
+    message: String!
+  }
   type ReferralCodeResponse {
     id: ID!
     code: String!
@@ -481,9 +487,21 @@ const typeDefs = gql`
     phoneNumber: String
   }
   input SignupInput {
+    firstName: String
+    lastName: String
+    username: String
+    fullName: String!
+    phoneNumber: String
+    email: String!
+    avatar: String
+    address: String
+    password: String!
+  }
+
+  input SignupInputDriver {
     firstName: String!
     lastName: String!
-    username: String
+    username: String!
     fullName: String
     phoneNumber: String
     email: String!
@@ -554,6 +572,10 @@ const typeDefs = gql`
   input OTPVerificationInput {
     code: String!
     email: String!
+    phoneNumber: String!
+  }
+
+  input OTPInput {
     phoneNumber: String!
   }
   input ReferralCodeInput {
@@ -660,7 +682,7 @@ const typeDefs = gql`
     storeOwnerLogin(input: LoginInput): Auth!
     driverLogin(input: LoginInput!): Auth
     userSignup(input: SignupInput!): Auth!
-    driverSignup(input: SignupInput!): Auth!
+    driverSignup(input: SignupInputDriver!): Auth!
     createMenu(input: MenuInput): Menu!
     createCategory(input: CategoryInput): Category!
     createCoupon(input: CouponInput): Coupon!
@@ -714,6 +736,7 @@ const typeDefs = gql`
     ): ReferralCodeResponse
     verifyOTPUser(input: OTPVerificationInput): OTPVerification
     verifyDriverOTP(input: OTPVerificationInput): OTPVerification
+    sendOTP(input: OTPInput): OTPResponse
     # delete
     deleteUser(userId: ID): Auth!
     deleteDriver(userId: ID): Auth!
