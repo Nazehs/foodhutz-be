@@ -1,22 +1,23 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 const { default: mongoose } = require("mongoose");
 
-const { StoreOwner } = require("../../models");
+const { Driver } = require("../../models");
 
-const getAggregate = async (_, __, { user }) => {
+const getDriverStats = async (_, __, { user }) => {
   try {
-    // if (!user) {
-    //   throw new AuthenticationError("Unauthorised to perform this operation");
-    // }
+    if (!user) {
+      throw new AuthenticationError("Unauthorised to perform this operation");
+    }
+    // console.log(user);
 
-    return await StoreOwner.aggregate([
+    const doc = await Driver.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(user.id) } },
       {
         $lookup: {
-          from: "orders",
-          localField: "orders",
+          from: "trips",
+          localField: "trips",
           foreignField: "_id",
-          as: "orders",
+          as: "trips",
         },
       },
       {
@@ -29,47 +30,47 @@ const getAggregate = async (_, __, { user }) => {
       {
         $facet: {
           categorizedByDay: [
-            { $unwind: "$orders" },
+            { $unwind: "$trips" },
             {
               $group: {
                 _id: {
                   $dateToString: {
                     format: "%Y-%m-%d",
-                    date: "$orders.orderTime",
+                    date: "$trips.createdAt",
                   },
                 },
                 count: { $sum: 1 },
-                totalSales: {
-                  $sum: "$orders.finalPrice",
+                totalAmt: {
+                  $sum: "$trips.amount",
                 },
               },
             },
           ],
           categorizedByMonth: [
-            { $unwind: "$orders" },
+            { $unwind: "$trips" },
             {
               $group: {
                 _id: {
-                  month: { $month: "$orders.orderTime" },
-                  day: { $dayOfMonth: "$orders.orderTime" },
-                  year: { $year: "$orders.orderTime" },
+                  month: { $month: "$trips.createdAt" },
+                  day: { $dayOfMonth: "$trips.createdAt" },
+                  year: { $year: "$trips.createdAt" },
                 },
                 count: { $sum: 1 },
-                totalSales: {
-                  $sum: "$orders.finalPrice",
+                totalAmt: {
+                  $sum: "$trips.amount",
                 },
               },
             },
           ],
           // total accepted order
           totalAmountAccepted: [
-            { $unwind: "$orders" },
+            { $unwind: "$trips" },
 
-            { $match: { "orders.orderStatus": "accepted" } },
+            { $match: { "trips.status": "accepted" } },
 
             {
               $project: {
-                total: "$orders.finalPrice",
+                total: "$trips.amount",
               },
             },
             {
@@ -89,11 +90,11 @@ const getAggregate = async (_, __, { user }) => {
           ],
           // total processed
           totalProcessed: [
-            { $unwind: "$orders" },
+            { $unwind: "$trips" },
 
-            { $match: { "orders.orderStatus": "processed" } },
+            { $match: { "trips.status": "processed" } },
 
-            { $project: { total: "$orders.finalPrice" } },
+            { $project: { total: "$trips.amount" } },
             {
               $group: {
                 _id: null,
@@ -111,11 +112,11 @@ const getAggregate = async (_, __, { user }) => {
           ],
           // total cancelled
           totalCancelled: [
-            { $unwind: "$orders" },
+            { $unwind: "$trips" },
 
-            { $match: { "orders.orderStatus": "cancelled" } },
+            { $match: { "trips.tripstatus": "cancelled" } },
 
-            { $project: { total: "$orders.finalPrice" } },
+            { $project: { total: "$trips.amount" } },
             {
               $group: {
                 _id: null,
@@ -131,13 +132,13 @@ const getAggregate = async (_, __, { user }) => {
               },
             },
           ],
-          // total missed orders
+          // total missed trips
           totalMissed: [
-            { $unwind: "$orders" },
+            { $unwind: "$trips" },
 
-            { $match: { "orders.orderStatus": "missed" } },
+            { $match: { "trips.status": "missed" } },
 
-            { $project: { total: "$orders.finalPrice" } },
+            { $project: { total: "$trips.amount" } },
             {
               $group: {
                 _id: null,
@@ -153,13 +154,13 @@ const getAggregate = async (_, __, { user }) => {
               },
             },
           ],
-          // total orders and counts
-          totalOrders: [
-            { $unwind: "$orders" },
+          // total trips and counts
+          totalTrips: [
+            { $unwind: "$trips" },
 
-            { $match: { "orders.orderStatus": { $in: ["New", "accepted"] } } },
+            { $match: { "trips.status": { $in: ["accepted"] } } },
 
-            { $project: { total: "$orders.finalPrice" } },
+            { $project: { total: "$trips.amount" } },
             {
               $group: {
                 _id: null,
@@ -178,14 +179,13 @@ const getAggregate = async (_, __, { user }) => {
         },
       },
     ]);
+    console.log(JSON.stringify(doc));
 
-    // console.log(JSON.stringify(doc));
-
-    // return doc;
+    return doc[0];
   } catch (error) {
     console.log(`[ERROR]: Failed to get aggregate details | ${error.message}`);
     throw new ApolloError("Failed to get aggregate details ");
   }
 };
 
-module.exports = getAggregate;
+module.exports = getDriverStats;

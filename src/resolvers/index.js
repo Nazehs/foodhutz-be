@@ -40,11 +40,12 @@ const deleteStoreOwner = require("./storeOwner/deleteStoreOwner");
 const getUser = require("./user/getUser");
 const getDriver = require("./driver/getDriver");
 const getAllDrivers = require("./driver/getAllDrivers");
+const getDriverStats = require("./driver/getDriverStats");
 const getAllUsers = require("./user/getAllUsers");
 const getTrip = require("./trip/getTrip");
 const getOrder = require("./order/getOrder");
 const getStoreOwner = require("./storeOwner/getStoreOwner");
-const getStoreOwnerAggregate = require("./storeOwner/getStoreAggregate");
+const getStoreOwnerStats = require("./storeOwner/getStoreStats");
 const getCoupon = require("./coupon/getCoupon");
 const getCategory = require("./category/getCategory");
 const getReferAndEarn = require("./referAndEarn/getReferAndEarn");
@@ -123,7 +124,7 @@ const resolvers = {
     getAllOrders,
     getOrder,
     getStoreOwner,
-    getStoreOwnerAggregate,
+    getStoreOwnerStats,
     getBankDetails,
     getAllNotification,
     getReferAndEarn,
@@ -146,6 +147,7 @@ const resolvers = {
     getAllNotification,
     getAllContactUs,
     getAllStoreOwners,
+    getDriverStats,
   },
   Mutation: {
     // delete resolvers
