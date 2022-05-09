@@ -238,13 +238,7 @@ const typeDefs = gql`
     hasMore: Boolean!
     menus: [Menu]
   }
-  type AllRestaurants {
-    currentPage: Int!
-    totalPages: Int!
-    hasMore: Boolean!
-    success: Boolean!
-    restaurants: [Restaurant]
-  }
+
   type AllCategory {
     currentPage: Int!
     totalPages: Int!
@@ -593,6 +587,7 @@ const typeDefs = gql`
     password: String
     needEquipment: String
     vehicleType: String
+    documents: [DocumentInput]
   }
 
   input TripInput {
