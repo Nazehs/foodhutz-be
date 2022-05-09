@@ -76,7 +76,11 @@ const typeDefs = gql`
     trips: [Trip]
     dateOfJoin: Date
     vehicleType: String
+    needEquipment: String
     vehicleNumber: String
+    jobType: String
+    requestedFor: String
+    previousExperience: String
     bankDetails: [BankDetail]
     documents: [DocumentResponse]
     tips: [Tips]
@@ -108,6 +112,11 @@ const typeDefs = gql`
     token: ID!
     user: User!
   }
+  type DriverAuth {
+    token: ID!
+    user: Driver!
+  }
+
   type Restaurant {
     id: ID!
     storeName: String!
@@ -742,10 +751,10 @@ const typeDefs = gql`
     # create
     singleUpload(input: DocumentUploadInput!): DocumentResponse!
     userLogin(input: LoginInput!): Auth!
-    storeOwnerLogin(input: LoginInput): Auth!
-    driverLogin(input: LoginInput!): Auth
+    storeOwnerLogin(input: LoginInput): StoreOwnerResponse!
+    driverLogin(input: LoginInput!): DriverAuth!
     userSignup(input: SignupInput!): Auth!
-    driverSignup(input: SignupInputDriver!): Auth!
+    driverSignup(input: SignupInputDriver!): DriverAuth!
     createMenu(input: MenuInput): Menu!
     createCategory(input: CategoryInput): Category!
     createCoupon(input: CouponInput): Coupon!
@@ -762,7 +771,7 @@ const typeDefs = gql`
     getCurrentLocation(input: String): String
     # update
     updateUser(input: UpdateUserInput!): Auth!
-    updateDriver(input: UpdateDriverInput!): Auth!
+    updateDriver(input: UpdateDriverInput!): DriverAuth!
     updateMenu(menuId: ID!, input: MenuInputUpdate!): Menu!
     updateCategory(categoryId: ID!, input: CategoryInput!): Category!
     updateTrip(tripId: ID!, input: TripUpdateInput!): Trip!
@@ -801,7 +810,7 @@ const typeDefs = gql`
     sendOTP(input: OTPInput): OTPResponse
     # delete
     deleteUser(userId: ID): Auth!
-    deleteDriver(userId: ID): Auth!
+    deleteDriver(userId: ID): DriverAuth!
     deleteCoupon(CouponId: ID): Coupon!
     deleteStoreOwner(storeId: ID): StoreUser
     deleteCategory(categoryId: ID): Category!
