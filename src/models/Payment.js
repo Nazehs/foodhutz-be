@@ -15,6 +15,7 @@ const paymentSchema = {
   },
   amount: {
     type: Number,
+    default: 0,
   },
   email: {
     type: String,
@@ -22,7 +23,7 @@ const paymentSchema = {
 };
 
 const schema = new Schema(paymentSchema, {
-  toJSON: { 
+  toJSON: {
     getters: true,
   },
   id: true,

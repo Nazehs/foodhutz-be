@@ -15,6 +15,7 @@ const CouponsSchema = {
   },
   amount: {
     type: Number,
+    default: 0,
   },
   arrivalTime: {
     type: Date,
@@ -33,6 +34,7 @@ const CouponsSchema = {
   },
   tip: {
     type: Number,
+    default: 0,
   },
   status: {
     type: String,

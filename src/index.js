@@ -31,6 +31,8 @@ async function startApolloServer(typeDefs, resolvers) {
     typeDefs,
     resolvers,
     context: authMiddleware,
+    csrfPrevention: true,
+    debug: process.env.NODE_ENV == "production",
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     introspection: process.env.NODE_ENV !== "production",
   });

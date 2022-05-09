@@ -8,7 +8,20 @@ const typeDefs = gql`
     mimetype: String!
     encoding: String!
   }
-
+  type Suspended {
+    reason: String
+  }
+  type IsBlocked {
+    message: String
+    blockedByUser: User
+  }
+  type IsWrongCredential {
+    message: String
+  }
+  type UnavailableInCountry {
+    countryCode: Int
+    message: String
+  }
   type User {
     id: ID
     firstName: String
@@ -558,6 +571,21 @@ const typeDefs = gql`
     password: String
   }
 
+  input UpdateDriverInput {
+    firstName: String
+    lastName: String
+    username: String
+    fullName: String
+    phoneNumber: String
+    email: String
+    jobType: String
+    requestedFor: String
+    previousExperience: String
+    password: String
+    needEquipment: String
+    vehicleType: String
+  }
+
   input TripInput {
     from: String!
     to: String!
@@ -734,7 +762,7 @@ const typeDefs = gql`
     getCurrentLocation(input: String): String
     # update
     updateUser(input: UpdateUserInput!): Auth!
-    updateDriver(input: UpdateUserInput!): Auth!
+    updateDriver(input: UpdateDriverInput!): Auth!
     updateMenu(menuId: ID!, input: MenuInputUpdate!): Menu!
     updateCategory(categoryId: ID!, input: CategoryInput!): Category!
     updateTrip(tripId: ID!, input: TripUpdateInput!): Trip!

@@ -21,6 +21,7 @@ const OrderItem = {
   },
   discount: {
     type: Number,
+    default: 0,
   },
   foodPrepTime: { type: Number },
   customer: {

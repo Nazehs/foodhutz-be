@@ -88,8 +88,24 @@ const driverSchema = {
   //   type: locationSchema,
   // },
   tips: [],
-  vehicleType: { type: String },
+  vehicleType: {
+    type: String,
+    enum: ["Bike", "Bicycle", "Car", "Scooter", "None"],
+    description: "None",
+  },
+  previousExperience: { type: String, enum: ["Yes", "No"], default: "No" },
+  needEquipment: { type: String, enum: ["Yes", "No"], default: "No" },
+  requestedFor: {
+    type: String,
+    enum: ["Jacket", "Delivery bags", "Helmet"],
+    default: "No",
+  },
   vehicleNumber: { type: String },
+  jobType: {
+    type: String,
+    enum: ["Regular", "Part-time"],
+    default: "Part-time",
+  },
   dateOfJoin: { type: Date, default: Date.now() },
   trips: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
   documents: [
