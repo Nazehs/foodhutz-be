@@ -11,6 +11,7 @@ const getDriver = async (_, { userId }, { user }) => {
     return await Driver.findById(userId)
       .populate("documents")
       .populate("trips")
+      .populate("bankDetails")
       .populate("tips");
   } catch (error) {
     console.log(`[ERROR]: Failed to get user details | ${error.message}`);
