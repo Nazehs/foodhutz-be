@@ -53,6 +53,8 @@ const getNotification = require("./notification/getNotification");
 const getMyNotifications = require("./notification/getMyNotifications");
 const getComplaint = require("./complaint/getComplaint");
 const getFeedback = require("./feedback/getFeedback");
+const getStoreFeedbackStats = require("./feedback/getStoreFeedbackStats");
+const getDriverFeedbackStats = require("./feedback/getDriverFeedbackStats");
 const getContactUs = require("./contactus/getContactUs");
 const getReferralCode = require("./referralCode/updateReferralCode");
 const getAllReferAndEarn = require("./referAndEarn/getAllReferAndEarn");
@@ -124,7 +126,9 @@ const resolvers = {
     getAllOrders,
     getOrder,
     getStoreOwner,
+    getStoreFeedbackStats,
     getStoreOwnerStats,
+
     getBankDetails,
     getAllNotification,
     getReferAndEarn,
@@ -148,6 +152,7 @@ const resolvers = {
     getAllContactUs,
     getAllStoreOwners,
     getDriverStats,
+    getDriverFeedbackStats,
   },
   Mutation: {
     // delete resolvers

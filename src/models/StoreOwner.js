@@ -100,6 +100,7 @@ const storeOwnerSchema = {
   coupons: [{ type: Schema.Types.ObjectId, ref: "Coupon" }],
   orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
   menus: [{ type: Schema.Types.ObjectId, ref: "Menu" }],
+  feedbacks: [{ type: Schema.Types.ObjectId, ref: "Feedback" }],
 };
 
 const schema = new Schema(storeOwnerSchema, {

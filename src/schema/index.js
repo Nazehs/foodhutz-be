@@ -46,6 +46,7 @@ const typeDefs = gql`
     phoneNumber: String!
     userType: String!
     orders: [Order]
+    feedbacks: [FeedbacksResponse]
     description: String
     dateOfJoin: Date
     businessType: String!
@@ -141,21 +142,16 @@ const typeDefs = gql`
   }
   type Order {
     id: ID!
-    # name: String!
-    # restaurant: Restaurant
     discount: Float
     deliveryAddress: String!
     actualDeliveryTime: Date!
-    # category: Category!
     comment: String
-    # customer: User!
     estimatedDeliveryTime: Date
     finalPrice: Float!
     orderTime: Date!
     deliveryBy: Driver
     orderStatus: String!
     orderItems: [OrderItem]
-    # rating: Float
   }
   type OrderItem {
     name: String!
@@ -174,6 +170,7 @@ const typeDefs = gql`
     timeActiveFrom: Date!
     dateActiveTo: Date!
     CouponPrice: Float!
+    generatedDate: Date!
     useBy: [Order]
     category: Category
   }
@@ -373,13 +370,37 @@ const typeDefs = gql`
     categorizedByDay: [DayStatsCategory]
     categorizedByMonth: [MonthStatsCategory]
   }
+
+  type FeedbackStatsResponse {
+    totalDelivered: [FeedbackStatsItem]
+    totalCancelled: [FeedbackStatsItem]
+    avgFeedback: [StarsTotal]
+    totalOrders: [FeedbackStatsItem]
+    # totalAmountAccepted: [StatsItem]
+    starsCategory: [StarsCategory]
+  }
   type StatsItem {
     totalAmt: Float!
+    count: Float!
+  }
+  type FeedbackStatsItem {
+    # totalAmt: Float!
     count: Float!
   }
   type DayStatsCategory {
     _id: String!
     totalAmt: Float!
+    count: Float!
+  }
+  type StarsTotal {
+    avgStars: Float!
+    count: Float!
+  }
+  type StarsCategory {
+    stars: Float!
+    count: Float!
+  }
+  type FeedbackStatsItem {
     count: Float!
   }
   type MonthMeta {
@@ -732,8 +753,10 @@ const typeDefs = gql`
     getMyNotifications: AllNotifications
     getMyOrders: AllOrders
     getMyTrips: AllTrips
+    getStoreFeedbackStats: FeedbackStatsResponse
     getStoreOwnerStats: StoreOwnerStatsResponse
     getDriverStats: DriverStatsResponse
+    getDriverFeedbackStats: FeedbackStatsResponse
     getReferAndEarn(referralId: ID!): ReferAndEarnResponse
     getReferralCode(codeId: ID!): ReferralCodeResponse
     getComplaint(complaintId: ID!): ComplaintsResponse

@@ -7,22 +7,34 @@ const storeOwnerLogin = async (_, { input }) => {
   try {
     let user;
     if (input.email) {
-      user = await StoreOwner.findOne({ email: input.email });
+      user = await StoreOwner.findOne({ email: input.email })
+        .populate("feedbacks")
+        .populate("categories")
+        .populate("orders")
+        .populate("menus")
+        .populate("coupons");
     }
 
     if (input.phoneNumber) {
-      user = await StoreOwner.findOne({ phoneNumber: input.phoneNumber });
+      user = await StoreOwner.findOne({
+        phoneNumber: input.phoneNumber,
+      })
+        .populate("feedbacks")
+        .populate("categories")
+        .populate("orders")
+        .populate("menus")
+        .populate("coupons");
     }
 
     if (!user) {
       console.log("[ERROR]: Failed to login | User does not exist");
-      throw new AuthenticationError("Failed to login");
+      throw new AuthenticationError("Failed to login || No such user!");
     }
     const isValidPassword = await user.checkPassword(input.password);
 
     if (!isValidPassword) {
       console.log("[ERROR]: Failed to login | Incorrect password");
-      throw new AuthenticationError("Failed to login");
+      throw new AuthenticationError(`Failed to login || wrong credentials`);
     }
 
     return {
@@ -31,7 +43,7 @@ const storeOwnerLogin = async (_, { input }) => {
     };
   } catch (error) {
     console.log(`[ERROR]: Failed to login | ${error.message}`);
-    throw new AuthenticationError("Failed to login yeah");
+    throw new AuthenticationError(`Failed to login || ${error.message}`);
   }
 };
 

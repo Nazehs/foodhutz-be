@@ -10,6 +10,10 @@ const couponSchema = {
     type: Schema.Types.ObjectID,
     ref: "Category",
   },
+  generatedDate: {
+    type: Date,
+    default: Date.now(),
+  },
   dateActiveFrom: {
     type: Date,
     required: true,
