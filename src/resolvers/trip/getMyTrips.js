@@ -1,20 +1,55 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
+const { default: mongoose } = require("mongoose");
 const { Driver } = require("../../models");
 
-const getMyTrips = async (_, { limit = 10, skip = 0 }, { user }) => {
+const getMyTrips = async (_, { limit = 10, skip = 0, status }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
-    const docs = await Driver.findById(user.id)
-      .populate("trips")
-      .populate({
-        path: "trips",
-        populate: {
-          path: "order",
-          model: "Order",
+    let docs;
+    if (status) {
+      docs = await Driver.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(user.id) } },
+        {
+          $lookup: {
+            from: "trips",
+            localField: "trips",
+            foreignField: "_id",
+            as: "trips",
+          },
         },
-      });
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: [{ $arrayElemAt: ["$fromItems", 0] }, "$$ROOT"],
+            },
+          },
+        },
+        {
+          $facet: {
+            trips: [
+              // { $unwind: "$trips" },
+
+              { $match: { "trips.status": status } },
+            ],
+          },
+        },
+        { $project: { fromItems: 0 } },
+      ]);
+      docs = docs[0].trips[0];
+      console.log(docs);
+    } else {
+      docs = await Driver.findById(user.id)
+        .populate("trips")
+        .populate({
+          path: "trips",
+          populate: {
+            path: "order",
+            model: "Order",
+          },
+        });
+    }
 
     const tripsCount = docs.trips.length;
 

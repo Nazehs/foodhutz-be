@@ -183,7 +183,7 @@ const typeDefs = gql`
     status: String!
   }
   type Trip {
-    id: ID!
+    id: ID
     from: String!
     to: String!
     arrivalTime: Date!
@@ -752,7 +752,7 @@ const typeDefs = gql`
     getOrder(orderId: ID!): Order
     getMyNotifications: AllNotifications
     getMyOrders: AllOrders
-    getMyTrips: AllTrips
+    getMyTrips(status: String): AllTrips
     getStoreFeedbackStats: FeedbackStatsResponse
     getStoreOwnerStats: StoreOwnerStatsResponse
     getDriverStats: DriverStatsResponse
