@@ -9,7 +9,7 @@ const getTrip = async (_, { tripId }, { user }) => {
     return await Trip.findById(tripId).populate("order");
   } catch (error) {
     console.log(`[ERROR]: Failed get trip details | ${error.message}`);
-    throw new ApolloError("Failed get trip details ");
+    throw new ApolloError(`Failed get trip details || ${error.message}`);
   }
 };
 

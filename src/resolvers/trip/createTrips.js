@@ -10,7 +10,7 @@ const createTrip = async (_, { input }, { user }) => {
     return await Trip.create(input);
   } catch (error) {
     console.log(`[ERROR]: Failed to create trip | ${error.message}`);
-    throw new ApolloError("Failed to create trip");
+    throw new ApolloError(`Failed to create trip || ${error.message}`);
   }
 };
 module.exports = createTrip;

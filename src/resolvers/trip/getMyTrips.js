@@ -16,29 +16,15 @@ const getMyTrips = async (_, { limit = 10, skip = 0, status }, { user }) => {
             from: "trips",
             localField: "trips",
             foreignField: "_id",
+            pipeline: [
+              { $match: { status } },
+              { $replaceRoot: { newRoot: "$$ROOT" } },
+            ],
             as: "trips",
           },
         },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: [{ $arrayElemAt: ["$fromItems", 0] }, "$$ROOT"],
-            },
-          },
-        },
-        {
-          $facet: {
-            trips: [
-              // { $unwind: "$trips" },
-
-              { $match: { "trips.status": status } },
-            ],
-          },
-        },
-        { $project: { fromItems: 0 } },
       ]);
-      docs = docs[0].trips[0];
-      console.log(docs);
+      docs = docs[0];
     } else {
       docs = await Driver.findById(user.id)
         .populate("trips")
@@ -67,7 +53,7 @@ const getMyTrips = async (_, { limit = 10, skip = 0, status }, { user }) => {
     // return await Trip.findById(user.id).populate("order");
   } catch (error) {
     console.log(`[ERROR]: Failed get trip my details | ${error.message}`);
-    throw new ApolloError("Failed get trip details ");
+    throw new ApolloError(`Failed get trip details  || ${error.message}`);
   }
 };
 

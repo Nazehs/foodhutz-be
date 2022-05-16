@@ -20,7 +20,7 @@ const getAllTrips = async (_, { skip = 0, limit = 10 }, { user }) => {
     };
   } catch (error) {
     console.log(`[ERROR]: Failed get trip details | ${error.message}`);
-    throw new ApolloError("Failed get trip details ");
+    throw new ApolloError(`Failed get trip details || ${error.message} `);
   }
 };
 

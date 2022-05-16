@@ -1,8 +1,8 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
-const { StoreOwner, Driver } = require("../../models");
+const { StoreOwner, Driver } = require("../models");
 
-const updateStatus = async (_, { status }, { user }) => {
+const updateOnlineStatus = async (_, { status }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
@@ -19,11 +19,15 @@ const updateStatus = async (_, { status }, { user }) => {
       });
     }
 
-    return { status: 0, success: true, message: "user status changed" };
+    return {
+      status: 0,
+      success: true,
+      message: "user status changed successfully",
+    };
   } catch (error) {
     console.log(`[ERROR]: Failed to update status | ${error.message}`);
-    throw new ApolloError("Failed to update status ");
+    throw new ApolloError(`Failed to update status || ${error.message}`);
   }
 };
 
-module.exports = updateStatus;
+module.exports = updateOnlineStatus;

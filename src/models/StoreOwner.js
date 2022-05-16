@@ -84,6 +84,7 @@ const storeOwnerSchema = {
   // location: {
   //   type: locationSchema,
   // },
+  wallet: { type: Number, default: 0 },
   postCode: { type: String },
   businessType: {
     type: String,

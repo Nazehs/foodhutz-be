@@ -28,6 +28,7 @@ const userSchema = {
     unique: true,
     trim: true,
   },
+  wallet: { type: Number, default: 0 },
   avatar: { type: String },
   address: { type: String },
   // location: {
@@ -76,7 +77,6 @@ const userSchema = {
   notifications: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
   userType: {
     type: String,
-    enum: ["USER", "RESTAURANT"],
     default: "USER",
   },
   password: {

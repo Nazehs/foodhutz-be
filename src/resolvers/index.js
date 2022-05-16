@@ -7,6 +7,7 @@ const driverLogin = require("./driver/driverLogin");
 const storeOwnerLogin = require("./storeOwner/storeOwnerLogin");
 const driverSignup = require("./driver/driverSignup");
 const userSignup = require("./user/signup");
+const updateOnlineStatus = require("./updateOnlineStatus");
 const createMenu = require("./menu/createMenu");
 const createTrip = require("./trip/createTrips");
 const createCategory = require("./category/createCategory");
@@ -92,6 +93,7 @@ const verifyOTPUser = require("./user/verifyOTP");
 const verifyDriverOTP = require("./driver/verifyDriverOTP");
 const updateDriver = require("./driver/updateDriver");
 const tripControl = require("./trip/tripControl");
+const checkUserExist = require("./userCheck");
 const updateStoreOwner = require("./storeOwner/updateStoreOwner");
 const getCurrentLocation = require("./location/getCurrentLocation");
 const dateScalar = new GraphQLScalarType({
@@ -148,6 +150,7 @@ const resolvers = {
     getMyFeedback,
     getAllReferAndEarn,
     getAllReferralCode,
+    checkUserExist,
     getAllNotification,
     getAllContactUs,
     getAllStoreOwners,
@@ -197,6 +200,7 @@ const resolvers = {
     getCurrentLocation,
     // update resolvers
     updateUser,
+    updateOnlineStatus,
     updateDriver,
     updateCategory,
     updateOrder,

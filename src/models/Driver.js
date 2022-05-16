@@ -87,6 +87,7 @@ const driverSchema = {
   // location: {
   //   type: locationSchema,
   // },
+  wallet: { type: Number, default: 0 },
   tips: [],
   vehicleType: {
     type: String,

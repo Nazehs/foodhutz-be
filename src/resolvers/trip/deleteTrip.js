@@ -9,7 +9,7 @@ const deleteTrip = async (_, { tripId }, { user }) => {
     return await Trip.findByIdAndDelete(tripId);
   } catch (error) {
     console.log(`[ERROR]: Failed delete trip | ${error.message}`);
-    throw new ApolloError("Failed delete trip");
+    throw new ApolloError(`Failed delete trip || ${error.message}`);
   }
 };
 

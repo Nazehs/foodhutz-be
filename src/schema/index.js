@@ -25,6 +25,7 @@ const typeDefs = gql`
   type User {
     id: ID
     firstName: String
+    wallet: float
     lastName: String
     username: String
     email: String!
@@ -38,6 +39,7 @@ const typeDefs = gql`
   type StoreUser {
     id: ID
     firstName: String!
+    wallet: Float
     lastName: String!
     username: String!
     fullName: String
@@ -66,6 +68,7 @@ const typeDefs = gql`
   type Driver {
     id: ID!
     firstName: String!
+    wallet: Float
     lastName: String!
     username: String!
     fullName: String
@@ -173,6 +176,17 @@ const typeDefs = gql`
     generatedDate: Date!
     useBy: [Order]
     category: Category
+  }
+  type OnlineStatus {
+    message: String!
+    status: Float!
+    success: Boolean!
+  }
+  type CheckUserExistResponse {
+    status: Float!
+    success: Boolean
+    isUserExisting: Boolean!
+    message: String!
   }
   type Payment {
     amount: Float!
@@ -698,6 +712,11 @@ const typeDefs = gql`
     message: String!
     order: ID!
   }
+  input CheckUserInput {
+    email: String!
+    mobile: String!
+    userType: String!
+  }
 
   input ComplaintsInputUpdate {
     complaintType: String
@@ -728,6 +747,7 @@ const typeDefs = gql`
     documentType: String
   }
   type Query {
+    checkUserExist(input: CheckUserInput): CheckUserExistResponse
     getAllUsers(limit: Int, skip: Int): AllUsers
     getAllDrivers: AllDrivers
     getAllCategory(limit: Int, skip: Int): AllCategory
@@ -794,6 +814,7 @@ const typeDefs = gql`
     updateCategory(categoryId: ID!, input: CategoryInput!): Category!
     updateTrip(tripId: ID!, input: TripUpdateInput!): Trip!
     updateCoupon(CouponId: ID!, input: CouponInputUpdate!): Coupon!
+    updateOnlineStatus(status: String): OnlineStatus
     updateOrder(orderId: ID!, input: OrderInput!): Order!
     orderControl(orderId: ID!, status: String): Order!
     tripControl(tripId: ID!, status: String): Trip!
