@@ -25,7 +25,7 @@ const typeDefs = gql`
   type User {
     id: ID
     firstName: String
-    wallet: float
+    wallet: Float
     lastName: String
     username: String
     email: String!
