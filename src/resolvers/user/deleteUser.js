@@ -6,7 +6,7 @@ const deleteUser = async (_, { userId }, { user }) => {
     return await User.findByIdAndDelete(userId);
   } catch (error) {
     console.log(`[ERROR]: Failed to create trip | ${error.message}`);
-    throw new ApolloError("Failed to create trip");
+    throw new ApolloError(`Failed to create trip || ${error.message}`);
   }
 };
 

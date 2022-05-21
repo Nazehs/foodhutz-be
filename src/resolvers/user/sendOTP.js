@@ -10,7 +10,7 @@ const sendOTP = async (_, { input }) => {
     };
   } catch (error) {
     console.log(`[ERROR]: Failed to update OTP  details | ${error.message}`);
-    throw new ApolloError("Failed to update OTP details");
+    throw new ApolloError(`Failed to update OTP details || ${error.message}`);
   }
 };
 

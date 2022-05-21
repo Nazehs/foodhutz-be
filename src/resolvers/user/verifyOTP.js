@@ -8,6 +8,7 @@ const verifyOTP = async (_, { input }) => {
       to: input.phoneNumber,
       code: input.code,
     });
+    // check if twilio approved the otp
     if (response && response.status == "approved" && response.valid) {
       return { status: 0, message: "Approved", isValid: true };
     } else {
@@ -15,7 +16,7 @@ const verifyOTP = async (_, { input }) => {
     }
   } catch (error) {
     console.log(`[ERROR]: Failed to update OTP  details | ${error.message}`);
-    throw new ApolloError("Failed to update OTP details");
+    throw new ApolloError(`Failed to update OTP details || ${error.message}`);
   }
 };
 

@@ -117,9 +117,8 @@ const driverSchema = {
   trips: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
   documents: [
     {
-      name: { type: String },
-      status: { type: ["Incomplete", "Completed"], default: "Incomplete" },
-      url: { type: String },
+      type: Schema.Types.ObjectId,
+      ref: "Document",
     },
   ],
 };

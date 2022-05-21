@@ -11,7 +11,7 @@ const getUser = async (_, { userId }, { user }) => {
     return await User.findById(userId).populate("orders");
   } catch (error) {
     console.log(`[ERROR]: Failed to get user details | ${error.message}`);
-    throw new ApolloError("Failed to get user details");
+    throw new ApolloError(`Failed to get user details  || ${error.message}`);
   }
 };
 

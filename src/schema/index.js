@@ -95,6 +95,7 @@ const typeDefs = gql`
     user: StoreUser!
   }
   type DocumentResponse {
+    id: :ID
     name: String!
     imageUrl: String!
     status: String!

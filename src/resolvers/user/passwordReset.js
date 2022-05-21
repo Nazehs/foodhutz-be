@@ -19,7 +19,7 @@ const userPasswordReset = async (_, { email, phoneNumber }) => {
     }
   } catch (error) {
     console.log(`[ERROR]: Failed to reset password | ${error.message}`);
-    throw new ApolloError("Failed to reset password");
+    throw new ApolloError(`Failed to reset password || ${error.message}`);
   }
 };
 

@@ -5,14 +5,10 @@ const { signToken } = require("../../utils/auth");
 // const { sentSMS } = require("../../utils/sms");
 
 const signup = async (_, { input }) => {
-  console.log("%%%% Method called %%%%||| user signup");
   try {
-    console.log("%%%% input %%%% ", input);
     const isUserExisting = await User.findOne({ email: input.email });
-    console.log("%%% isUserExisting %% ", isUserExisting);
     if (!isUserExisting) {
       const user = User.create(input).then((user) => user);
-      console.log("created user ::::: ", user);
       return {
         token: signToken(user),
         user,
