@@ -8,7 +8,7 @@ const signup = async (_, { input }) => {
   console.log("%%%% Method called %%%%||| user signup");
   try {
     console.log("%%%% input %%%% ", input);
-    const isUserExisting = await User.find({ email: input.email });
+    const isUserExisting = await User.findOne({ email: input.email });
     console.log("%%% isUserExisting %% ", isUserExisting);
     if (!isUserExisting) {
       const user = await User.create(input);
