@@ -95,9 +95,9 @@ const typeDefs = gql`
     user: StoreUser!
   }
   type DocumentResponse {
-    name: String
-    imageUrl: String
-    status: String
+    name: String!
+    imageUrl: String!
+    status: String!
   }
   type Tips {
     amount: Float

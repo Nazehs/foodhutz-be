@@ -1,6 +1,4 @@
 const { AuthenticationError } = require("apollo-server-express");
-
-const { User } = require("../../models");
 const { verifySMS } = require("../../utils/sms");
 
 const verifyOTP = async (_, { input }) => {

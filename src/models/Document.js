@@ -5,7 +5,7 @@ const documentSchema = {
   status: {
     type: String,
     default: "Incomplete",
-    enum: ["Approved", "Incomplete", "Rejected"],
+    enum: ["Approved", "Rejected"],
   },
 };
 

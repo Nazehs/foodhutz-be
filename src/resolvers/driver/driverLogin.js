@@ -37,6 +37,8 @@ const driverLogin = async (_, { input }) => {
       throw new AuthenticationError("Failed to login");
     }
 
+    console.log("user driver", user);
+
     return {
       token: signToken(user),
       user,
