@@ -11,7 +11,7 @@ const signup = async (_, { input }) => {
     const isUserExisting = await User.findOne({ email: input.email });
     console.log("%%% isUserExisting %% ", isUserExisting);
     if (!isUserExisting) {
-      const user = await User.create(input);
+      const user = User.create(input).then((user) => user);
       console.log("created user ::::: ", user);
       return {
         token: signToken(user),
