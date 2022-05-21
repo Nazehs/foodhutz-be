@@ -130,7 +130,6 @@ const resolvers = {
     getStoreOwner,
     getStoreFeedbackStats,
     getStoreOwnerStats,
-
     getBankDetails,
     getAllNotification,
     getReferAndEarn,
