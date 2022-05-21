@@ -19,7 +19,7 @@ const createStoreOwner = async (_, { input }) => {
     throw new ApolloError("Failed to sign up. user already exist");
   } catch (error) {
     console.log(`[ERROR]: Failed to create StoreOwner | ${error.message}`);
-    throw new ApolloError("Failed to create StoreOwner");
+    throw new ApolloError(`Failed to create StoreOwner || ${error.message}`);
   }
 };
 

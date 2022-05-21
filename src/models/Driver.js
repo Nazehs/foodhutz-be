@@ -88,6 +88,12 @@ const driverSchema = {
   //   type: locationSchema,
   // },
   wallet: { type: Number, default: 0 },
+  invoices: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Payment",
+    },
+  ],
   tips: [],
   vehicleType: {
     type: String,

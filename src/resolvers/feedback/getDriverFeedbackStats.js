@@ -20,6 +20,8 @@ const getDriverFeedbackStats = async (_, __, { user }) => {
           as: "orders",
         },
       },
+      { $unwind: { path: "$orders", preserveNullAndEmptyArrays: true } },
+      { $sort: { "orders.createdAt": 1 } },
       {
         $replaceRoot: {
           newRoot: {

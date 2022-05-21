@@ -27,7 +27,7 @@ const getAllStoreOwner = async (_, { limit = 10, skip = 0 }, { user }) => {
     };
   } catch (error) {
     console.log(`[ERROR]: Failed to get all StoreOwner | ${error.message}`);
-    throw new ApolloError("Failed to get all StoreOwner ");
+    throw new ApolloError(`Failed to get all StoreOwner  || ${error.message}`);
   }
 };
 

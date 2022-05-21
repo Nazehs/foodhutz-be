@@ -7,11 +7,23 @@ const driverLogin = async (_, { input }) => {
   try {
     let user;
     if (input.email) {
-      user = await Driver.findOne({ email: input.email });
+      user = await Driver.findOne({ email: input.email })
+        .populate("documents")
+        .populate("trips")
+        .populate("tips")
+        .populate("notifications")
+        .populate("bankDetails")
+        .populate("invoices");
     }
 
     if (input.phoneNumber) {
-      user = await Driver.findOne({ phoneNumber: input.phoneNumber });
+      user = await Driver.findOne({ phoneNumber: input.phoneNumber })
+        .populate("documents")
+        .populate("trips")
+        .populate("tips")
+        .populate("notifications")
+        .populate("bankDetails")
+        .populate("invoices");
     }
 
     if (!user) {
@@ -31,7 +43,7 @@ const driverLogin = async (_, { input }) => {
     };
   } catch (error) {
     console.log(`[ERROR]: Failed to login | ${error.message}`);
-    throw new AuthenticationError("Failed to login");
+    throw new AuthenticationError(`Failed to login || ${error.message}`);
   }
 };
 

@@ -14,7 +14,7 @@ const updateDriver = async (_, { input }, { user }) => {
     };
   } catch (error) {
     console.log(`[ERROR]: Failed to sign up | ${error.message}`);
-    throw new ApolloError("Failed to sign up");
+    throw new ApolloError(`Failed to update driver || ${error.message}`);
   }
 };
 

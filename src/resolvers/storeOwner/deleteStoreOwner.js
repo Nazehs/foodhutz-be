@@ -9,7 +9,7 @@ const deleteStoreOwner = async (_, { storeId }, { user }) => {
     return await StoreOwner.findByIdAndDelete(storeId);
   } catch (error) {
     console.log(`[ERROR]: Failed delete StoreOwner | ${error.message}`);
-    throw new ApolloError("Failed delete StoreOwner");
+    throw new ApolloError(`Failed delete StoreOwner || ${error.message}`);
   }
 };
 

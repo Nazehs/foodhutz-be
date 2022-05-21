@@ -85,6 +85,12 @@ const storeOwnerSchema = {
   //   type: locationSchema,
   // },
   wallet: { type: Number, default: 0 },
+  invoices: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Payment",
+    },
+  ],
   postCode: { type: String },
   businessType: {
     type: String,

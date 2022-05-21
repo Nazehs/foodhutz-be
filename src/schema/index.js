@@ -208,6 +208,12 @@ const typeDefs = gql`
     distance: String
     tip: Float
   }
+  type TripResponse {
+    trip: Trip!
+    accepted: Boolean!
+    status: Float!
+    message: String!
+  }
   type Menu {
     id: ID!
     isActive: Boolean!
@@ -402,7 +408,17 @@ const typeDefs = gql`
     count: Float!
   }
   type DayStatsCategory {
-    _id: String!
+    day: String!
+    totalAmt: Float!
+    count: Float!
+  }
+  type YearStatsCategory {
+    year: String!
+    totalAmt: Float!
+    count: Float!
+  }
+  type WeekStatsCategory {
+    week: WeekMeta
     totalAmt: Float!
     count: Float!
   }
@@ -422,8 +438,12 @@ const typeDefs = gql`
     day: Int!
     year: Int!
   }
+  type WeekMeta {
+    year: Int!
+    week: Int!
+  }
   type MonthStatsCategory {
-    _id: MonthMeta!
+    month: MonthMeta!
     totalAmt: Float!
     count: Float!
   }
@@ -444,6 +464,8 @@ const typeDefs = gql`
     totalAmountAccepted: [StatsItem]
     categorizedByDay: [DayStatsCategory]
     categorizedByMonth: [MonthStatsCategory]
+    categorizedByWeek: [WeekStatsCategory]
+    categorizedByYear: [YearStatsCategory]
   }
   type NotificationResponse {
     id: ID!
@@ -817,7 +839,7 @@ const typeDefs = gql`
     updateOnlineStatus(status: String): OnlineStatus
     updateOrder(orderId: ID!, input: OrderInput!): Order!
     orderControl(orderId: ID!, status: String): Order!
-    tripControl(tripId: ID!, status: String): Trip!
+    tripControl(tripId: ID!, status: String): TripResponse!
     updateStoreOwner(storeId: ID!, input: StoreOwnerInputUpdate!): StoreUser!
     updateBankDetails(bankId: ID!, input: BankDetailInput!): BankDetail
     updateComplaint(

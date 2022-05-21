@@ -9,13 +9,18 @@ const paymentSchema = {
   status: {
     type: String,
   },
-  user: {
+  restaurant: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: "StoreOwner",
   },
+  driver: { type: Schema.Types.ObjectId, ref: "Driver" },
   amount: {
     type: Number,
     default: 0,
+  },
+  bankDetails: {
+    type: Schema.Types.ObjectId,
+    ref: "BankDetails",
   },
   email: {
     type: String,

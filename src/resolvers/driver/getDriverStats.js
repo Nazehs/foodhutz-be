@@ -8,10 +8,9 @@ const getDriverStats = async (_, __, { user }) => {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
-    // console.log(user);
-
     const doc = await Driver.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(user.id) } },
+
       {
         $lookup: {
           from: "trips",
@@ -20,6 +19,8 @@ const getDriverStats = async (_, __, { user }) => {
           as: "trips",
         },
       },
+      { $unwind: { path: "$trips", preserveNullAndEmptyArrays: true } },
+      { $sort: { "trips.createdAt": 1 } },
       {
         $replaceRoot: {
           newRoot: {
@@ -31,6 +32,11 @@ const getDriverStats = async (_, __, { user }) => {
         $facet: {
           categorizedByDay: [
             { $unwind: "$trips" },
+            {
+              $match: {
+                "trips.status": "accepted",
+              },
+            },
             {
               $group: {
                 _id: {
@@ -45,9 +51,87 @@ const getDriverStats = async (_, __, { user }) => {
                 },
               },
             },
+            {
+              $project: {
+                totalAmt: { $round: ["$totalAmt", 2] },
+                count: 1,
+                day: "$_id",
+                _id: 0,
+              },
+            },
+          ],
+          categorizedByYear: [
+            { $unwind: "$trips" },
+            {
+              $match: {
+                "trips.status": "accepted",
+                createdAt: {
+                  $gte: new Date("2022-04-04T10:30:00.000Z"),
+                },
+              },
+            },
+            {
+              $group: {
+                _id: {
+                  $year: "$trips.createdAt",
+                },
+                // year: { $year: "$trips.createdAt" },
+
+                count: { $sum: 1 },
+                totalAmt: {
+                  $sum: "$trips.amount",
+                },
+              },
+            },
+            {
+              $project: {
+                totalAmt: { $round: ["$totalAmt", 2] },
+                count: 1,
+                year: "$_id",
+                _id: 0,
+              },
+            },
+          ],
+          categorizedByWeek: [
+            { $unwind: "$trips" },
+            {
+              $match: {
+                "trips.status": "accepted",
+              },
+            },
+            {
+              $match: {
+                "trips.status": "accepted",
+              },
+            },
+            {
+              $group: {
+                _id: {
+                  year: { $year: "$trips.createdAt" },
+                  week: { $week: "$trips.createdAt" },
+                },
+                count: { $sum: 1 },
+                totalAmt: {
+                  $sum: "$trips.amount",
+                },
+              },
+            },
+            {
+              $project: {
+                totalAmt: { $round: ["$totalAmt", 2] },
+                count: 1,
+                week: "$_id",
+                _id: 0,
+              },
+            },
           ],
           categorizedByMonth: [
             { $unwind: "$trips" },
+            {
+              $match: {
+                "trips.status": "accepted",
+              },
+            },
             {
               $group: {
                 _id: {
@@ -59,6 +143,14 @@ const getDriverStats = async (_, __, { user }) => {
                 totalAmt: {
                   $sum: "$trips.amount",
                 },
+              },
+            },
+            {
+              $project: {
+                month: "$_id",
+                _id: 0,
+                count: 1,
+                totalAmt: 1,
               },
             },
           ],
@@ -114,7 +206,7 @@ const getDriverStats = async (_, __, { user }) => {
           totalCancelled: [
             { $unwind: "$trips" },
 
-            { $match: { "trips.tripstatus": "cancelled" } },
+            { $match: { "trips.status": "cancelled" } },
 
             { $project: { total: "$trips.amount" } },
             {
@@ -179,12 +271,13 @@ const getDriverStats = async (_, __, { user }) => {
         },
       },
     ]);
-    console.log(JSON.stringify(doc));
 
     return doc[0];
   } catch (error) {
     console.log(`[ERROR]: Failed to get aggregate details | ${error.message}`);
-    throw new ApolloError("Failed to get aggregate details ");
+    throw new ApolloError(
+      `Failed to get aggregate details || ${error.message} `
+    );
   }
 };
 
