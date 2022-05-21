@@ -7,8 +7,8 @@ const { signToken } = require("../../utils/auth");
 const signup = async (_, { input }) => {
   try {
     console.log("input", input);
-    const isUserExisting = await User.findOne({ email: input.email });
-    console.log("isUserExisting", isUserExisting);
+    const isUserExisting = await User.find({ email: input.email });
+    console.log("%%% isUserExisting %% ", isUserExisting);
     if (!isUserExisting) {
       const user = await User.create(input);
       return {

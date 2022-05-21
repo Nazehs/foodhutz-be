@@ -89,7 +89,7 @@ const tripControl = async (_, { tripId, status }, { user }) => {
     };
   } catch (error) {
     console.log(`[ERROR]: Failed to update  trip | ${error.message}`);
-    throw new ApolloError("Failed to update  trip status");
+    throw new ApolloError(`Failed to update  trip status ${error.message}`);
   }
 };
 module.exports = tripControl;
