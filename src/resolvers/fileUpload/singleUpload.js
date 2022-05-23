@@ -8,10 +8,12 @@ const singleUpload = async (_, { input }, { user }) => {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
     const result = await uploadFromStream(input);
+    console.log("upload result ", result);
     const doc = await Document.create({
       name: input.documentType,
       imageUrl: result.secure_url,
     });
+    console.log("doc uploaded  ", doc);
     if (user.userType === "USER") {
       await User.findByIdAndUpdate(user.id, {
         $push: { documents: doc._id },

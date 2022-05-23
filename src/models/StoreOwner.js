@@ -100,7 +100,7 @@ const storeOwnerSchema = {
   },
   dateOfJoin: { type: Date, default: Date.now() },
   description: { type: String },
-  documents: [{ type: Schema.Types.ObjectId, ref: "Document `" }],
+  documents: [{ type: Schema.Types.ObjectId, ref: "Document" }],
   status: { type: String, enum: ["Online", "Offline"], default: "Offline" },
   openingHours: [{ from: String, to: String, day: String }],
   categories: [{ type: Schema.Types.ObjectId, ref: "Category" }],
