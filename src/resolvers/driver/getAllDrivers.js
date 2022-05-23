@@ -12,6 +12,12 @@ const getAllDrivers = async (_, { limit = 10, skip = 0 }, { user }) => {
     }
 
     const docs = await Driver.find()
+      .populate("documents")
+      .populate("trips")
+      .populate("tips")
+      .populate("notifications")
+      .populate("bankDetails")
+      .populate("invoices")
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });

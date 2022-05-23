@@ -104,8 +104,8 @@ const driverSchema = {
   needEquipment: { type: String, enum: ["Yes", "No"], default: "No" },
   requestedFor: {
     type: String,
-    enum: ["Jacket", "Delivery bags", "Helmet"],
-    default: "No",
+    enum: ["Jacket", "Delivery bags", "None", "No", "Helmet"],
+    default: "None",
   },
   vehicleNumber: { type: String },
   jobType: {
