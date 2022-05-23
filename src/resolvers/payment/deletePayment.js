@@ -1,5 +1,5 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
-const { Payment } = require("../../models");
+const { Payment, StoreOwner } = require("../../models");
 
 const deletePayment = async (_, { paymentId }, { user }) => {
   try {
@@ -23,8 +23,10 @@ const deletePayment = async (_, { paymentId }, { user }) => {
     }
     return doc;
   } catch (error) {
-    console.log(`[ERROR]: Failed to delete payment | ${error.message}`);
-    throw new ApolloError(`Failed to delete payment || ${error.message}`);
+    console.log(`[ERROR]: Failed to delete payment details | ${error.message}`);
+    throw new ApolloError(
+      `Failed to delete payment details || ${error.message}`
+    );
   }
 };
 module.exports = deletePayment;

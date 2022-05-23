@@ -8,20 +8,6 @@ const typeDefs = gql`
     mimetype: String!
     encoding: String!
   }
-  type Suspended {
-    reason: String
-  }
-  type IsBlocked {
-    message: String
-    blockedByUser: User
-  }
-  type IsWrongCredential {
-    message: String
-  }
-  type UnavailableInCountry {
-    countryCode: Int
-    message: String
-  }
   type User {
     id: ID
     firstName: String
@@ -189,13 +175,16 @@ const typeDefs = gql`
     isUserExisting: Boolean!
     message: String!
   }
-  type Payment {
+  type PaymentResponse {
+    id: ID!
     amount: Float!
-    user: User
     email: String
     paymentType: String
     fees: Float!
     status: String!
+    driver: Driver
+    restaurant: StoreUser
+    bankDetails: BankDetail
   }
   type Trip {
     id: ID
@@ -312,6 +301,14 @@ const typeDefs = gql`
     success: Boolean!
     hasMore: Boolean!
     messages: [ContactUsResponse]
+  }
+  type AllPayments {
+    status: Int!
+    currentPage: Int!
+    totalPages: Int!
+    success: Boolean!
+    hasMore: Boolean!
+    payments: [PaymentResponse]
   }
   type AllStoresOwners {
     status: Int!
@@ -548,11 +545,9 @@ const typeDefs = gql`
   }
   input PaymentInput {
     amount: Float
-    user: ID!
-    email: String
     paymentType: String
     fees: Float!
-    status: String!
+    bankDetails: ID!
   }
   input HoursInput {
     from: String
@@ -561,7 +556,6 @@ const typeDefs = gql`
   }
   input PaymentInputUpdate {
     amount: Float
-    user: ID
     email: String
     paymentType: String
     fees: Float
@@ -784,6 +778,7 @@ const typeDefs = gql`
     getAllReferralCode(limit: Int, skip: Int): AllReferralCode
     getAllNotification(limit: Int, skip: Int): AllNotifications
     getAllContactUs(limit: Int, skip: Int): AllContactUs
+    getAllPayments(limit: Int, skip: Int): AllPayments
     getAllStoreOwners: AllStoresOwners
     getStoreOwner(storeId: ID!): StoreUser
     getUser(userId: ID!): User!
@@ -798,6 +793,8 @@ const typeDefs = gql`
     getMyTrips(status: String): AllTrips
     getStoreFeedbackStats: FeedbackStatsResponse
     getStoreOwnerStats: StoreOwnerStatsResponse
+    getMyPayments: AllPayments
+    getPayment(paymentId: ID!): PaymentResponse
     getDriverStats: DriverStatsResponse
     getDriverFeedbackStats: FeedbackStatsResponse
     getReferAndEarn(referralId: ID!): ReferAndEarnResponse
@@ -829,6 +826,7 @@ const typeDefs = gql`
     createContactUs(input: ContactUsInput): ContactUsResponse
     createReferralCode(input: ReferralCodeInput): ReferralCodeResponse
     createStoreOwner(input: StoreOwnerInput): StoreOwnerResponse
+    createPayment(input: PaymentInput): PaymentResponse
     getCurrentLocation(input: String): String
     # update
     updateUser(input: UpdateUserInput!): Auth!
@@ -843,6 +841,7 @@ const typeDefs = gql`
     tripControl(tripId: ID!, status: String): TripResponse!
     updateStoreOwner(storeId: ID!, input: StoreOwnerInputUpdate!): StoreUser!
     updateBankDetails(bankId: ID!, input: BankDetailInput!): BankDetail
+    updatePayment(paymentId: ID!, input: PaymentInputUpdate!): PaymentResponse
     updateComplaint(
       complaintId: ID!
       input: ComplaintsInputUpdate!
@@ -885,6 +884,7 @@ const typeDefs = gql`
     deleteNotification(notificationId: ID!): NotificationResponse
     deleteReferAndEarn(referralId: ID!): ReferAndEarnResponse
     deleteReferralCode(codeId: ID): ReferralCodeResponse
+    deletePayment(paymentId: ID): PaymentResponse
   }
 `;
 

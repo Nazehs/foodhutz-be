@@ -6,7 +6,7 @@ const updatePayment = async (_, { paymentId, input }, { user }) => {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
-    return Payment.findByIdAndUpdate(paymentId, input)
+    return Payment.findByIdAndUpdate(paymentId, input, { new: true })
       .populate("bankDetails")
       .populate("driver")
       .populate("restaurant");

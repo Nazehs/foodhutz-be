@@ -12,6 +12,7 @@ const createPayment = async (_, { input }, { user }) => {
     if (user.userType.toUpperCase() === "DRIVER") {
       input.driver = user.id;
     }
+    input.email = user.email;
 
     const doc = await Payment.create(input);
 

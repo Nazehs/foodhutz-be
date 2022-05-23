@@ -1,23 +1,29 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 const { Payment } = require("../../models");
 
-const getMyPayments = async (_, { paymentId }, { user }) => {
+const getMyPayments = async (_, { limit = 10, skip = 0 }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
     let doc;
     if (user.userType.toUpperCase() === "DRIVER") {
-      doc = await Payment.find({ driver: paymentId })
+      doc = await Payment.find({})
         .populate("bankDetails")
         .populate("driver")
-        .populate("restaurant");
+        .populate("restaurant")
+        .skip(skip)
+        .limit(limit)
+        .sort("desc");
     }
     if (user.userType.toUpperCase() === "RESTAURANT") {
-      doc = await Payment.find({ restaurant: paymentId })
+      doc = await Payment.find({})
         .populate("bankDetails")
         .populate("driver")
-        .populate("restaurant");
+        .populate("restaurant")
+        .skip(skip)
+        .limit(limit)
+        .sort("desc");
     }
     const invoicesCount = doc.length;
 

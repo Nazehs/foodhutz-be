@@ -8,6 +8,7 @@ const paymentSchema = {
   },
   status: {
     type: String,
+    default: "Inprogress",
   },
   restaurant: {
     type: Schema.Types.ObjectId,
@@ -20,7 +21,7 @@ const paymentSchema = {
   },
   bankDetails: {
     type: Schema.Types.ObjectId,
-    ref: "BankDetails",
+    ref: "BankDetail",
   },
   email: {
     type: String,
