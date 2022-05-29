@@ -4,7 +4,7 @@ const { GraphQLUpload } = require("graphql-upload");
 const userLogin = require("./user/login");
 const sendOTP = require("./user/sendOTP");
 const driverLogin = require("./driver/driverLogin");
-const storeOwnerLogin = require("./restaurant/storeOwnerLogin");
+const RestaurantLogin = require("./restaurant/RestaurantLogin");
 const driverSignup = require("./driver/driverSignup");
 const userSignup = require("./user/signup");
 const updateOnlineStatus = require("./updateOnlineStatus");
@@ -20,7 +20,7 @@ const createComplaint = require("./complaint/createComplaint");
 const createFeedback = require("./feedback/createFeedback");
 const createContactUs = require("./contactus/createContactUs");
 const createReferralCode = require("./referralCode/createReferralCode");
-const createStoreOwner = require("./restaurant/createStoreOwner");
+const createRestaurant = require("./restaurant/createRestaurant");
 const createPayment = require("./payment/createPayment");
 const singleUpload = require("./fileUpload/singleUpload");
 // delete resolvers
@@ -37,7 +37,7 @@ const deleteComplaint = require("./complaint/deleteComplaint");
 const deleteFeedback = require("./feedback/deleteFeedback");
 const deleteContactUs = require("./contactus/deleteContactUs");
 const deleteReferralCode = require("./referralCode/deleteReferralCode");
-const deleteStoreOwner = require("./restaurant/deleteStoreOwner");
+const deleteRestaurant = require("./restaurant/deleteRestaurant");
 const deletePayment = require("./payment/deletePayment");
 // query resolvers
 const getUser = require("./user/getUser");
@@ -47,8 +47,8 @@ const getDriverStats = require("./driver/getDriverStats");
 const getAllUsers = require("./user/getAllUsers");
 const getTrip = require("./trip/getTrip");
 const getOrder = require("./order/getOrder");
-const getStoreOwner = require("./restaurant/getStoreOwner");
-const getStoreOwnerStats = require("./restaurant/getStoreStats");
+const getRestaurant = require("./restaurant/getRestaurant");
+const getRestaurantStats = require("./restaurant/getRestaurantStats");
 const getCoupon = require("./coupon/getCoupon");
 const getMyPayments = require("./payment/getMyPayments");
 const getPayment = require("./payment/getPayment");
@@ -58,7 +58,7 @@ const getNotification = require("./notification/getNotification");
 const getMyNotifications = require("./notification/getMyNotifications");
 const getComplaint = require("./complaint/getComplaint");
 const getFeedback = require("./feedback/getFeedback");
-const getStoreFeedbackStats = require("./feedback/getStoreFeedbackStats");
+const getRestaurantFeedbackStats = require("./feedback/getRestaurantFeedbackStats");
 const getDriverFeedbackStats = require("./feedback/getDriverFeedbackStats");
 const getContactUs = require("./contactus/getContactUs");
 const getReferralCode = require("./referralCode/updateReferralCode");
@@ -71,13 +71,14 @@ const getAllContactUs = require("./contactus/getAllContactUs");
 const getAllReferralCode = require("./referralCode/getAllReferralCode");
 const getAllCategory = require("./category/getAllCategory");
 const getAllMenus = require("./menu/getAllMenus");
+const getMenu = require("./menu/getMenu");
 const getAllTrips = require("./trip/getAllTrips");
 const getMyTrips = require("./trip/getMyTrips");
 const getAllOrders = require("./order/getAllOrders");
 const getMyOrders = require("./order/getMyOrders");
 const getBankDetails = require("./bankDetails/getBankDetails");
 const getAllCoupons = require("./coupon/getAllCoupons");
-const getAllStoreOwners = require("./restaurant/getAllStoreOwner");
+const getAllRestaurants = require("./restaurant/getAllRestaurant");
 const getAllPayments = require("./payment/getAllPayments");
 // update resolvers
 const updateUser = require("./user/updateUser");
@@ -99,7 +100,7 @@ const verifyDriverOTP = require("./driver/verifyDriverOTP");
 const updateDriver = require("./driver/updateDriver");
 const tripControl = require("./trip/tripControl");
 const checkUserExist = require("./userCheck");
-const updateStoreOwner = require("./restaurant/updateStoreOwner");
+const updateRestaurant = require("./restaurant/updateRestaurant");
 const getCurrentLocation = require("./location/getCurrentLocation");
 const updatePayment = require("./payment/updatePayment");
 const dateScalar = new GraphQLScalarType({
@@ -130,12 +131,13 @@ const resolvers = {
     getTrip,
     getCategory,
     getAllMenus,
+
     getAllTrips,
     getAllOrders,
     getOrder,
-    getStoreOwner,
-    getStoreFeedbackStats,
-    getStoreOwnerStats,
+    getRestaurant,
+    getRestaurantFeedbackStats,
+    getRestaurantStats,
     getBankDetails,
     getAllNotification,
     getReferAndEarn,
@@ -146,6 +148,7 @@ const resolvers = {
     getMyNotifications,
     getMyOrders,
     getMyTrips,
+    getMenu,
     getContactUs,
     getCategory,
     getAllCategory,
@@ -158,7 +161,7 @@ const resolvers = {
     checkUserExist,
     getAllNotification,
     getAllContactUs,
-    getAllStoreOwners,
+    getAllRestaurants,
     getDriverStats,
     getDriverFeedbackStats,
     getMyPayments,
@@ -171,7 +174,7 @@ const resolvers = {
     deleteDriver,
     deleteCoupon,
     deleteCategory,
-    deleteStoreOwner,
+    deleteRestaurant,
     deleteTrip,
     deleteBankDetails,
     deleteMenu,
@@ -189,7 +192,7 @@ const resolvers = {
     singleUpload,
     userLogin,
     userSignup,
-    storeOwnerLogin,
+    RestaurantLogin,
     driverLogin,
     driverSignup,
     createMenu,
@@ -205,7 +208,7 @@ const resolvers = {
     createReferAndEarn,
     createContactUs,
     createReferralCode,
-    createStoreOwner,
+    createRestaurant,
     createPayment,
     getCurrentLocation,
     // update resolvers
@@ -225,7 +228,7 @@ const resolvers = {
     updateReferAndEarn,
     updateReferralCode,
     updateBankDetails,
-    updateStoreOwner,
+    updateRestaurant,
     updatePayment,
     verifyOTPUser,
     verifyDriverOTP,

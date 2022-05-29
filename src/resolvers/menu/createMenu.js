@@ -14,7 +14,7 @@ const createMenu = async (_, { input }, { user }) => {
     return await Menu.findById(doc._id).populate("category");
   } catch (error) {
     console.log(`[ERROR]: Failed to create a menu | ${error.message}`);
-    throw new ApolloError("Failed to create a menu");
+    throw new ApolloError(`Failed to create a menu | ${error.message}`);
   }
 };
 

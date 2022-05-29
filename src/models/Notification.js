@@ -12,6 +12,24 @@ const notificationSchema = {
     type: Schema.Types.ObjectID,
     ref: "Order",
   },
+  to: {
+    type: String,
+  },
+  from: { type: String },
+  distance: {
+    duration: {
+      text: { type: String },
+      value: { type: Number },
+    },
+    distance: {
+      text: { type: String },
+      value: { type: Number },
+    },
+    duration_in_traffic: {
+      text: { type: String },
+      value: { type: Number },
+    },
+  },
 };
 
 const schema = new Schema(notificationSchema, {

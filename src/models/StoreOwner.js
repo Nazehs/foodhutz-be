@@ -21,7 +21,11 @@ const storeOwnerSchema = {
     unique: true,
   },
   city: { type: String, required: true },
-  avatar: { type: String },
+  avatar: {
+    type: String,
+    default:
+      "https://smallbizclub.com/wp-content/uploads/2015/12/4-Things-You-Should-Know-About-Opening-a-Restaurant.jpg",
+  },
   phoneNumber: {
     type: String,
     minLength: 11,
@@ -66,6 +70,10 @@ const storeOwnerSchema = {
     type: Boolean,
     default: false,
   },
+  isOnline: {
+    type: String,
+    default: "Offline",
+  },
   userType: { type: String, default: "RESTAURANT" },
   bankDetails: [
     {
@@ -80,10 +88,9 @@ const storeOwnerSchema = {
   },
   storeName: { type: String },
   storeAddress: { type: String, required: true },
-  address: { type: String },
-  // location: {
-  //   type: locationSchema,
-  // },
+  location: {
+    type: locationSchema,
+  },
   wallet: { type: Number, default: 0 },
   invoices: [
     {
@@ -91,6 +98,7 @@ const storeOwnerSchema = {
       ref: "Payment",
     },
   ],
+  deliveryTime: { type: String, default: "15 Minutes" },
   postCode: { type: String },
   businessType: {
     type: String,
@@ -129,24 +137,23 @@ schema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, 10);
   }
   // GEOCODE THE CODE
-  // const {
-  //   data: { results },
-  // } = await getGeoLocation(this.storeAddress);
+  const {
+    data: { results },
+  } = await getGeoLocation(this.postCode);
+  console.log("results", results);
+  this.location = {
+    type: "Point",
+    coordinates: [
+      results[0].geometry.location.lng,
+      results[0].geometry.location.lat,
+    ],
+    formattedAddress: results[0].formatted_address,
+    city: results[0].address_components[2].long_name,
+    postCode: this.postCode,
+  };
 
-  // this.location = {
-  //   type: "Point",
-  //   coordinates: [
-  //     results[0].geometry.location.lng,
-  //     results[0].geometry.location.lat,
-  //   ],
-  //   formattedAddress: results[0].formatted_address,
-  //   postCode:
-  //     results[0].address_components[results[0].address_components.length - 1]
-  //       .short_name,
-  //   city: results[0].address_components[2].long_name,
-  // };
+  this.storeAddress = results[0].formatted_address;
 
-  // this.address = results[0].formatted_address;
   next();
 });
 

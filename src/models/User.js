@@ -31,9 +31,9 @@ const userSchema = {
   wallet: { type: Number, default: 0 },
   avatar: { type: String },
   address: { type: String },
-  // location: {
-  //   type: locationSchema,
-  // },
+  location: {
+    type: locationSchema,
+  },
   phoneNumber: {
     type: String,
     trim: true,

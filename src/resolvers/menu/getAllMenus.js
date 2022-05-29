@@ -25,8 +25,8 @@ const getAllMenus = async (_, { skip = 0, limit = 10 }, { user }) => {
       hasMore: docsCount >= limit + 1,
     };
   } catch (error) {
-    console.log(`[ERROR]: Failed to get meal details | ${error.message}`);
-    throw new ApolloError("Failed to get meal details");
+    console.log(`[ERROR]: Failed to get menus details | ${error.message}`);
+    throw new ApolloError(`Failed to get menus details | ${error.message}`);
   }
 };
 

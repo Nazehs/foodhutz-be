@@ -11,6 +11,7 @@ const getGeoLocation = async (address) => {
       },
       timeout: 1000, // milliseconds
     };
+    console.log(address);
     return await client.geocode(args);
   } catch (error) {
     console.log("error", error);

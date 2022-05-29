@@ -1,7 +1,7 @@
 const { ApolloError } = require("apollo-server-express");
 const { Driver, User } = require("../../models");
 const { signToken } = require("../../utils/auth");
-const { generateOTP } = require("../../utils/generateOTP");
+const { generateRandomNumber } = require("../../utils/generateRandomNumbers");
 const { sentSMS } = require("../../utils/sms");
 
 const driverSignup = async (_, { input }) => {

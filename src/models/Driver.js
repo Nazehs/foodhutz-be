@@ -23,6 +23,7 @@ const driverSchema = {
     default: "DRIVER",
   },
   avatar: { type: String },
+  postCode: { type: String },
   phoneNumber: {
     type: String,
     minLength: 11,
@@ -84,9 +85,15 @@ const driverSchema = {
     trim: true,
   },
   address: { type: String },
-  // location: {
-  //   type: locationSchema,
-  // },
+  lastKnownLocation: {
+    index: "2dsphere",
+    type: locationSchema,
+  },
+  location: {
+    type: locationSchema,
+    index: "2dsphere",
+    // sparse: true,
+  },
   wallet: { type: Number, default: 0 },
   invoices: [
     {
@@ -130,7 +137,6 @@ const schema = new Schema(driverSchema, {
   id: true,
   timestamps: true,
 });
-
 function validateEmail(email) {
   var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return re.test(email);
@@ -143,25 +149,23 @@ schema.pre("save", async function (next) {
   }
 
   // GEOCODE THE CODE
-  // const {
-  //   data: { results },
-  // } = await getGeoLocation(this.address);
-  // console.log(loc.data.results[0]);
+  const {
+    data: { results },
+  } = await getGeoLocation(this.address);
 
-  // // await geocoder.geocode(this.address);
-  // console.log(loc);
-  // this.location = {
-  //   type: "Point",
-  //   coordinates: [
-  //     results[0].geometry.location.lng,
-  //     results[0].geometry.location.lat,
-  //   ],
-  //   formattedAddress: results[0].formatted_address,
-  //   postCode:
-  //     results[0].address_components[results[0].address_components.length - 1]
-  //       .short_name,
-  //   city: results[0].address_components[2].long_name,
-  // };
+  // await geocoder.geocode(this.address);
+  this.location = {
+    type: "Point",
+    coordinates: [
+      results[0].geometry.location.lng,
+      results[0].geometry.location.lat,
+    ],
+    formattedAddress: results[0].formatted_address,
+    // postCode:
+    //   results[0].address_components[results[0].address_components.length - 1]
+    //     .short_name,
+    city: results[0].address_components[2].long_name,
+  };
   // this.location = {
   //   type: "Point",
   //   coordinates: [loc[0].longitude, loc[0].latitude],
@@ -170,7 +174,7 @@ schema.pre("save", async function (next) {
   //   city: loc[0].city,
   // };
 
-  // this.address = results[0].formatted_address;
+  this.address = results[0].formatted_address;
 
   next();
 });

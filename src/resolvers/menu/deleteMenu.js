@@ -15,7 +15,7 @@ const deleteMenu = async (_, { menuId }, { user }) => {
     return doc;
   } catch (error) {
     console.log(`[ERROR]: Failed to delete menu  details | ${error.message}`);
-    throw new ApolloError("Failed to delete menu details");
+    throw new ApolloError(`Failed to delete menu details | ${error.message}`);
   }
 };
 

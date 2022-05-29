@@ -22,7 +22,7 @@ const typeDefs = gql`
     orders: [Order]
     dateOfJoin: Date
   }
-  type StoreUser {
+  type RestaurantUser {
     id: ID
     firstName: String!
     wallet: Float
@@ -48,7 +48,8 @@ const typeDefs = gql`
     openingHours: [Hours]
     storeName: String
     postCode: String!
-    storeAddress: String
+    RestaurantAddress: String
+    location: Location
     bankDetails: [BankDetail]
   }
   type Driver {
@@ -70,15 +71,17 @@ const typeDefs = gql`
     vehicleNumber: String
     jobType: String
     requestedFor: String
+    location: Location
+    invoices: [PaymentResponse]
     previousExperience: String
     bankDetails: [BankDetail]
     documents: [DocumentResponse]
     tips: [Tips]
   }
 
-  type StoreOwnerResponse {
+  type RestaurantResponse {
     token: String!
-    user: StoreUser!
+    user: RestaurantUser!
   }
   type DocumentResponse {
     id: ID
@@ -107,24 +110,6 @@ const typeDefs = gql`
     token: ID!
     user: Driver!
   }
-
-  type Restaurant {
-    id: ID!
-    storeName: String!
-    email: String!
-    city: String!
-    storeAddress: String!
-    businessType: String!
-    avatar: String!
-    postCode: String!
-    phoneNumber: String!
-    userType: String!
-    categories: [Category]
-    orders: [Order]
-    coupons: [Coupon]
-    menus: [Menu]
-    openingHours: [Hours]
-  }
   type Hours {
     from: String
     to: String
@@ -133,19 +118,23 @@ const typeDefs = gql`
   type Order {
     id: ID!
     discount: Float
-    deliveryAddress: String!
+    driverLocation: Location!
+    deliveryAddress: Location!
     actualDeliveryTime: Date!
     comment: String
+    isMultipleRestaurant: Boolean
     estimatedDeliveryTime: Date
     finalPrice: Float!
+    restaurantLocation: [Location]
     orderTime: Date!
+    requestOrderId: String!
     deliveryBy: Driver
     orderStatus: String!
     orderItems: [OrderItem]
   }
   type OrderItem {
     name: String!
-    restaurant: Restaurant
+    restaurant: RestaurantUser
     discount: Float
     category: Category!
     comment: String
@@ -183,7 +172,7 @@ const typeDefs = gql`
     fees: Float!
     status: String!
     driver: Driver
-    restaurant: StoreUser
+    restaurant: RestaurantUser
     bankDetails: BankDetail
   }
   type Trip {
@@ -310,13 +299,13 @@ const typeDefs = gql`
     hasMore: Boolean!
     payments: [PaymentResponse]
   }
-  type AllStoresOwners {
+  type AllRestaurantsOwners {
     status: Int!
     currentPage: Int!
     totalPages: Int!
     success: Boolean!
     hasMore: Boolean!
-    users: [StoreUser]
+    users: [RestaurantUser]
   }
   type AllDrivers {
     status: Int!
@@ -357,7 +346,7 @@ const typeDefs = gql`
     id: ID!
     code: String!
     value: Float!
-    owner: Restaurant!
+    owner: RestaurantUser!
   }
   type ReferAndEarnResponse {
     id: ID!
@@ -379,7 +368,11 @@ const typeDefs = gql`
     message: String!
     order: Order
   }
-  type StoreOwnerStatsResponse {
+  type Location {
+    coordinates: [Float]
+    formattedAddress: String
+  }
+  type RestaurantStatsResponse {
     totalProcessed: [StatsItem]
     totalCancelled: [StatsItem]
     totalMissed: [StatsItem]
@@ -424,6 +417,12 @@ const typeDefs = gql`
     avgStars: Float!
     count: Float!
   }
+  type Location {
+    coordinates: [Float]
+    formattedAddress: String
+    postCode: String
+    city: String
+  }
   type StarsCategory {
     stars: Float!
     count: Float!
@@ -450,7 +449,7 @@ const typeDefs = gql`
     stars: Float!
     user: User
     driver: Driver
-    restaurant: StoreUser
+    restaurant: RestaurantUser
     message: String
     order: Order
   }
@@ -469,6 +468,8 @@ const typeDefs = gql`
     id: ID!
     user: User!
     message: String!
+    location: Location
+    formattedAddress: String
     order: Order
   }
   input NotificationInput {
@@ -484,7 +485,7 @@ const typeDefs = gql`
   input CategoryInput {
     name: String!
   }
-  input StoreOwnerInput {
+  input RestaurantInput {
     firstName: String!
     lastName: String!
     username: String!
@@ -498,7 +499,7 @@ const typeDefs = gql`
     storeName: String!
     description: String
     postCode: String!
-    storeAddress: String!
+    RestaurantAddress: String!
   }
 
   input OrderItemInput {
@@ -508,13 +509,15 @@ const typeDefs = gql`
     category: ID!
     amount: Float!
   }
-  input StoreOwnerInputUpdate {
+  input RestaurantInputUpdate {
     firstName: String
     lastName: String
     username: String
     fullName: String
     email: String
+    # isOnline: String
     avatar: String
+    isOnline: String
     password: String
     phoneNumber: String
     businessType: String
@@ -530,7 +533,7 @@ const typeDefs = gql`
     storeName: String
     postCode: String
     description: String
-    storeAddress: String
+    RestaurantAddress: String
   }
   input RestaurantInput {
     name: String
@@ -613,6 +616,7 @@ const typeDefs = gql`
     email: String!
     avatar: String
     address: String
+    postCode: String!
     password: String!
   }
 
@@ -639,6 +643,7 @@ const typeDefs = gql`
     password: String
     needEquipment: String
     vehicleType: String
+    postCode: String!
     documents: [DocumentInput]
   }
 
@@ -668,8 +673,9 @@ const typeDefs = gql`
   }
   input OrderInput {
     orderItems: [OrderItemInput]
-    deliveryAddress: String
+    deliveryPostCode: String
     comment: String
+    isMultipleRestaurant: Boolean
     finalPrice: Float
   }
   input MenuInputUpdate {
@@ -769,6 +775,7 @@ const typeDefs = gql`
     getAllDrivers: AllDrivers
     getAllCategory(limit: Int, skip: Int): AllCategory
     getAllMenus(limit: Int, skip: Int): AllMenus!
+    getMenu: Menu!
     getAllTrips(limit: Int, skip: Int): AllTrips!
     getAllCoupons(limit: Int, skip: Int): AllCoupons!
     getAllOrders(limit: Int, skip: Int): AllOrders
@@ -779,8 +786,12 @@ const typeDefs = gql`
     getAllNotification(limit: Int, skip: Int): AllNotifications
     getAllContactUs(limit: Int, skip: Int): AllContactUs
     getAllPayments(limit: Int, skip: Int): AllPayments
-    getAllStoreOwners: AllStoresOwners
-    getStoreOwner(storeId: ID!): StoreUser
+    getAllRestaurants(
+      limit: Int
+      skip: Int
+      postCode: String
+    ): AllRestaurantsOwners
+    getRestaurant(RestaurantId: ID!): RestaurantUser
     getUser(userId: ID!): User!
     getDriver(userId: ID!): Driver!
     getBankDetails(bankId: ID): BankDetail
@@ -791,8 +802,8 @@ const typeDefs = gql`
     getMyNotifications: AllNotifications
     getMyOrders: AllOrders
     getMyTrips(status: String): AllTrips
-    getStoreFeedbackStats: FeedbackStatsResponse
-    getStoreOwnerStats: StoreOwnerStatsResponse
+    getRestaurantFeedbackStats: FeedbackStatsResponse
+    getRestaurantStats: RestaurantStatsResponse
     getMyPayments: AllPayments
     getPayment(paymentId: ID!): PaymentResponse
     getDriverStats: DriverStatsResponse
@@ -809,7 +820,7 @@ const typeDefs = gql`
     # create
     singleUpload(input: DocumentUploadInput!): DocumentResponse!
     userLogin(input: LoginInput!): Auth!
-    storeOwnerLogin(input: LoginInput): StoreOwnerResponse!
+    RestaurantLogin(input: LoginInput): RestaurantResponse!
     driverLogin(input: LoginInput!): DriverAuth!
     userSignup(input: SignupInput!): Auth!
     driverSignup(input: SignupInputDriver!): DriverAuth!
@@ -825,7 +836,7 @@ const typeDefs = gql`
     createReferAndEarn(input: ReferAndEarnInput): ReferAndEarnResponse
     createContactUs(input: ContactUsInput): ContactUsResponse
     createReferralCode(input: ReferralCodeInput): ReferralCodeResponse
-    createStoreOwner(input: StoreOwnerInput): StoreOwnerResponse
+    createRestaurant(input: RestaurantInput): RestaurantResponse
     createPayment(input: PaymentInput): PaymentResponse
     getCurrentLocation(input: String): String
     # update
@@ -839,7 +850,10 @@ const typeDefs = gql`
     updateOrder(orderId: ID!, input: OrderInput!): Order!
     orderControl(orderId: ID!, status: String): Order!
     tripControl(tripId: ID!, status: String): TripResponse!
-    updateStoreOwner(storeId: ID!, input: StoreOwnerInputUpdate!): StoreUser!
+    updateRestaurant(
+      RestaurantId: ID!
+      input: RestaurantInputUpdate!
+    ): RestaurantUser!
     updateBankDetails(bankId: ID!, input: BankDetailInput!): BankDetail
     updatePayment(paymentId: ID!, input: PaymentInputUpdate!): PaymentResponse
     updateComplaint(
@@ -873,7 +887,7 @@ const typeDefs = gql`
     deleteUser(userId: ID): Auth!
     deleteDriver(userId: ID): DriverAuth!
     deleteCoupon(CouponId: ID): Coupon!
-    deleteStoreOwner(storeId: ID): StoreUser
+    deleteRestaurant(RestaurantId: ID): RestaurantUser
     deleteCategory(categoryId: ID): Category!
     deleteTrip(tripId: ID): Trip!
     deleteBankDetails(bankId: ID!): BankDetail

@@ -3,7 +3,7 @@ const { default: mongoose } = require("mongoose");
 
 const { StoreOwner } = require("../../models");
 
-const getStoreOwnerAggregate = async (_, __, { user }) => {
+const getStoreOwnerAggregate = async (_, { startDate, endDate }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");

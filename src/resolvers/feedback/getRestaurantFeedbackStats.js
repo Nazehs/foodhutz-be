@@ -1,7 +1,7 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 const { default: mongoose } = require("mongoose");
 
-const { StoreOwner, Feedback } = require("../../models");
+const { Feedback } = require("../../models");
 
 const getStoreFeedbackStats = async (_, __, { user }) => {
   try {

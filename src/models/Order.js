@@ -1,4 +1,5 @@
 const { model, Schema } = require("mongoose");
+const locationSchema = require("./LocationSchema");
 const OrderItem = require("./OrderItem");
 
 const orderSchema = {
@@ -6,13 +7,11 @@ const orderSchema = {
     type: Date,
     default: Date.now(),
   },
-  deliveryAddress: {
-    type: String,
-  },
   discount: {
     type: Number,
     default: 0,
   },
+  requestOrderId: { type: String },
   actualDeliveryTime: {
     type: Date,
   },
@@ -23,12 +22,18 @@ const orderSchema = {
   finalPrice: {
     type: Number,
   },
-  comment: {
-    type: String,
+  // city: { type: String },
+  // comment: {
+  //   type: String,
+  // },
+  // deliveryAddress: { type: String },
+  deliveryAddress: {
+    type: locationSchema,
+    index: "2dsphere",
   },
   subtotal: { type: Number },
   orderItems: [OrderItem],
-
+  isMultipleRestaurant: { type: Boolean, default: false },
   estimatedDeliveryTime: {
     type: Date,
   },
@@ -56,7 +61,7 @@ const orderSchema = {
     default: "New",
   },
 };
-
+// orderSchema.index({ deliveryAddress: 1 });
 const schema = new Schema(orderSchema, {
   toJSON: {
     getters: true,

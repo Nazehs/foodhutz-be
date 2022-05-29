@@ -1,4 +1,4 @@
-const { ApolloError, AuthenticationError } = require("apollo-server-express");
+const { ApolloError } = require("apollo-server-express");
 const { StoreOwner, Driver, User } = require("../../models");
 const { signToken } = require("../../utils/auth");
 const { sentSMS } = require("../../utils/sms");
@@ -18,8 +18,8 @@ const createStoreOwner = async (_, { input }) => {
     }
     throw new ApolloError("Failed to sign up. user already exist");
   } catch (error) {
-    console.log(`[ERROR]: Failed to create StoreOwner | ${error.message}`);
-    throw new ApolloError(`Failed to create StoreOwner || ${error.message}`);
+    console.log(`[ERROR]: Failed to create restaurant | ${error.message}`);
+    throw new ApolloError(`Failed to create restaurant || ${error.message}`);
   }
 };
 

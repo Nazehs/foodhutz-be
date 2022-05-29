@@ -7,8 +7,6 @@ const getOrder = async (_, { orderId }, { user }) => {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
-   
-
     return await Order.findById(orderId);
   } catch (error) {
     console.log(`[ERROR]: Failed to get order details| ${error.message}`);
