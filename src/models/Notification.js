@@ -15,7 +15,20 @@ const notificationSchema = {
   to: {
     type: String,
   },
-  from: { type: String },
+  from: {
+    duration: {
+      text: { type: String },
+      value: { type: Number },
+    },
+    distance: {
+      text: { type: String },
+      value: { type: Number },
+    },
+    duration_in_traffic: {
+      text: { type: String },
+      value: { type: Number },
+    },
+  },
   distance: {
     duration: {
       text: { type: String },
@@ -29,6 +42,10 @@ const notificationSchema = {
       text: { type: String },
       value: { type: Number },
     },
+  },
+  amount: {
+    type: Number,
+    default: 0,
   },
 };
 

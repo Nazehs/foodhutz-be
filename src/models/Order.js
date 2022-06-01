@@ -31,6 +31,10 @@ const orderSchema = {
     type: locationSchema,
     index: "2dsphere",
   },
+  restaurantLocation: {
+    type: [locationSchema],
+    index: "2dsphere",
+  },
   subtotal: { type: Number },
   orderItems: [OrderItem],
   isMultipleRestaurant: { type: Boolean, default: false },

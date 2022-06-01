@@ -792,7 +792,7 @@ const typeDefs = gql`
       skip: Int
       postCode: String
     ): AllRestaurantsOwners
-    getRestaurant(RestaurantId: ID!): RestaurantUser
+    getRestaurant(restaurantId: ID!): RestaurantUser
     getUser(userId: ID!): User!
     getDriver(userId: ID!): Driver!
     getBankDetails(bankId: ID): BankDetail
@@ -888,7 +888,7 @@ const typeDefs = gql`
     deleteUser(userId: ID): Auth!
     deleteDriver(userId: ID): Driver!
     deleteCoupon(CouponId: ID): Coupon!
-    deleteRestaurant(RestaurantId: ID): RestaurantUser
+    deleteRestaurant(restaurantId: ID): RestaurantUser
     deleteCategory(categoryId: ID): Category!
     deleteTrip(tripId: ID): Trip!
     deleteBankDetails(bankId: ID!): BankDetail
