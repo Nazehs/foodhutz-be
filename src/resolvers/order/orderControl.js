@@ -1,4 +1,8 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
+const {
+  calculateFareToRestaurant,
+  calculateFareToUser,
+} = require("../../helpers/calculateTripFare");
 const { Order, Driver, Notification } = require("../../models");
 const getTripMatrix = require("../../utils/getTripMatrix");
 
@@ -57,7 +61,7 @@ const orderControl = async (_, { orderId, status }, { user }) => {
           model: "Payment",
         },
       });
-
+    // console.log(doc);
     if (status.toLowerCase() == "accepted") {
       const restaurantsLocations = doc?.orderItems?.reduce(
         (accumulator, restaurant) => {
@@ -85,6 +89,7 @@ const orderControl = async (_, { orderId, status }, { user }) => {
         longitude: doc?.deliveryAddress?.coordinates[0],
         latitude: doc?.deliveryAddress?.coordinates[1],
       };
+      // get the trip matrix of the restaurants and the delivery address
       const { data: distanceDoc } = await getTripMatrix(restaurantsLocations, [
         deliveryAddress,
       ]);
@@ -94,9 +99,41 @@ const orderControl = async (_, { orderId, status }, { user }) => {
         user: doc?.user?._id,
         order: doc?._id,
         to: doc?.deliveryAddress,
-        from: doc?.from,
+        from: restaurantsLocations,
         distance: distanceDoc?.rows[0]?.elements[0],
       };
+      // console.log(orderNotification);
+      //  get drivers close the longitude and latitude of the order
+      const nearByDrivers = await Driver.find({
+        location: {
+          $near: {
+            $geometry: orderNotification.to,
+          },
+        },
+      });
+
+      // get the trip matrix of the restaurants and the delivery address
+      const { data: nearByDriversLocation } = await getTripMatrix(
+        restaurantsLocations,
+        [
+          {
+            longitude: nearByDrivers[0]?.lastKnownLocation?.coordinates[0],
+            latitude: nearByDrivers[0]?.lastKnownLocation?.coordinates[1],
+          },
+        ]
+      );
+      // calculate the fare of the driver and the restaurant
+      const driverToRestaurantTripFare = calculateFareToRestaurant(
+        nearByDriversLocation.rows[0].elements[0].distance.value
+      );
+
+      //  calculate the trip fare of the driver to the user location
+      const driverToUserTripFare = calculateFareToUser(
+        distanceDoc.rows[0].elements[0].distance.value
+      );
+      // set the suggested price of the trip
+      orderNotification.amount =
+        driverToRestaurantTripFare + driverToUserTripFare;
 
       //   create a notification
       const notificationDoc = await Notification.create(orderNotification);
@@ -119,7 +156,7 @@ const orderControl = async (_, { orderId, status }, { user }) => {
     return doc;
   } catch (error) {
     console.log(`[ERROR]: Failed to update  order | ${error.message}`);
-    throw new ApolloError("Failed to update  order status");
+    throw new ApolloError(`Failed to update  order status || ${error.message}`);
   }
 };
 module.exports = orderControl;

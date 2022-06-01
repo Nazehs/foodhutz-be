@@ -77,6 +77,7 @@ const typeDefs = gql`
     bankDetails: [BankDetail]
     documents: [DocumentResponse]
     tips: [Tips]
+    lastKnownLocation: Location
   }
 
   type RestaurantResponse {
@@ -533,7 +534,7 @@ const typeDefs = gql`
     storeName: String
     postCode: String
     description: String
-    RestaurantAddress: String
+    # RestaurantAddress: String
   }
   input RestaurantInput {
     name: String
@@ -841,7 +842,7 @@ const typeDefs = gql`
     getCurrentLocation(input: String): String
     # update
     updateUser(input: UpdateUserInput!): Auth!
-    updateDriver(input: UpdateDriverInput!): DriverAuth!
+    updateDriver(input: UpdateDriverInput!): Driver!
     updateMenu(menuId: ID!, input: MenuInputUpdate!): Menu!
     updateCategory(categoryId: ID!, input: CategoryInput!): Category!
     updateTrip(tripId: ID!, input: TripUpdateInput!): Trip!
@@ -851,7 +852,7 @@ const typeDefs = gql`
     orderControl(orderId: ID!, status: String): Order!
     tripControl(tripId: ID!, status: String): TripResponse!
     updateRestaurant(
-      RestaurantId: ID!
+      restaurantId: ID!
       input: RestaurantInputUpdate!
     ): RestaurantUser!
     updateBankDetails(bankId: ID!, input: BankDetailInput!): BankDetail
@@ -885,7 +886,7 @@ const typeDefs = gql`
     sendOTP(input: OTPInput): OTPResponse
     # delete
     deleteUser(userId: ID): Auth!
-    deleteDriver(userId: ID): DriverAuth!
+    deleteDriver(userId: ID): Driver!
     deleteCoupon(CouponId: ID): Coupon!
     deleteRestaurant(RestaurantId: ID): RestaurantUser
     deleteCategory(categoryId: ID): Category!

@@ -28,6 +28,7 @@ const getDriverStats = async (_, __, { user }) => {
           },
         },
       },
+
       {
         $facet: {
           categorizedByDay: [
@@ -92,6 +93,7 @@ const getDriverStats = async (_, __, { user }) => {
               },
             },
           ],
+
           categorizedByWeek: [
             { $unwind: "$trips" },
             {
@@ -124,6 +126,12 @@ const getDriverStats = async (_, __, { user }) => {
                 _id: 0,
               },
             },
+          ],
+          totalTripOntime: [
+            { $unwind: "$trips" },
+            { $match: { "trip.deliveryTime": { $lte: "date" } } },
+            { $group: { _id: null, count: { $sum: 1 } } },
+            { $project: { count: 1, _id: 0 } },
           ],
           categorizedByMonth: [
             { $unwind: "$trips" },

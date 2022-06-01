@@ -42,8 +42,8 @@ const createOrder = async (_, { input }, { user }) => {
     let restaurantsLocation;
     if (input?.isMultipleRestaurant) {
       // reduces the order items to avoid duplicate calling the same restaurant for 2 updates
-      const uniqueOrderItems = doc.orderItems.reduce((prev, orderItem) => {
-        if (!prev[orderItem.restaurant]) {
+      const uniqueOrderItems = doc?.orderItems?.reduce((prev, orderItem) => {
+        if (!prev[orderItem?.restaurant]) {
           prev[orderItem.restaurant] = [];
           prev[orderItem.restaurant] = [
             ...prev[orderItem.restaurant],
@@ -76,7 +76,7 @@ const createOrder = async (_, { input }, { user }) => {
     } else {
       // update the restaurant order items
       allDocs = await StoreOwner.findByIdAndUpdate(
-        doc.orderItems[0].restaurant,
+        doc?.orderItems[0]?.restaurant,
         {
           $push: { orders: { $each: doc.orderItems } },
         }
@@ -101,6 +101,7 @@ const createOrder = async (_, { input }, { user }) => {
         },
       });
     docs.restaurantLocation = restaurantsLocation;
+
     return docs;
   } catch (error) {
     console.log(`[ERROR]: Failed to create order | ${error.message}`);

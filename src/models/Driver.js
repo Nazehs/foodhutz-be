@@ -2,6 +2,7 @@ const { model, Schema } = require("mongoose");
 const bcrypt = require("bcrypt");
 const locationSchema = require("./LocationSchema");
 const geocoder = require("../utils/geoCoder");
+const getGeoLocation = require("../utils/googleGeoCoder");
 const driverSchema = {
   firstName: {
     type: String,
@@ -178,7 +179,29 @@ schema.pre("save", async function (next) {
 
   next();
 });
+// update the drivers last known location using their postcode
+schema.pre("findOneAndUpdate", async function (next) {
+  if (this.getUpdate().postCode) {
+    const {
+      data: { results },
+    } = await getGeoLocation(this.getUpdate().postCode);
+    // get the longitude and latitude
+    this.location = {
+      type: "Point",
+      coordinates: [
+        results[0]?.geometry?.location.lng,
+        results[0]?.geometry?.location.lat,
+      ],
+      formattedAddress: results[0]?.formatted_address,
+      city: results[0]?.address_components[2]?.long_name,
+      postCode: this.getUpdate()?.postCode,
+    };
 
+    // update the location and address
+    this._update.$set.lastKnownLocation = this.location;
+  }
+  next();
+});
 schema.methods.checkPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };

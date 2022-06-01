@@ -2,13 +2,13 @@ const { ApolloError, AuthenticationError } = require("apollo-server-express");
 
 const { StoreOwner } = require("../../models");
 
-const getStoreOwner = async (_, { storeId }, { user }) => {
+const getStoreOwner = async (_, { restaurantId }, { user }) => {
   try {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
 
-    return await StoreOwner.findById(storeId)
+    return await StoreOwner.findById(restaurantId)
       .populate("categories")
       .populate("orders")
       .populate("menus")

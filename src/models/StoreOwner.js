@@ -137,10 +137,10 @@ schema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, 10);
   }
   // GEOCODE THE CODE
+
   const {
     data: { results },
   } = await getGeoLocation(this.postCode);
-  console.log("results", results);
   this.location = {
     type: "Point",
     coordinates: [
@@ -154,6 +154,33 @@ schema.pre("save", async function (next) {
 
   this.storeAddress = results[0].formatted_address;
 
+  next();
+});
+
+schema.pre("findOneAndUpdate", async function (next) {
+  if (this.getUpdate().postCode) {
+    const docToUpdate = await this.model.findOne(this.getQuery());
+    const {
+      data: { results },
+    } = await getGeoLocation(docToUpdate.postCode);
+    // get the longitude and latitude
+    this.location = {
+      type: "Point",
+      coordinates: [
+        results[0].geometry.location.lng,
+        results[0].geometry.location.lat,
+      ],
+      formattedAddress: results[0].formatted_address,
+      city: results[0].address_components[2].long_name,
+      postCode: docToUpdate.postCode,
+    };
+
+    this.storeAddress = results[0].formatted_address;
+
+    // update the location and address
+    this._update.$set.storeAddress = this.storeAddress;
+    this._update.$set.location = this.location;
+  }
   next();
 });
 

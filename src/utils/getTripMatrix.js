@@ -9,6 +9,7 @@ const getTripMatrix = async (from, to) => {
         key: process.env.GOOGLE_MAPS_API_KEY,
         destinations: to,
         origins: from,
+        units: "imperial",
         mode: "driving",
         region: "gb",
         departure_time: Date.now(),

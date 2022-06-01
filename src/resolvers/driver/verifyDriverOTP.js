@@ -1,5 +1,3 @@
-const { AuthenticationError } = require("apollo-server-express");
-
 const { Driver } = require("../../models");
 const { verifySMS } = require("../../utils/sms");
 
