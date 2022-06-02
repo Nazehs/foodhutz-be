@@ -17,17 +17,40 @@ const getAllNotification = async (_, { limit = 10, skip = 0 }, { user }) => {
       .populate({
         path: "order",
         populate: {
-          path: "restaurant",
-          model: "Restaurant",
+          path: "orderItems",
+          populate: {
+            path: "category",
+            model: "Category",
+          },
         },
       })
       .populate({
         path: "order",
         populate: {
-          path: "category",
-          model: "Category",
+          path: "orderItems",
+          populate: {
+            path: "restaurant",
+            model: "Restaurant",
+          },
+        },
+      })
+      .populate({
+        path: "order",
+        populate: {
+          path: "orderItems",
+          populate: {
+            path: "customer",
+            model: "User",
+          },
         },
       });
+    // .populate({
+    //   path: "order",
+    //   populate: {
+    //     path: "category",
+    //     model: "Category",
+    //   },
+    // });
     const docsCount = await Notification.count();
     const totalPages = Math.ceil(docsCount / limit);
     const currentPage = Math.ceil(docsCount % (skip + 1));

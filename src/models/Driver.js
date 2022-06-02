@@ -205,7 +205,10 @@ schema.pre("findOneAndUpdate", async function (next) {
 schema.methods.checkPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
-
+// Model.aggregate().sample(1).exec((err, docs) => {
+//   docs = docs.map(doc => Model.hydrate(doc));
+//   docs[0].a; // Should be defined
+// });
 const Driver = model("Driver", schema);
 
 module.exports = Driver;

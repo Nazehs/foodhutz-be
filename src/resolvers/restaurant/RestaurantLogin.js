@@ -12,7 +12,15 @@ const storeOwnerLogin = async (_, { input }) => {
         .populate("categories")
         .populate("orders")
         .populate("menus")
-        .populate("coupons");
+        .populate("invoices")
+        .populate("coupons")
+        .populate({
+          path: "menus",
+          populate: {
+            path: "category",
+            model: "Category",
+          },
+        });
     }
 
     if (input.phoneNumber) {
@@ -23,7 +31,15 @@ const storeOwnerLogin = async (_, { input }) => {
         .populate("categories")
         .populate("orders")
         .populate("menus")
-        .populate("coupons");
+        .populate("invoices")
+        .populate("coupons")
+        .populate({
+          path: "menus",
+          populate: {
+            path: "category",
+            model: "Category",
+          },
+        });
     }
 
     if (!user) {

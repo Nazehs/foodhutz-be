@@ -16,7 +16,7 @@ const typeDefs = gql`
     username: String
     email: String!
     avatar: String
-    fullName: String!
+    fullName: String
     phoneNumber: String!
     userType: String!
     orders: [Order]
@@ -128,7 +128,7 @@ const typeDefs = gql`
     finalPrice: Float!
     restaurantLocation: [Location]
     orderTime: Date!
-    requestOrderId: String!
+    requestOrderId: String
     deliveryBy: Driver
     orderStatus: String!
     orderItems: [OrderItem]
@@ -139,7 +139,7 @@ const typeDefs = gql`
     discount: Float
     category: Category!
     comment: String
-    customer: User!
+    customer: User
     amount: Float!
   }
   type Coupon {
@@ -472,6 +472,20 @@ const typeDefs = gql`
     location: Location
     formattedAddress: String
     order: Order
+    to: Location
+    from: Location!
+    distance: Distance!
+    amount: Float!
+  }
+
+  type Distance {
+    duration: DistanceObject
+    distance: DistanceObject
+    duration_in_traffic: DistanceObject
+  }
+  type DistanceObject {
+    text: String
+    value: Float
   }
   input NotificationInput {
     user: ID!
@@ -665,7 +679,7 @@ const typeDefs = gql`
   input MenuInput {
     isActive: Boolean!
     name: String!
-    category: String!
+    category: ID!
     ingredients: [String!]
     description: String!
     price: Float!
