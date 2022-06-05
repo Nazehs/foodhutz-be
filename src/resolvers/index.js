@@ -1,5 +1,6 @@
 const { GraphQLScalarType, Kind } = require("graphql");
 const { GraphQLUpload } = require("graphql-upload");
+const { withFilter } = require("graphql-subscriptions");
 // create resolvers
 const userLogin = require("./user/login");
 const sendOTP = require("./user/sendOTP");
@@ -22,6 +23,9 @@ const createContactUs = require("./contactus/createContactUs");
 const createReferralCode = require("./referralCode/createReferralCode");
 const createRestaurant = require("./restaurant/createRestaurant");
 const createPayment = require("./payment/createPayment");
+const createCustomer = require("./payment/stripePaymentHelpers");
+const createUserPaymentIntent = require("./payment/createUserPaymentIntent");
+const confirmUserPayment = require("./payment/confirmUserPayment");
 const singleUpload = require("./fileUpload/singleUpload");
 // delete resolvers
 const deleteUser = require("./user/deleteUser");
@@ -103,6 +107,7 @@ const checkUserExist = require("./userCheck");
 const updateRestaurant = require("./restaurant/updateRestaurant");
 const getCurrentLocation = require("./location/getCurrentLocation");
 const updatePayment = require("./payment/updatePayment");
+const pubsub = require("./pubSub");
 const dateScalar = new GraphQLScalarType({
   name: "Date",
   description: "Date custom scalar type",
@@ -119,6 +124,11 @@ const dateScalar = new GraphQLScalarType({
     return null; // Invalid hard-coded value (not an integer)
   },
 });
+const newOrder = (root, args, context) => {
+  pubsub.publish("AUCTION_BID", {
+    auctionBid: { bid, status, listingId: input.listingId },
+  });
+};
 const resolvers = {
   Date: dateScalar,
   Upload: GraphQLUpload,
@@ -211,6 +221,8 @@ const resolvers = {
     createRestaurant,
     createPayment,
     getCurrentLocation,
+    createUserPaymentIntent,
+    confirmUserPayment,
     // update resolvers
     updateUser,
     updateOnlineStatus,
@@ -233,6 +245,67 @@ const resolvers = {
     verifyOTPUser,
     verifyDriverOTP,
     sendOTP,
+    createCustomer,
+  },
+  Subscription: {
+    NewOrder: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(["NEW_ORDER"]),
+        (payload, variables) => {
+          return payload.NewOrder.orderId === variables.orderId;
+        }
+      ),
+    },
+    OrderStatusChange: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(["ORDER_STATUS_CHANGE"]),
+        (payload, variables) => {
+          return (
+            payload.OrderStatusChange.order._id.toString() === variables.orderId
+          );
+        }
+      ),
+    },
+    NewTrip: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(["NEW_TRIP"]),
+        (payload, variables) => {
+          return payload.NewTrip.trip._id.toString() === variables.orderId;
+        }
+      ),
+    },
+    TripStatusChange: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(["TRIP_STATUS_CHANGE"]),
+        (payload, variables) => {
+          return (
+            payload.TripStatusChange.trip._id.toString() === variables.orderId
+          );
+        }
+      ),
+    },
+    NewNotification: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(["NEW_ORDER_NOTIFICATION"]),
+        (payload, variables) => {
+          return (
+            payload.NewNotification.notification._id.toString() ===
+            variables.orderId
+          );
+        }
+      ),
+    },
+    UpdateDriverLocation: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(["DRIVER_LOCATION_STATUS_CHANGE"]),
+        (payload, variables) => {
+          return (
+            payload.UpdateDriverLocation.driver._id.toString() ===
+            variables.orderId
+          );
+        }
+      ),
+    },
   },
 };
 

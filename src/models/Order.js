@@ -48,6 +48,21 @@ const orderSchema = {
     type: Number,
     default: 0,
   },
+  paymentStatus: {
+    type: String,
+    enum: [
+      "Pending",
+      "Processing",
+      "Action Required",
+      "Cancelled",
+      "Refunded",
+      "Failed",
+      "Paid",
+      "Unpaid",
+      "NEW",
+    ],
+    default: "Pending",
+  },
   orderStatus: {
     type: String,
     enum: [

@@ -39,6 +39,10 @@ const CouponsSchema = {
   status: {
     type: String,
   },
+  rating: {
+    type: Number,
+    default: 0,
+  },
 };
 
 const schema = new Schema(CouponsSchema, {

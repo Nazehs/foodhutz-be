@@ -127,7 +127,65 @@ const getDriverStats = async (_, __, { user }) => {
               },
             },
           ],
-          totalTripOntime: [
+          categorizedTipsByWeek: [
+            { $unwind: "$trips" },
+            {
+              $match: {
+                "trips.status": "accepted",
+              },
+            },
+            {
+              $match: {
+                "trips.status": "accepted",
+              },
+            },
+            {
+              $group: {
+                _id: {
+                  year: { $year: "$trips.createdAt" },
+                  week: { $week: "$trips.createdAt" },
+                },
+                count: { $sum: 1 },
+                totalTips: {
+                  $sum: "$trips.tip",
+                },
+              },
+            },
+            {
+              $project: {
+                totalTips: { $round: ["$totalTips", 2] },
+                count: 1,
+                week: "$_id",
+                _id: 0,
+              },
+            },
+          ],
+          categorizedStarsRatingByWeek: [
+            { $unwind: "$trips" },
+            {
+              $match: {
+                "trips.status": "accepted",
+                "trips.rating": { $gte: 5 },
+              },
+            },
+            {
+              $group: {
+                _id: {
+                  year: { $year: "$trips.createdAt" },
+                  week: { $week: "$trips.createdAt" },
+                },
+                count: { $sum: 1 },
+              },
+            },
+            {
+              $project: {
+                count: 1,
+                week: "$_id",
+                _id: 0,
+              },
+            },
+          ],
+          totalTripOnTime: [
             { $unwind: "$trips" },
             { $match: { "trip.deliveryTime": { $lte: "date" } } },
             { $group: { _id: null, count: { $sum: 1 } } },

@@ -20,6 +20,34 @@ const driverLogin = async (_, { input }) => {
       user = await Driver.findOne({ phoneNumber: input.phoneNumber })
         .populate("documents")
         .populate("trips")
+        .populate({
+          path: "trips",
+          populate: {
+            path: "order",
+            model: "Order",
+          },
+        })
+        .populate({
+          path: "trips",
+          populate: {
+            path: "deliveryBy",
+            model: "Driver",
+          },
+        })
+        .populate({
+          path: "trips",
+          populate: {
+            path: "orderItems",
+            populate: {
+              path: "restaurant",
+              model: "StoreOwner",
+            },
+            populate: {
+              path: "category",
+              model: "Category",
+            },
+          },
+        })
         .populate("tips")
         .populate("notifications")
         .populate("bankDetails")

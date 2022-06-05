@@ -77,6 +77,7 @@ const typeDefs = gql`
     bankDetails: [BankDetail]
     documents: [DocumentResponse]
     tips: [Tips]
+    # feedbacks: [FeedbacksResponse]
     lastKnownLocation: Location
   }
 
@@ -431,6 +432,10 @@ const typeDefs = gql`
   type FeedbackStatsItem {
     count: Float!
   }
+
+  type OrderUpdateResponse {
+    order: Order
+  }
   type MonthMeta {
     month: Int
     day: Int!
@@ -454,6 +459,14 @@ const typeDefs = gql`
     message: String
     order: Order
   }
+  type PaymentIntentResponse {
+    status: Int!
+    success: Boolean!
+    message: String!
+    clientSecret: String!
+    # paymentIntentId: String!
+  }
+
   type DriverStatsResponse {
     totalProcessed: [StatsItem]
     totalCancelled: [StatsItem]
@@ -464,6 +477,23 @@ const typeDefs = gql`
     categorizedByMonth: [MonthStatsCategory]
     categorizedByWeek: [WeekStatsCategory]
     categorizedByYear: [YearStatsCategory]
+    categorizedTipsByWeek: [WeekTipsStatsCategory]
+    categorizedStarsRatingByWeek: [StarsRatingCategory]
+  }
+  type DriverLocationResponse {
+    driver: Driver
+  }
+  type TripUpdateResponse {
+    trip: Trip
+  }
+  type WeekTipsStatsCategory {
+    week: WeekMeta
+    totalTips: Float!
+    count: Float!
+  }
+  type StarsRatingCategory {
+    week: WeekMeta
+    count: Float!
   }
   type NotificationResponse {
     id: ID!
@@ -676,6 +706,25 @@ const typeDefs = gql`
     startTime: Date
     order: ID
   }
+  input PaymentIntentInput {
+    amount: Float
+    paymentType: String
+    fees: Float
+    orderId: ID!
+  }
+  input PaymentIntentConfirmInput {
+    clientSecret: String!
+    orderId: ID!
+    payment_method: Card
+  }
+
+  input Card {
+    card_number: String!
+    exp_month: Int!
+    exp_year: Int!
+    cvc: String!
+  }
+
   input MenuInput {
     isActive: Boolean!
     name: String!
@@ -854,6 +903,8 @@ const typeDefs = gql`
     createRestaurant(input: RestaurantInput): RestaurantResponse
     createPayment(input: PaymentInput): PaymentResponse
     getCurrentLocation(input: String): String
+    createUserPaymentIntent(input: PaymentIntentInput!): PaymentIntentResponse
+    confirmUserPayment(input: PaymentIntentConfirmInput!): PaymentResponse
     # update
     updateUser(input: UpdateUserInput!): Auth!
     updateDriver(input: UpdateDriverInput!): Driver!
@@ -895,16 +946,16 @@ const typeDefs = gql`
       codeId: ID!
       input: ReferralCodeInputUpdate!
     ): ReferralCodeResponse
-    verifyOTPUser(input: OTPVerificationInput): OTPVerification
-    verifyDriverOTP(input: OTPVerificationInput): OTPVerification
-    sendOTP(input: OTPInput): OTPResponse
+    verifyOTPUser(input: OTPVerificationInput!): OTPVerification
+    verifyDriverOTP(input: OTPVerificationInput!): OTPVerification
+    sendOTP(input: OTPInput!): OTPResponse
     # delete
-    deleteUser(userId: ID): Auth!
-    deleteDriver(userId: ID): Driver!
-    deleteCoupon(CouponId: ID): Coupon!
-    deleteRestaurant(restaurantId: ID): RestaurantUser
-    deleteCategory(categoryId: ID): Category!
-    deleteTrip(tripId: ID): Trip!
+    deleteUser(userId: ID!): Auth!
+    deleteDriver(userId: ID!): Driver!
+    deleteCoupon(CouponId: ID!): Coupon!
+    deleteRestaurant(restaurantId: ID!): RestaurantUser
+    deleteCategory(categoryId: ID!): Category!
+    deleteTrip(tripId: ID!): Trip!
     deleteBankDetails(bankId: ID!): BankDetail
     deleteMenu(menuId: ID!): Menu
     deleteContactUs(messageId: ID!): ContactUsResponse
@@ -912,8 +963,19 @@ const typeDefs = gql`
     deleteFeedback(feedbackId: ID!): FeedbacksResponse
     deleteNotification(notificationId: ID!): NotificationResponse
     deleteReferAndEarn(referralId: ID!): ReferAndEarnResponse
-    deleteReferralCode(codeId: ID): ReferralCodeResponse
-    deletePayment(paymentId: ID): PaymentResponse
+    deleteReferralCode(codeId: ID!): ReferralCodeResponse
+    deletePayment(paymentId: ID!): PaymentResponse
+
+    # payment
+    createCustomer(input: ID): PaymentResponse
+  }
+  type Subscription {
+    NewOrder(restaurantId: ID!): Order
+    OrderStatusChange(orderId: ID!): OrderUpdateResponse!
+    NewTrip(restaurantId: ID!): Trip
+    TripStatusChange(tripId: ID!): TripUpdateResponse
+    NewNotification(restaurantId: ID!): NotificationResponse
+    UpdateDriverLocation(driverId: ID!): DriverLocationResponse
   }
 `;
 

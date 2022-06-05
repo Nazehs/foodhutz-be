@@ -7,9 +7,15 @@ const updateOrderStatus = async (_, { orderId, input }, { user }) => {
     if (!user) {
       throw new AuthenticationError("Unauthorised to perform this operation");
     }
-    await Order.findById(orderId, { $set: { status: input.status } });
+    console.log(doc);
+    return await Order.findById(
+      orderId,
+      {
+        $set: { status: input.status },
+      },
+      { new: true }
+    );
     // check the appropriate status then fire the next thing such as looking for driver
-    return {};
   } catch (error) {
     console.log(`[ERROR]: Failed to update order details| ${error.message}`);
     throw new ApolloError("Failed to update order details");

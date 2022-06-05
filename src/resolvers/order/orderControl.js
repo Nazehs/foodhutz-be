@@ -5,6 +5,7 @@ const {
 } = require("../../helpers/calculateTripFare");
 const { Order, Driver, Notification } = require("../../models");
 const getTripMatrix = require("../../utils/getTripMatrix");
+const pubsub = require("../pubSub");
 
 const orderControl = async (_, { orderId, status }, { user }) => {
   try {
@@ -152,7 +153,9 @@ const orderControl = async (_, { orderId, status }, { user }) => {
         { $push: { notifications: notificationDoc._id } }
       );
     }
-
+    pubsub.publish("ORDER_STATUS_CHANGE", {
+      OrderStatusChange: { order: doc },
+    });
     return doc;
   } catch (error) {
     console.log(`[ERROR]: Failed to update  order | ${error.message}`);

@@ -1,7 +1,6 @@
 const { model, Schema } = require("mongoose");
 const bcrypt = require("bcrypt");
 const locationSchema = require("./LocationSchema");
-const geocoder = require("../utils/geoCoder");
 const getGeoLocation = require("../utils/googleGeoCoder");
 const driverSchema = {
   firstName: {
@@ -90,6 +89,12 @@ const driverSchema = {
     index: "2dsphere",
     type: locationSchema,
   },
+  // feedbacks: [
+  //   {
+  //     type: Schema.Types.ObjectId,
+  //     ref: "Feedback",
+  //   },
+  // ],
   location: {
     type: locationSchema,
     index: "2dsphere",
@@ -162,18 +167,9 @@ schema.pre("save", async function (next) {
       results[0].geometry.location.lat,
     ],
     formattedAddress: results[0].formatted_address,
-    // postCode:
-    //   results[0].address_components[results[0].address_components.length - 1]
-    //     .short_name,
+
     city: results[0].address_components[2].long_name,
   };
-  // this.location = {
-  //   type: "Point",
-  //   coordinates: [loc[0].longitude, loc[0].latitude],
-  //   formattedAddress: loc[0].formattedAddress,
-  //   postCode: loc[0].zipcode,
-  //   city: loc[0].city,
-  // };
 
   this.address = results[0].formatted_address;
 
