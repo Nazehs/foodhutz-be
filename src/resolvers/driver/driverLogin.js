@@ -61,7 +61,7 @@ const driverLogin = async (_, { input }) => {
           path: "invoices",
           populate: {
             path: "bankDetails",
-            model: "BankDetails",
+            model: "BankDetail",
           },
         });
     }
