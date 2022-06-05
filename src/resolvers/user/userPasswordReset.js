@@ -1,4 +1,4 @@
-const { ApolloError, AuthenticationError } = require("apollo-server-express");
+const { ApolloError } = require("apollo-server-express");
 const { User } = require("../../models");
 const { sentSMS } = require("../../utils/sms");
 const userPasswordReset = async (_, { email, phoneNumber }) => {
@@ -19,7 +19,7 @@ const userPasswordReset = async (_, { email, phoneNumber }) => {
     }
   } catch (error) {
     console.log(`[ERROR]: Failed to reset password | ${error.message}`);
-    throw new ApolloError(`Failed to reset password ||${error.message} `);
+    throw new ApolloError(`Failed to reset password || ${error.message}`);
   }
 };
 

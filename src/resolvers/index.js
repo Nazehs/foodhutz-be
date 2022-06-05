@@ -7,6 +7,7 @@ const sendOTP = require("./user/sendOTP");
 const driverLogin = require("./driver/driverLogin");
 const RestaurantLogin = require("./restaurant/RestaurantLogin");
 const driverSignup = require("./driver/driverSignup");
+const passwordReset = require("./passwordReset");
 const userSignup = require("./user/signup");
 const updateOnlineStatus = require("./updateOnlineStatus");
 const createMenu = require("./menu/createMenu");
@@ -223,6 +224,7 @@ const resolvers = {
     getCurrentLocation,
     createUserPaymentIntent,
     confirmUserPayment,
+    passwordReset,
     // update resolvers
     updateUser,
     updateOnlineStatus,

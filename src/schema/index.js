@@ -33,6 +33,7 @@ const typeDefs = gql`
     avatar: String
     phoneNumber: String!
     userType: String!
+    invoices: [PaymentResponse]
     orders: [Order]
     feedbacks: [FeedbacksResponse]
     description: String
@@ -495,6 +496,12 @@ const typeDefs = gql`
     week: WeekMeta
     count: Float!
   }
+
+  type PasswordResetResponse {
+    message: String
+    status: Float
+    success: Boolean
+  }
   type NotificationResponse {
     id: ID!
     user: User!
@@ -833,6 +840,10 @@ const typeDefs = gql`
     document: Upload
     documentType: String
   }
+  input PasswordResetInput {
+    email: String
+    userType: String
+  }
   type Query {
     checkUserExist(input: CheckUserInput): CheckUserExistResponse
     getAllUsers(limit: Int, skip: Int): AllUsers
@@ -907,6 +918,7 @@ const typeDefs = gql`
     confirmUserPayment(input: PaymentIntentConfirmInput!): PaymentResponse
     # update
     updateUser(input: UpdateUserInput!): Auth!
+    passwordReset(input: PasswordResetInput!): PasswordResetResponse!
     updateDriver(input: UpdateDriverInput!): Driver!
     updateMenu(menuId: ID!, input: MenuInputUpdate!): Menu!
     updateCategory(categoryId: ID!, input: CategoryInput!): Category!
