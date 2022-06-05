@@ -54,7 +54,6 @@ const driverLogin = async (_, { input }) => {
             },
           },
         })
-
         .populate("notifications")
         .populate("bankDetails")
         .populate({
@@ -137,7 +136,8 @@ const driverLogin = async (_, { input }) => {
       console.log("[ERROR]: Failed to login | Incorrect password");
       throw new AuthenticationError("Failed to login");
     }
-
+    console.log("[INFO]: Successfully logged in");
+    console.log(user);
     return {
       token: signToken(user),
       user,

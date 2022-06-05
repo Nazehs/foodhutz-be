@@ -46,6 +46,14 @@ const getStoreOwnerAggregate = async (_, { startDate, endDate }, { user }) => {
                 },
               },
             },
+            {
+              $project: {
+                _id: 0,
+                day: "$_id",
+                count: 1,
+                totalAmt: 1,
+              },
+            },
           ],
           categorizedByMonth: [
             { $unwind: "$orders" },
@@ -60,6 +68,18 @@ const getStoreOwnerAggregate = async (_, { startDate, endDate }, { user }) => {
                 totalAmt: {
                   $sum: "$orders.finalPrice",
                 },
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                month: {
+                  month: "$_id.month",
+                  day: "$_id.day",
+                  year: "$_id.year",
+                },
+                count: 1,
+                totalAmt: 1,
               },
             },
           ],
@@ -159,7 +179,20 @@ const getStoreOwnerAggregate = async (_, { startDate, endDate }, { user }) => {
           totalOrders: [
             { $unwind: "$orders" },
 
-            { $match: { "orders.orderStatus": { $in: ["New", "accepted"] } } },
+            {
+              $match: {
+                "orders.orderStatus": {
+                  $in: [
+                    "New",
+                    "accepted",
+                    "processed",
+                    "completed",
+                    "cancelled",
+                    "missed",
+                  ],
+                },
+              },
+            },
 
             { $project: { total: "$orders.finalPrice" } },
             {
@@ -180,7 +213,6 @@ const getStoreOwnerAggregate = async (_, { startDate, endDate }, { user }) => {
         },
       },
     ]);
-
     return doc[0];
   } catch (error) {
     console.log(`[ERROR]: Failed to get aggregate details | ${error.message}`);

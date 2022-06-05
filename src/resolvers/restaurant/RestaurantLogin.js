@@ -14,6 +14,17 @@ const storeOwnerLogin = async (_, { input }) => {
         .populate("menus")
         .populate("invoices")
         .populate("coupons")
+        .populate("documents")
+        .populate({
+          path: "orders",
+          populate: {
+            path: "orderItems",
+            populate: {
+              path: "category",
+              model: "Category",
+            },
+          },
+        })
         .populate({
           path: "menus",
           populate: {
@@ -33,6 +44,17 @@ const storeOwnerLogin = async (_, { input }) => {
         .populate("menus")
         .populate("invoices")
         .populate("coupons")
+        .populate("documents")
+        .populate({
+          path: "order",
+          populate: {
+            path: "orderItems",
+            populate: {
+              path: "category",
+              model: "Category",
+            },
+          },
+        })
         .populate({
           path: "menus",
           populate: {
