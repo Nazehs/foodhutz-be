@@ -63,6 +63,10 @@ const orderSchema = {
     ],
     default: "Pending",
   },
+  deliveryBy: {
+    type: Schema.Types.ObjectId,
+    ref: "Driver",
+  },
   orderStatus: {
     type: String,
     enum: [

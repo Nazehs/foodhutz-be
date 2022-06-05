@@ -18,28 +18,6 @@ async function startApolloServer(typeDefs, resolvers) {
   // Required logic for integrating with Express
   const app = express();
 
-  // app.post("/create-payment-intent", async (req, res) => {
-  //   // const { amount, currency } = req.body;
-  //   try {
-  //     const amount = 2000;
-  //     const currency = "GBP";
-  //     const payment_method_types = ["card"];
-
-  //     const paymentIntent = await stripe.paymentIntents.create({
-  //       amount,
-  //       currency,
-  //       payment_method_types,
-  //     });
-  //     // return the payment intent id to the client
-  //     res.send({
-  //       clientSecret: paymentIntent.client_secret,
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //     res.send({ error: { message: error.message } });
-  //   }
-  // });
-
   // This is your Stripe CLI webhook secret for testing your endpoint locally.
   app.post(
     "/webhook",
@@ -190,6 +168,7 @@ async function startApolloServer(typeDefs, resolvers) {
     schema,
     context: authMiddleware,
     csrfPrevention: true,
+
     debug: process.env.NODE_ENV !== "production",
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -211,13 +190,8 @@ async function startApolloServer(typeDefs, resolvers) {
     // More required logic for integrating with Express
     await server.start();
     //   await db();
-    server.applyMiddleware({ app });
+    server.applyMiddleware({ app, path: "/" });
     const port = process.env.PORT || 4000;
-    // httpServer.listen(port, () => {
-    //   console.log(
-    //     `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
-    //   );
-    // });
     // Modified server startup
     await new Promise((resolve) => httpServer.listen({ port }, resolve));
 

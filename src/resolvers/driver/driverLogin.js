@@ -10,15 +10,6 @@ const driverLogin = async (_, { input }) => {
       user = await Driver.findOne({ email: input.email })
         .populate("documents")
         .populate("trips")
-        .populate("tips")
-        .populate("notifications")
-        .populate("bankDetails")
-        .populate("invoices");
-    }
-
-    if (input.phoneNumber) {
-      user = await Driver.findOne({ phoneNumber: input.phoneNumber })
-        .populate("documents")
         .populate("trips")
         .populate({
           path: "trips",
@@ -30,28 +21,110 @@ const driverLogin = async (_, { input }) => {
         .populate({
           path: "trips",
           populate: {
-            path: "deliveryBy",
-            model: "Driver",
+            path: "order",
+            populate: {
+              path: "deliveryBy",
+              model: "Driver",
+            },
           },
         })
         .populate({
           path: "trips",
           populate: {
-            path: "orderItems",
+            path: "order",
             populate: {
-              path: "restaurant",
-              model: "StoreOwner",
-            },
-            populate: {
-              path: "category",
-              model: "Category",
+              path: "orderItems",
+              populate: {
+                path: "restaurant",
+                model: "StoreOwner",
+              },
             },
           },
         })
-        .populate("tips")
+        .populate({
+          path: "trips",
+          populate: {
+            path: "order",
+            populate: {
+              path: "orderItems",
+              populate: {
+                path: "category",
+                model: "Category",
+              },
+            },
+          },
+        })
+
         .populate("notifications")
         .populate("bankDetails")
-        .populate("invoices");
+        .populate({
+          path: "invoices",
+          populate: {
+            path: "bankDetails",
+            model: "BankDetails",
+          },
+        });
+    }
+
+    if (input.phoneNumber) {
+      user = await Driver.findOne({ phoneNumber: input.phoneNumber })
+        .populate("documents")
+        .populate("trips")
+        .populate("trips")
+        .populate({
+          path: "trips",
+          populate: {
+            path: "order",
+            model: "Order",
+          },
+        })
+        .populate({
+          path: "trips",
+          populate: {
+            path: "order",
+            populate: {
+              path: "deliveryBy",
+              model: "Driver",
+            },
+          },
+        })
+        .populate({
+          path: "trips",
+          populate: {
+            path: "order",
+            populate: {
+              path: "orderItems",
+              populate: {
+                path: "restaurant",
+                model: "StoreOwner",
+              },
+            },
+          },
+        })
+        .populate({
+          path: "trips",
+          populate: {
+            path: "order",
+            populate: {
+              path: "orderItems",
+              populate: {
+                path: "category",
+                model: "Category",
+              },
+            },
+          },
+        })
+
+        .populate("notifications")
+        .populate("bankDetails")
+        .populate("invoices")
+        .populate({
+          path: "invoices",
+          populate: {
+            path: "bankDetails",
+            model: "BankDetails",
+          },
+        });
     }
 
     if (!user) {
