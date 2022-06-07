@@ -26,6 +26,9 @@ const paymentSchema = {
   email: {
     type: String,
   },
+  paymentRef: {
+    type: String,
+  },
 };
 
 const schema = new Schema(paymentSchema, {

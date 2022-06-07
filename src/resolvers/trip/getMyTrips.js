@@ -19,6 +19,7 @@ const getMyTrips = async (_, { limit = 10, skip = 0, status }, { user }) => {
             pipeline: [
               { $match: { status } },
               { $replaceRoot: { newRoot: "$$ROOT" } },
+              { $sort: { createdAt: -1, _id: -1 } },
             ],
             as: "trips",
           },

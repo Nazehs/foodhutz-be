@@ -106,6 +106,12 @@ const storeOwnerSchema = {
     default: "Restaurant",
     required: true,
   },
+  stripeID: {
+    type: String,
+  },
+  stripeAccountId:{
+    type: String,
+  },
   dateOfJoin: { type: Date, default: Date.now() },
   description: { type: String },
   documents: [{ type: Schema.Types.ObjectId, ref: "Document" }],

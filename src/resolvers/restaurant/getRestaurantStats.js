@@ -16,11 +16,12 @@ const getStoreOwnerAggregate = async (_, { startDate, endDate }, { user }) => {
           from: "orders",
           localField: "orders",
           foreignField: "_id",
+          let: { orders: "$orders" },
+          pipeline: [{ $sort: { createdAt: -1 } }],
           as: "orders",
         },
       },
       { $unwind: { path: "$orders", preserveNullAndEmptyArrays: true } },
-      { $sort: { "orders.createdAt": 1 } },
       {
         $replaceRoot: {
           newRoot: {
@@ -28,6 +29,7 @@ const getStoreOwnerAggregate = async (_, { startDate, endDate }, { user }) => {
           },
         },
       },
+      { $sort: { "orders.createdAt": -1 } },
       {
         $facet: {
           categorizedByDay: [

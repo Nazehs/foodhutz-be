@@ -288,6 +288,34 @@ const createPaymentIntent = async (input) => {
     console.log(error);
   }
 };
+const createAccount = async () => {
+  const account = await stripe.accounts.create({
+    country: "GB",
+    type: "express",
+    capabilities: {
+      card_payments: { requested: true },
+      transfers: { requested: true },
+    },
+    business_type: "company",
+
+    business_profile: {
+      url: "https://foodhutz.com",
+      name: "Foodhutz test",
+      mcc: "4121",
+    },
+  });
+  return account;
+};
+
+const updateAccount = async (accountId) => {
+  const account = await stripe.accounts.update(accountId, {
+    business_profile: {
+      mcc: "4121",
+      name: "Test",
+      url: "https://example.com",
+    },
+  });
+};
 
 const confirmPaymentIntent = async (params) => {
   try {
@@ -423,5 +451,6 @@ module.exports = {
   createPaymentIntent,
   confirmPaymentIntent,
   confirmCardPayment,
+  createAccount,
   attachPaymentMethodToCustomer,
 };

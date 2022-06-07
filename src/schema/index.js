@@ -78,6 +78,8 @@ const typeDefs = gql`
     bankDetails: [BankDetail]
     documents: [DocumentResponse]
     tips: [Tips]
+    status: String
+    notifications: [NotificationResponse]
     # feedbacks: [FeedbacksResponse]
     lastKnownLocation: Location
   }
@@ -697,6 +699,7 @@ const typeDefs = gql`
     vehicleType: String
     postCode: String!
     documents: [DocumentInput]
+    lastKnownLocation: String
   }
 
   input TripInput {

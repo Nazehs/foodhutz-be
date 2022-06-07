@@ -29,7 +29,8 @@ const driverPasswordReset = async (_, { email, userType }) => {
         }
         if (user) {
           return {
-            message: "Password reset link has been sent to your email",
+            message:
+              "Password reset link has been sent to your email || OTP has been sent to your phone number",
             status: 0,
             success: true,
           };

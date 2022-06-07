@@ -120,6 +120,12 @@ const driverSchema = {
     enum: ["Jacket", "Delivery bags", "None", "No", "Helmet"],
     default: "None",
   },
+  stripeID: {
+    type: String,
+  },
+  stripeAccountId: {
+    type: String,
+  },
   vehicleNumber: { type: String },
   jobType: {
     type: String,

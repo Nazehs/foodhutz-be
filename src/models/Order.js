@@ -67,6 +67,9 @@ const orderSchema = {
     type: Schema.Types.ObjectId,
     ref: "Driver",
   },
+  paymentIntentId: {
+    type: String,
+  },
   orderStatus: {
     type: String,
     enum: [

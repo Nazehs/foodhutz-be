@@ -12,10 +12,10 @@ const createUserPaymentIntent = async (_, { input }, { user }) => {
     }
 
     // get the order charges
-    const customerOrder = await Order.findById(input.orderId);
+    const customerOrder = await Order.findById(input?.orderId);
     // create customer
 
-    user.description = `Customer payment for order ${customerOrder.orderId}`;
+    user.description = `Customer payment for order ${input?.orderId}`;
 
     // create the customer for one time payment
     const customer = await createCustomer(user);
@@ -28,13 +28,13 @@ const createUserPaymentIntent = async (_, { input }, { user }) => {
         enabled: true,
       },
       // setup_future_usage: 'off_session',
-      metadata: { orderId: customerOrder._id },
-      receipt_email: "nazehabel@gmail.com" || user.email,
-      customer: customer.id,
+      metadata: { orderId: customerOrder?._id },
+      receipt_email: user?.email,
+      customer: customer?.id,
     });
 
     return {
-      clientSecret: paymentIntent.id,
+      clientSecret: paymentIntent?.id,
       status: 0,
       success: true,
       message: "payment intent created!",

@@ -79,6 +79,12 @@ const userSchema = {
     type: String,
     default: "USER",
   },
+  stripeID: {
+    type: String,
+  },
+  stripeAccountId: {
+    type: String,
+  },
   password: {
     type: String,
     // required: true,
