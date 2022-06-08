@@ -11,6 +11,7 @@ const createStoreOwner = async (_, { input }) => {
     if (!isUserExisting) {
       await sentSMS(input.phoneNumber);
       const user = await await StoreOwner.create(input);
+      //  set up stripe account and profile to the user
       return {
         token: signToken(user),
         user,

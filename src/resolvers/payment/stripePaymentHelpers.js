@@ -9,6 +9,82 @@ const stripe = require("stripe")("sk_test_jy4RDZiCWtIGt3Hz9JNOsd85", {
 //   apiVersion: "2020-08-27",
 // });
 const uuid = require("uuid");
+
+/**
+ * GET /user/stripe/token
+ *
+ * Connect the new Stripe account to the platform account.
+ */
+const connectUserToPlatform = async (__, { input }, { user }) => {
+  try {
+    // Check the `state` we got back equals the one we generated before proceeding (to protect from CSRF)
+    if (req.session.state != req.query.state) {
+      throw new AppolloAuthenticationError(
+        "You are not authorized to access this resource."
+      );
+    }
+    try {
+      // Post the authorization code to Stripe to complete the Express onboarding flow
+      const expressAuthorized = await request.post({
+        uri: config.stripe.tokenUri,
+        form: {
+          grant_type: "authorization_code",
+          client_id: config.stripe.clientId,
+          client_secret: config.stripe.secretKey,
+          code: req.query.code,
+        },
+        json: true,
+      });
+
+      if (expressAuthorized.error) {
+        throw new AppolloError(
+          `failed to connect to Stripe platform account for user  ${user.id}`
+        );
+      }
+
+      // Update the model and store the Stripe account ID in the datastore:
+      // this Stripe account ID will be used to issue payouts to the pilot
+      req.user.stripeAccountId = expressAuthorized.stripe_user_id;
+      await req.user.save();
+
+      console.log(
+        `[INFO]: User ${req.user.id} connected to Stripe platform account`
+      );
+      return {};
+    } catch (err) {
+      console.log("The Stripe onboarding process has not succeeded.");
+      next(err);
+    }
+  } catch (error) {
+    console.log(
+      `[ERROR]: Failed to connect user to platform-failed to onboard customer | ${error.message}`
+    );
+  }
+};
+
+const generateCustomerEphemeralKey = async (__, { input }, { user }) => {
+  try {
+    // ephemeral keys are used for testing purposes only.
+    const apiVersion = input.api_version || "2019-05-16";
+    // Create ephemeral key for customer
+    const ephemeralKey = await stripe.ephemeralKeys.create(
+      {
+        customer: user.stripeCustomerId,
+      },
+      {
+        stripe_version: apiVersion,
+      }
+    );
+    console.log(`[INFO]: Ephemeral key created for passenger ${passenger._id}`);
+    // Respond with ephemeral key
+    return ephemeralKey;
+  } catch (err) {
+    console.log(`[ERROR]: Failed to create ephemeral key | ${err.message}`);
+    throw new ApolloError(
+      `Error creating ephemeral key: ${err.message || err}`
+    );
+  }
+};
 const createCustomer = async (customer) => {
   // console.log(customer);
   try {
@@ -441,7 +517,15 @@ const confirmFailedPayment = async (params) => {
     });
     return paymentIntent;
   } catch (error) {
+    console.log(`[ ERROR ] failed to confirm payment ${error}`);
     console.log(error);
+  }
+};
+const stripeSettings = async () => {
+  try {
+    return { publishableKey: process.env.STRIPE_PUBLISHABLE_KEY };
+  } catch (error) {
+    console.log(`[ERROR] for getting stripe setting ${error.message}`);
   }
 };
 
@@ -450,7 +534,12 @@ module.exports = {
   createPaymentMethod,
   createPaymentIntent,
   confirmPaymentIntent,
+  stripeSettings,
   confirmCardPayment,
   createAccount,
   attachPaymentMethodToCustomer,
+  generateCustomerEphemeralKey,
+  confirmFailedPayment,
+  retrievePayout,
+  connectUserToPlatform,
 };

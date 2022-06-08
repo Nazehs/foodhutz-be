@@ -1,7 +1,6 @@
 const { ApolloError } = require("apollo-server-express");
 const { Driver, User } = require("../../models");
 const { signToken } = require("../../utils/auth");
-const { generateRandomNumber } = require("../../utils/generateRandomNumbers");
 const { sentSMS } = require("../../utils/sms");
 
 const driverSignup = async (_, { input }) => {
@@ -11,7 +10,7 @@ const driverSignup = async (_, { input }) => {
       (await User.findOne({ email: input.email }));
     if (!isUserExisting) {
       await sentSMS(input.phoneNumber);
-
+      //  set up stripe account and profile to the user
       const user = await Driver.create(input);
       return {
         token: signToken(user),

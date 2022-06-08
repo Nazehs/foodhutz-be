@@ -117,12 +117,120 @@ async function startApolloServer(typeDefs, resolvers) {
       }
     }
   );
-  app.get("/config", async (req, res) => {
-    res.json({
-      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-    });
-  });
 
+  function pilotRequired(req, res, next) {
+    if (!req.isAuthenticated()) {
+      return res.redirect("/login");
+    }
+    next();
+  }
+  // router.get("/authorize", pilotRequired, (req, res) => {
+  //   // Generate a random string as `state` to protect from CSRF and include it in the session
+  //   req.session.state = Math.random().toString(36).slice(2);
+  //   // Define the mandatory Stripe parameters: make sure to include our platform's client ID
+  //   let parameters = {
+  //     client_id: config.stripe.clientId,
+  //     state: req.session.state,
+  //   };
+  //   // Optionally, the Express onboarding flow accepts `first_name`, `last_name`, `email`,
+  //   // and `phone` in the query parameters: those form fields will be prefilled
+  //   parameters = Object.assign(parameters, {
+  //     redirect_uri: config.publicDomain + "/pilots/stripe/token",
+  //     "stripe_user[business_type]": req.user.type || "individual",
+  //     "stripe_user[business_name]": req.user.businessName || undefined,
+  //     "stripe_user[first_name]": req.user.firstName || undefined,
+  //     "stripe_user[last_name]": req.user.lastName || undefined,
+  //     "stripe_user[email]": req.user.email || undefined,
+  //     "stripe_user[country]": req.user.country || undefined,
+  //     // If we're suggesting this account have the `card_payments` capability,
+  //     // we can pass some additional fields to prefill:
+  //     // 'suggested_capabilities[]': 'card_payments',
+  //     // 'stripe_user[street_address]': req.user.address || undefined,
+  //     // 'stripe_user[city]': req.user.city || undefined,
+  //     // 'stripe_user[zip]': req.user.postalCode || undefined,
+  //     // 'stripe_user[state]': req.user.city || undefined,
+  //   });
+  //   console.log("Starting Express flow:", parameters);
+  //   // Redirect to Stripe to start the Express onboarding flow
+  //   res.redirect(
+  //     config.stripe.authorizeUri + "?" + querystring.stringify(parameters)
+  //   );
+  // });
+  // /**
+  //  * GET /user/stripe/token
+  //  *
+  //  * Connect the new Stripe account to the platform account.
+  //  */
+  // router.get("/token", pilotRequired, async (req, res, next) => {
+  //   // Check the `state` we got back equals the one we generated before proceeding (to protect from CSRF)
+  //   if (req.session.state != req.query.state) {
+  //     return res.redirect("/pilots/signup");
+  //   }
+  //   try {
+  //     // Post the authorization code to Stripe to complete the Express onboarding flow
+  //     const expressAuthorized = await request.post({
+  //       uri: config.stripe.tokenUri,
+  //       form: {
+  //         grant_type: "authorization_code",
+  //         client_id: config.stripe.clientId,
+  //         client_secret: config.stripe.secretKey,
+  //         code: req.query.code,
+  //       },
+  //       json: true,
+  //     });
+
+  //     if (expressAuthorized.error) {
+  //       throw expressAuthorized.error;
+  //     }
+
+  //     // Update the model and store the Stripe account ID in the datastore:
+  //     // this Stripe account ID will be used to issue payouts to the pilot
+  //     req.user.stripeAccountId = expressAuthorized.stripe_user_id;
+  //     await req.user.save();
+
+  //     // Redirect to the Rocket Rides dashboard
+  //     req.flash("showBanner", "true");
+  //     res.redirect("/pilots/dashboard");
+  //   } catch (err) {
+  //     console.log("The Stripe onboarding process has not succeeded.");
+  //     next(err);
+  //   }
+  // });
+
+  // /**
+  //  * POST /pilots/stripe/payout
+  //  *
+  //  * Generate a payout with Stripe for the available balance.
+  //  */
+  // router.post("/payout", userRequired, async (req, res) => {
+  //   const user = req.user;
+  //   try {
+  //     // Fetch the account balance to determine the available funds
+  //     const balance = await stripe.balance.retrieve({
+  //       stripe_account: user.stripeAccountId,
+  //     });
+  //     // This demo app only uses USD so we'll just use the first available balance
+  //     // (Note: there is one balance for each currency used in your application)
+  //     const { amount, currency } = balance.available[0];
+  //     // Create a payout
+  //     const payout = await stripe.payouts.create(
+  //       {
+  //         amount: amount,
+  //         currency: currency,
+  //         statement_descriptor: config.appName,
+  //       },
+  //       { stripe_account: user.stripeAccountId }
+  //     );
+  //     console.log("Payout created:", payout);
+  //     // Update the model and store the payout ID in the datastore:
+  //     // this payout ID will be used to track the payout status
+  //     // user.stripePayoutId = payout.id;
+  //     // await user.save();
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  //   return payout;
+  // });
   // This middleware should be added before calling `applyMiddleware`.
   app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
   // error handler

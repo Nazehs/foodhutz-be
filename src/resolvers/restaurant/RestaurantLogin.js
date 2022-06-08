@@ -14,6 +14,7 @@ const storeOwnerLogin = async (_, { input }) => {
         .populate("menus")
         .populate("invoices")
         .populate("coupons")
+        .populate("bankDetails")
         .populate("documents")
         .populate({
           path: "orders",
@@ -31,6 +32,13 @@ const storeOwnerLogin = async (_, { input }) => {
             path: "category",
             model: "Category",
           },
+        })
+        .populate({
+          path: "invoices",
+          populate: {
+            path: "bankDetails",
+            model: "BankDetail",
+          },
         });
     }
 
@@ -44,6 +52,7 @@ const storeOwnerLogin = async (_, { input }) => {
         .populate("menus")
         .populate("invoices")
         .populate("coupons")
+        .populate("bankDetails")
         .populate("documents")
         .populate({
           path: "order",
@@ -60,6 +69,13 @@ const storeOwnerLogin = async (_, { input }) => {
           populate: {
             path: "category",
             model: "Category",
+          },
+        })
+        .populate({
+          path: "invoices",
+          populate: {
+            path: "bankDetails",
+            model: "BankDetail",
           },
         });
     }

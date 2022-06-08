@@ -9,6 +9,7 @@ const signup = async (_, { input }) => {
     const isUserExisting = await User.findOne({ email: input.email });
     if (!isUserExisting) {
       const user = User.create(input).then((user) => user);
+      //  set up stripe account and profile to the user
       return {
         token: signToken(user),
         user,
