@@ -113,15 +113,13 @@ const driverLogin = async (_, { input }) => {
             },
           },
         })
-
         .populate("notifications")
         .populate("bankDetails")
-        .populate("invoices")
         .populate({
           path: "invoices",
           populate: {
             path: "bankDetails",
-            model: "BankDetails",
+            model: "BankDetail",
           },
         });
     }
