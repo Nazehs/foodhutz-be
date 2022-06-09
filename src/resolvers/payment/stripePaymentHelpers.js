@@ -2,20 +2,12 @@ const stripe = require("stripe")("sk_test_jy4RDZiCWtIGt3Hz9JNOsd85", {
   maxNetworkRetries: 2,
 });
 
-// create payment intent
-// confirm payment on the client(use the  available cards if any or the new card)
-
-// const stripe = new Stripe("sk_test_jy4RDZiCWtIGt3Hz9JNOsd85", {
-//   apiVersion: "2020-08-27",
-// });
-const uuid = require("uuid");
-
 /**
  * GET /user/stripe/token
  *
  * Connect the new Stripe account to the platform account.
  */
-const connectUserToPlatform = async (__, { input }, { user }) => {
+const connectUserToPlatform = async (__, { input }, req) => {
   try {
     // Check the `state` we got back equals the one we generated before proceeding (to protect from CSRF)
     if (req.session.state != req.query.state) {
@@ -25,12 +17,12 @@ const connectUserToPlatform = async (__, { input }, { user }) => {
     }
     try {
       // Post the authorization code to Stripe to complete the Express onboarding flow
-      const expressAuthorized = await request.post({
-        uri: config.stripe.tokenUri,
+      const expressAuthorized = await req.post({
+        uri: process.env.STRIPE_AUTHORIZATION_URL,
         form: {
           grant_type: "authorization_code",
-          client_id: config.stripe.clientId,
-          client_secret: config.stripe.secretKey,
+          client_id: process.env.STRIPE_CLIENT_ID,
+          client_secret: process.env.STRIPE_SECRET_KEY,
           code: req.query.code,
         },
         json: true,
@@ -50,7 +42,11 @@ const connectUserToPlatform = async (__, { input }, { user }) => {
       console.log(
         `[INFO]: User ${req.user.id} connected to Stripe platform account`
       );
-      return {};
+      return {
+        success: true,
+        status: 0,
+        message: "User connected to Stripe platform account",
+      };
     } catch (err) {
       console.log("The Stripe onboarding process has not succeeded.");
       next(err);

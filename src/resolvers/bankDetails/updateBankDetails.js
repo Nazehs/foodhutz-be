@@ -1,4 +1,4 @@
-const { ApolloError } = require("apollo-server-express");
+const { ApolloError, AuthenticationError } = require("apollo-server-express");
 const { BankDetails } = require("../../models");
 
 const updateBankDetails = async (_, { bankId, input }, { user }) => {

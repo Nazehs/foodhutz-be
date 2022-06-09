@@ -1,4 +1,4 @@
-const { ApolloError } = require("apollo-server-express");
+const { ApolloError, AuthenticationError } = require("apollo-server-express");
 const {
   BankDetails,
   User,
