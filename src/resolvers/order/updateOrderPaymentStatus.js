@@ -1,5 +1,5 @@
 const { ApolloError } = require("apollo-server-express");
-const { Order } = require("../models");
+const { Order } = require("../../models");
 
 const updateOrderPaymentStatus = async (orderId, status) => {
   try {
@@ -9,7 +9,9 @@ const updateOrderPaymentStatus = async (orderId, status) => {
 
     return doc;
   } catch (error) {
-    console.log(`[ERROR]: Failed to update payment Status | ${error.message}`);
+    console.log(
+      `[ERROR - updateOrderPaymentStatus]: Failed to update payment Status | ${error.message}`
+    );
     throw new ApolloError("Failed to update payment Status ");
   }
 };

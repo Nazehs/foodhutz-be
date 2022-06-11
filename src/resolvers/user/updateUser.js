@@ -13,7 +13,7 @@ const updateUser = async (_, { input }, { user }) => {
       user: currentUser,
     };
   } catch (error) {
-    console.log(`[ERROR]: Failed to sign up | ${error.message}`);
+    console.log(`[ERROR - updateUser]: Failed to sign up | ${error.message}`);
     throw new ApolloError(`Failed to sign up || ${error.message}`);
   }
 };

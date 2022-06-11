@@ -25,7 +25,9 @@ const updateOnlineStatus = async (_, { status }, { user }) => {
       message: "user status changed successfully",
     };
   } catch (error) {
-    console.log(`[ERROR]: Failed to update status | ${error.message}`);
+    console.log(
+      `[ERROR - updateOnlineStatus]: Failed to update status | ${error.message}`
+    );
     throw new ApolloError(`Failed to update status || ${error.message}`);
   }
 };

@@ -19,7 +19,7 @@ const driverSignup = async (_, { input }) => {
     }
     throw new ApolloError("Failed to sign up user already exist");
   } catch (error) {
-    console.log(`[ERROR]: Failed to sign up | ${error.message}`);
+    console.log(`[ERROR - driverSignup]: Failed to sign up | ${error.message}`);
     throw new ApolloError(`Failed to sign up || ${error.message}`);
   }
 };

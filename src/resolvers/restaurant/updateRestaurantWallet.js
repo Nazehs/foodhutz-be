@@ -1,4 +1,4 @@
-const { StoreOwner } = require("../models");
+const { StoreOwner } = require("../../models");
 
 // update restaurant sales
 const updateRestaurantSales = (restaurantId, amount) => {

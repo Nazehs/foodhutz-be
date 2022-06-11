@@ -29,7 +29,9 @@ const checkUserExist = async (_, { input }) => {
       };
     }
   } catch (error) {
-    console.log(`[ERROR]: Failed to update status | ${error.message}`);
+    console.log(
+      `[ERROR - checkUserExist]: Failed to update status | ${error.message}`
+    );
     throw new ApolloError(`Failed to update status || ${error.message}`);
   }
 };

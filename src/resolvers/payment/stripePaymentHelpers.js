@@ -1,61 +1,94 @@
-const stripe = require("stripe")("sk_test_jy4RDZiCWtIGt3Hz9JNOsd85", {
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
   maxNetworkRetries: 2,
 });
-
-/**
- * GET /user/stripe/token
- *
- * Connect the new Stripe account to the platform account.
- */
-const connectUserToPlatform = async (__, { input }, req) => {
-  try {
-    // Check the `state` we got back equals the one we generated before proceeding (to protect from CSRF)
-    if (req.session.state != req.query.state) {
-      throw new AppolloAuthenticationError(
-        "You are not authorized to access this resource."
-      );
-    }
-    try {
-      // Post the authorization code to Stripe to complete the Express onboarding flow
-      const expressAuthorized = await req.post({
-        uri: process.env.STRIPE_AUTHORIZATION_URL,
-        form: {
-          grant_type: "authorization_code",
-          client_id: process.env.STRIPE_CLIENT_ID,
-          client_secret: process.env.STRIPE_SECRET_KEY,
-          code: req.query.code,
-        },
-        json: true,
-      });
-
-      if (expressAuthorized.error) {
-        throw new AppolloError(
-          `failed to connect to Stripe platform account for user  ${user.id}`
-        );
-      }
-
-      // Update the model and store the Stripe account ID in the datastore:
-      // this Stripe account ID will be used to issue payouts to the pilot
-      req.user.stripeAccountId = expressAuthorized.stripe_user_id;
-      await req.user.save();
-
-      console.log(
-        `[INFO]: User ${req.user.id} connected to Stripe platform account`
-      );
-      return {
-        success: true,
-        status: 0,
-        message: "User connected to Stripe platform account",
-      };
-    } catch (err) {
-      console.log("The Stripe onboarding process has not succeeded.");
-      next(err);
-    }
-  } catch (error) {
-    console.log(
-      `[ERROR]: Failed to connect user to platform-failed to onboard customer | ${error.message}`
-    );
+// STRIPE_PUBLISHABLE_KEY
+// Function that returns a test card token for Stripe
+const getTestSource = (behavior) => {
+  // Important: We're using static tokens based on specific test card numbers
+  // to trigger a special behavior. This is NOT how you would create real payments!
+  // You should use Stripe Elements or Stripe iOS/Android SDKs to tokenize card numbers.
+  // Use a static token based on a test card: https://stripe.com/docs/testing#cards
+  var source = "tok_visa";
+  // We can use a different test token if a specific behavior is requested
+  if (behavior === "immediate_balance") {
+    source = "tok_bypassPending";
+  } else if (behavior === "payout_limit") {
+    source = "tok_visa_triggerTransferBlock";
   }
+  return source;
+};
+
+const testAccountTransferFunds = async () => {
+  // Generate a test ride with sample data for the logged-in pilot.
+
+  try {
+    // Get a test source, using the given testing behavior
+    let source;
+    // if (req.body.immediate_balance) {
+    source = getTestSource("immediate_balance");
+    // } else if (req.body.payout_limit) {
+    //   source = getTestSource("payout_limit");
+    // }
+    let charge;
+    // Accounts created in Japan have the `full` service agreement and must create their own card payments
+    // if (pilot.country === 'JP') {
+    //   // Create a Destination Charge to the pilot's account
+    //   charge = await stripe.charges.create({
+    //     source: source,
+    //     amount: ride.amount,
+    //     currency: ride.currency,
+    //     description: config.appName,
+    //     statement_descriptor: config.appName,
+    //     on_behalf_of: pilot.stripeAccountId,
+    //     // The destination parameter directs the transfer of funds from platform to pilot
+    //     transfer_data: {
+    //       // Send the amount for the pilot after collecting a 20% platform fee:
+    //       // the `amountForPilot` method simply computes `ride.amount * 0.8`
+    //       amount: ride.amountForPilot(),
+    //       // The destination of this charge is the pilot's Stripe account
+    //       destination: pilot.stripeAccountId,
+    //     },
+    //   });
+    // } else {
+
+    // Accounts created in any other country use the more limited `recipients` service agreement (with a simpler
+    // onboarding flow): the platform creates the charge and then separately transfers the funds to the recipient.
+    charge = await stripe.charges.create({
+      source: source,
+      amount: 10 * 100,
+      currency: "gpb",
+      description: process.env.APP_NAME,
+      statement_descriptor: process.env.APP_NAME,
+      // The `transfer_group` parameter must be a unique id for the ride; it must also match between the charge and transfer
+      transfer_group: "ride.id",
+    });
+
+    console.log("charge", charge);
+    const transfer = await stripe.transfers.create({
+      amount: 5 * 100,
+      currency: "gpb",
+      destination: user.stripeAccountId,
+      transfer_group: "ride.id",
+    });
+    console.log("transfer", transfer);
+    // Add the Stripe charge reference to the ride and save it
+    // ride.stripeChargeId = charge.id;
+    // ride.save();
+  } catch (err) {
+    console.log(err);
+    console.log(
+      `[ERROR - testAccountTransferFunds]: Failed to create charge | ${err.message}`
+    );
+    // Return a 402 Payment Required error code
+    res.sendStatus(402);
+    next(`Error adding token to customer: ${err.message}`);
+  }
+  // res.redirect("/pilots/dashboard");
+};
+
+// Return a random int between two numbers
+const getRandomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 const generateCustomerEphemeralKey = async (__, { input }, { user }) => {
@@ -94,6 +127,9 @@ const createCustomer = async (customer) => {
       metadata: customer,
     });
   } catch (error) {
+    console.log(
+      `[ERROR - createCustomer]: Failed to create customer | ${error.message}`
+    );
     console.log("error  ", error);
   }
 };
@@ -266,6 +302,9 @@ const createPaymentMethod = async (paymentData) => {
     const paymentMethod = await stripe.paymentMethods.create(paymentData);
     return paymentMethod;
   } catch (error) {
+    console.log(
+      `[ERROR - createPaymentMethod]: Failed to create payment method | ${error.message}`
+    );
     console.log(error);
   }
 };
@@ -294,14 +333,17 @@ const getAllPaymentMethods = async () => {
   }
 };
 
-const getCustomerPaymentMethods = async () => {
+const getCustomerPaymentMethods = async (customer) => {
   try {
     const paymentMethods = await stripe.paymentMethods.list({
       limit: 3,
-      customer: "cus_LnsPdqZl62UfAW",
+      ...customer,
     });
-    console.log(paymentMethods);
+    return paymentMethods;
   } catch (error) {
+    console.log(
+      `[ERROR - getCustomerPaymentMethods] FAILED TO GET CUSTOMER PAYMENT METHODS: ${error}`
+    );
     console.log(error);
   }
 };
@@ -404,8 +446,18 @@ const confirmPaymentIntent = async (params) => {
 };
 const confirmCardPayment = async (params) => {
   try {
+    console.log({
+      payment_method: {
+        card: params.card,
+        type: "card",
+      },
+    });
     const payment = await stripe.paymentIntents.confirm(params.clientSecret, {
-      payment_method: params.card,
+      payment_method: "pm_card_visa",
+      // payment_method: {
+      //   card: params.card,
+      //   type: "card",
+      // },
     });
     return payment;
   } catch (error) {
@@ -537,5 +589,7 @@ module.exports = {
   generateCustomerEphemeralKey,
   confirmFailedPayment,
   retrievePayout,
-  connectUserToPlatform,
+  getCustomerPaymentMethods,
+  testAccountTransferFunds,
+  // connectUserToPlatform,
 };

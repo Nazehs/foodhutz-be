@@ -125,13 +125,17 @@ const driverLogin = async (_, { input }) => {
     }
 
     if (!user) {
-      console.log("[ERROR]: Failed to login | User does not exist");
+      console.log(
+        "[ERROR - driverLogin]: Failed to login | User does not exist"
+      );
       throw new AuthenticationError("Failed to login");
     }
     const isValidPassword = await user.checkPassword(input.password);
 
     if (!isValidPassword) {
-      console.log("[ERROR]: Failed to login | Incorrect password");
+      console.log(
+        "[ERROR - driverLogin]: Failed to login | Incorrect password"
+      );
       throw new AuthenticationError("Failed to login");
     }
     console.log("[INFO]: Successfully logged in");
@@ -141,7 +145,7 @@ const driverLogin = async (_, { input }) => {
       user,
     };
   } catch (error) {
-    console.log(`[ERROR]: Failed to login | ${error.message}`);
+    console.log(`[ERROR - driverLogin]: Failed to login | ${error.message}`);
     throw new AuthenticationError(`Failed to login || ${error.message}`);
   }
 };

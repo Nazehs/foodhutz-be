@@ -7,7 +7,7 @@ const sendOTP = require("./user/sendOTP");
 const driverLogin = require("./driver/driverLogin");
 const RestaurantLogin = require("./restaurant/RestaurantLogin");
 const driverSignup = require("./driver/driverSignup");
-const passwordReset = require("./passwordReset");
+const passwordReset = require("./driver/passwordReset");
 const userSignup = require("./user/signup");
 const updateOnlineStatus = require("./updateOnlineStatus");
 const createMenu = require("./menu/createMenu");
@@ -91,6 +91,8 @@ const updateCategory = require("./category/updateCategory");
 const updateTrip = require("./trip/updateTrip");
 const updateCoupon = require("./coupon/updateCoupon");
 const updateOrder = require("./order/updateOrder");
+const makeOrderPayment = require("./payment/makeOrderPayment");
+const connectUserToPlatform = require("./connectUserToPlatform");
 const orderControl = require("./order/orderControl");
 const updateBankDetails = require("./bankDetails/updateBankDetails");
 const updateMenu = require("./menu/updateMenu");
@@ -248,6 +250,8 @@ const resolvers = {
     verifyDriverOTP,
     sendOTP,
     createCustomer,
+    makeOrderPayment,
+    connectUserToPlatform,
   },
   Subscription: {
     NewOrder: {

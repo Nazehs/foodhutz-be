@@ -18,7 +18,9 @@ const getTripMatrix = async (from, to) => {
     };
     return await client.distancematrix(args);
   } catch (error) {
-    console.log(`[ERROR]: Failed to get map details | ${error.message}`);
+    console.log(
+      `[ERROR - getTripMatrix]: Failed to get map details | ${error.message}`
+    );
     throw new Error(`Failed to get map details || ${error.message}`);
   }
 };

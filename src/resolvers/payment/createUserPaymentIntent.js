@@ -1,8 +1,9 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
-const { Order } = require("../../models");
+const { Order, User } = require("../../models");
 const {
   createPaymentIntent,
   createCustomer,
+  getCustomerPaymentMethods,
 } = require("./stripePaymentHelpers");
 
 const createUserPaymentIntent = async (_, { input }, { user }) => {
@@ -13,24 +14,28 @@ const createUserPaymentIntent = async (_, { input }, { user }) => {
 
     // get the order charges
     const customerOrder = await Order.findById(input?.orderId);
-    // create customer
 
     user.description = `Customer payment for order ${input?.orderId}`;
-
-    // create the customer for one time payment
-    const customer = await createCustomer(user);
-
+    let customer;
+    if (!user.stripeCustomerId) {
+      // create the customer  since it does not exist
+      customer = await createCustomer(user);
+      await User.findByIdAndUpdate(user._id, {
+        stripeCustomerId: customer.id,
+      });
+      user.stripeCustomerId = customer.id;
+    }
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await createPaymentIntent({
-      amount: customerOrder.finalPrice * 100,
+      amount: customerOrder.finalPrice * 100 || 300,
       currency: "gbp",
-      automatic_payment_methods: {
-        enabled: true,
-      },
-      // setup_future_usage: 'off_session',
-      metadata: { orderId: customerOrder?._id },
+      description: process?.env?.APP_NAME,
+      statement_descriptor: "Order payment from foodhutz",
+      customer: user?.stripeCustomerId || customer?.id,
       receipt_email: user?.email,
-      customer: customer?.id,
+      customer: customer?.stripeCustomerId || user?.stripeCustomerId,
+      metadata: { orderId: customerOrder?._id, user: JSON.stringify(user) },
+      receipt_email: user?.email,
     });
 
     return {

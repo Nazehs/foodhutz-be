@@ -340,7 +340,9 @@ const getDriverStats = async (_, __, { user }) => {
 
     return doc[0];
   } catch (error) {
-    console.log(`[ERROR]: Failed to get aggregate details | ${error.message}`);
+    console.log(
+      `[ERROR - getDriverStats]: Failed to get aggregate details | ${error.message}`
+    );
     throw new ApolloError(
       `Failed to get aggregate details || ${error.message} `
     );

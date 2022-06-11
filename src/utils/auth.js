@@ -4,12 +4,23 @@ const jwt = require("jsonwebtoken");
 const secret = process.env.APP_SECRET;
 const expiration = "12h";
 
-const signToken = ({ firstName, lastName, email, username, id, userType }) => {
+const signToken = ({
+  firstName,
+  lastName,
+  email,
+  username,
+  id,
+  userType,
+  stripeCustomerId,
+  stripeAccountId,
+}) => {
   const payload = {
     firstName,
     lastName,
     email,
     username,
+    stripeCustomerId,
+    stripeAccountId,
     id,
     userType,
   };

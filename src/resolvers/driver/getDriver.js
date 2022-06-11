@@ -14,7 +14,9 @@ const getDriver = async (_, { userId }, { user }) => {
       .populate("bankDetails")
       .populate("tips");
   } catch (error) {
-    console.log(`[ERROR]: Failed to get user details | ${error.message}`);
+    console.log(
+      `[ERROR - getDriver]: Failed to get user details | ${error.message}`
+    );
     throw new ApolloError(`Failed to get user details || ${error.message}`);
   }
 };

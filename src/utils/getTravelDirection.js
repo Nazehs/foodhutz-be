@@ -18,7 +18,9 @@ const getTripDirection = async (from, To) => {
     };
     return await client.directions(args);
   } catch (error) {
-    console.log("error", error);
+    console.log(
+      `[ERROR - getTripDirection]: Failed to get trip direction | ${error.message}`
+    );
   }
 };
 

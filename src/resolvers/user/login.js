@@ -1,8 +1,4 @@
-const {
-  AuthenticationError,
-  ApolloError,
-  UserInputError,
-} = require("apollo-server-express");
+const { AuthenticationError, ApolloError } = require("apollo-server-express");
 // throw new UserInputError('Invalid argument value')
 
 const { User } = require("../../models");
@@ -20,7 +16,7 @@ const login = async (_, { input }) => {
     }
 
     if (!user) {
-      console.log("[ERROR]: Failed to login | User does not exist");
+      console.log("[ERROR - login]: Failed to login | User does not exist");
       throw new ApolloError("Oops! user does not exist", "FORBIDDEN");
       // throw new ApolloError({
       //   message: "Oops! user does not exist",
@@ -33,21 +29,19 @@ const login = async (_, { input }) => {
     const isValidPassword = await user.checkPassword(input.password);
 
     if (!isValidPassword) {
-      console.log("[ERROR]: Failed to login | Incorrect password");
-      // throw new UserInputError("Invalid argument value", {
-      //   argumentName: "email",
-      // });
+      console.log("[ERROR - login]: Failed to login | Incorrect password");
+
       throw new AuthenticationError("Oops! wrong credentials");
     }
 
+    console.log("[INFO - login]: Successfully logged in");
     return {
       token: signToken(user),
       user,
     };
   } catch (error) {
     console.log(`[ERROR]: Failed to login | `);
-    // throw new ApolloError("Failed to login");
-    // throw new ApolloError("Invalid argument value", 500);
+
     throw new ApolloError(`${error.message}`);
   }
 };

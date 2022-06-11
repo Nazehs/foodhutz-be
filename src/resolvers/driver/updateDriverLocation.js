@@ -1,4 +1,4 @@
-const { Driver } = require("../models");
+const { Driver } = require("../../models");
 
 const updateDriverLocation = (driverId, location) => {
   return new Promise((resolve, reject) => {

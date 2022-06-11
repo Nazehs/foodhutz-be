@@ -725,13 +725,14 @@ const typeDefs = gql`
   input PaymentIntentConfirmInput {
     clientSecret: String!
     orderId: ID!
-    payment_method: Card
+    type: String
+    card: Card
   }
 
   input Card {
-    card_number: String!
-    exp_month: Int!
-    exp_year: Int!
+    number: String!
+    exp_month: String!
+    exp_year: String!
     cvc: String!
   }
 
@@ -983,6 +984,8 @@ const typeDefs = gql`
 
     # payment
     createCustomer(input: ID): PaymentResponse
+    makeOrderPayment(input: PaymentIntentConfirmInput): PaymentResponse
+    connectUserToPlatform(input: ID): PaymentResponse
   }
   type Subscription {
     NewOrder(restaurantId: ID!): Order

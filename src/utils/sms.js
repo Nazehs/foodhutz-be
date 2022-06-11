@@ -12,12 +12,12 @@ const sentSMS = async (to) => {
       .services(verifySID)
       .verifications.create({ to, channel: "sms" });
 
-    // const service = await client.verify.services(verifySID).fetch();
-    // console.log(service);
-    // client.verify.services.list({ limit: 40, lookupEnabled: true });
+    console.log(`[INFO - sentSMS]: SMS sent to ${to}`);
     return response;
   } catch (error) {
-    console.log(error);
+    console.log(
+      `[ERROR - sentSMS]: Failed to send SMS to ${to} | ${error.message}`
+    );
   }
 };
 
@@ -26,8 +26,10 @@ const verifySMS = async ({ to, code }) => {
     const response = await client.verify
       .services(verifySID)
       .verificationChecks.create({ to, code });
+    console.log(`[INFO - verifySMS]: SMS verified successfully`);
     return response;
   } catch (error) {
+    console.log(`[ERROR - verifySMS]: Failed to verify SMS | ${error.message}`);
     console.log(error);
   }
 };

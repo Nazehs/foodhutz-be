@@ -26,7 +26,9 @@ const getAllUsers = async (_, { limit = 10, skip = 0 }, { user }) => {
       hasMore: usersCount >= limit + 1,
     };
   } catch (error) {
-    console.log(`[ERROR]: Failed to get all  user  | ${error.message}`);
+    console.log(
+      `[ERROR - getAllUsers]: Failed to get all  user  | ${error.message}`
+    );
     throw new ApolloError(`Failed to get users || ${error.message}`);
   }
 };

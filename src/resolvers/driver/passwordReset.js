@@ -1,6 +1,6 @@
 const { ApolloError } = require("apollo-server-express");
-const { User } = require("../models");
-const { sentSMS } = require("../utils/sms");
+const { User } = require("../../models");
+const { sentSMS } = require("../../utils/sms");
 const driverPasswordReset = async (_, { email, userType }) => {
   try {
     if (email && userType) {
@@ -44,7 +44,9 @@ const driverPasswordReset = async (_, { email, userType }) => {
       }
     }
   } catch (error) {
-    console.log(`[ERROR]: Failed to reset password | ${error.message}`);
+    console.log(
+      `[ERROR -driverPasswordReset]: Failed to reset password | ${error.message}`
+    );
     throw new ApolloError(`Failed to reset password ||${error.message} `);
   }
 };
