@@ -29,6 +29,9 @@ const signToken = ({
 };
 
 const authMiddleware = ({ req }) => {
+  console.log("[INFO - authMiddleware]: Authenticating user...");
+  console.log("[INFO - authMiddleware]: req.headers: ", req.headers);
+  console.log("[INFO - authMiddleware]: req.body: ", req.body);
   let token = req.body.token || req.query.token || req.headers.authorization;
 
   if (req.headers.authorization) {
