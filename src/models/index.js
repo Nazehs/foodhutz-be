@@ -2,7 +2,6 @@ const User = require("./User");
 const Menu = require("./Menu");
 const Coupon = require("./Coupon");
 const Order = require("./Order");
-const Restaurant = require("./Restaurant");
 const Trip = require("./Trip");
 const Category = require("./Category");
 const BankDetails = require("./BankDetails");
@@ -32,7 +31,6 @@ module.exports = {
   Driver,
   Trip,
   ContactUs,
-  Restaurant,
   Notification,
   Complaint,
   Tips,

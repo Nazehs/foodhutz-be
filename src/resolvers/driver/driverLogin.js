@@ -55,6 +55,72 @@ const driverLogin = async (_, { input }) => {
           },
         })
         .populate("notifications")
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "order",
+            model: "Order",
+          },
+        })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "user",
+            model: "User",
+          },
+        })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "order",
+            populate: {
+              path: "orderItems",
+              populate: {
+                path: "restaurant",
+                model: "StoreOwner",
+              },
+            },
+          },
+        })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "order",
+            populate: {
+              path: "orderItems",
+              populate: {
+                path: "category",
+                model: "Category",
+              },
+            },
+          },
+        })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "order",
+            populate: {
+              path: "orderItems",
+              populate: {
+                path: "customer",
+                model: "User",
+              },
+            },
+          },
+        })
+        .populate({
+          path: "trips",
+          populate: {
+            path: "order",
+            populate: {
+              path: "orderItems",
+              populate: {
+                path: "customer",
+                model: "User",
+              },
+            },
+          },
+        })
         .populate("bankDetails")
         .populate({
           path: "invoices",
@@ -114,6 +180,72 @@ const driverLogin = async (_, { input }) => {
           },
         })
         .populate("notifications")
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "order",
+            model: "Order",
+          },
+        })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "order",
+            populate: {
+              path: "orderItems",
+              populate: {
+                path: "category",
+                model: "Category",
+              },
+            },
+          },
+        })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "order",
+            populate: {
+              path: "orderItems",
+              populate: {
+                path: "customer",
+                model: "Category",
+              },
+            },
+          },
+        })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "user",
+            model: "User",
+          },
+        })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "order",
+            populate: {
+              path: "orderItems",
+              populate: {
+                path: "restaurant",
+                model: "StoreOwner",
+              },
+            },
+          },
+        })
+        .populate({
+          path: "notifications",
+          populate: {
+            path: "order",
+            populate: {
+              path: "orderItems",
+              populate: {
+                path: "customer",
+                model: "User",
+              },
+            },
+          },
+        })
         .populate("bankDetails")
         .populate({
           path: "invoices",
@@ -139,7 +271,6 @@ const driverLogin = async (_, { input }) => {
       throw new AuthenticationError("Failed to login");
     }
     console.log("[INFO]: Successfully logged in");
-    console.log(user);
     return {
       token: signToken(user),
       user,

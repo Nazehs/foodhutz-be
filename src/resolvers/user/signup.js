@@ -19,6 +19,9 @@ const signup = async (_, { input }) => {
     }
   } catch (error) {
     console.log(`[ERROR - signup]: Failed to sign up | ${error.message}`);
+    if (error.message.includes("duplicate key error")) {
+      throw new ApolloError(`Phone number or email already exist`);
+    }
     throw new ApolloError(`Failed to sign up || ${error.message}`);
   }
 };

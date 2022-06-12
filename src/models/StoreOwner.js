@@ -109,7 +109,7 @@ const storeOwnerSchema = {
   stripeID: {
     type: String,
   },
-  stripeAccountId:{
+  stripeAccountId: {
     type: String,
   },
   dateOfJoin: { type: Date, default: Date.now() },
@@ -187,6 +187,18 @@ schema.pre("findOneAndUpdate", async function (next) {
     this._update.$set.storeAddress = this.storeAddress;
     this._update.$set.location = this.location;
   }
+  next();
+});
+
+schema.pre("find", async function (next) {
+  this.populate("categories");
+  this.populate("menus");
+  this.populate("invoices");
+  this.populate("documents");
+  this.populate("bankDetails");
+  this.populate("notifications");
+  this.populate("orders");
+  this.populate("feedbacks");
   next();
 });
 

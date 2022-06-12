@@ -1,4 +1,5 @@
 const { model, Schema } = require("mongoose");
+const locationSchema = require("./LocationSchema");
 
 const notificationSchema = {
   message: {
@@ -13,7 +14,8 @@ const notificationSchema = {
     ref: "Order",
   },
   to: {
-    type: String,
+    index: "2dsphere",
+    type: locationSchema,
   },
   from: {
     duration: {

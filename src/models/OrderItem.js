@@ -23,7 +23,7 @@ const OrderItem = {
     type: Number,
     default: 0,
   },
-  foodPrepTime: { type: Number },
+  foodPrepTime: { type: Number, default: 15 },
   customer: {
     type: Schema.Types.ObjectId,
     ref: "User",

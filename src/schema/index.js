@@ -144,6 +144,7 @@ const typeDefs = gql`
     category: Category!
     comment: String
     customer: User
+    foodPrepTime: String!
     amount: Float!
   }
   type Coupon {

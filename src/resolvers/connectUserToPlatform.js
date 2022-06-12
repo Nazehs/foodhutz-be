@@ -38,7 +38,7 @@ const connectUserToPlatform = async (__, { input }, req) => {
       return {
         success: true,
         status: 0,
-        expressAuthorized,
+        data:expressAuthorized,
         message: "User connected to Stripe platform account",
       };
     } catch (err) {

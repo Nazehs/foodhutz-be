@@ -8,10 +8,10 @@ const calculateFareToRestaurant = (distance) => {
   // convert the distance to miles
   const distanceInMiles = distance / METRES_TO_MILES;
   const fare = distanceInMiles * FARE_CHARGES_PER_MILE_RESTAURANT;
-  if (distanceInMiles <= 2) {
+  if (distanceInMiles <= 1) {
     return fare;
-  } else if (distanceInMiles > 2) {
-    return fare + RATE_OVER_DISTANCE * (distanceInMiles - 2);
+  } else if (distanceInMiles > 1) {
+    return fare + RATE_OVER_DISTANCE * (distanceInMiles - 1);
   }
   return fare;
 };
@@ -20,10 +20,10 @@ const calculateFareToUser = (distance) => {
   // convert the distance to miles
   const distanceInMiles = distance / METRES_TO_MILES;
   const fare = distanceInMiles * FARE_CHARGES_PER_MILE_TO_USER;
-  if (distanceInMiles <= 2) {
+  if (distanceInMiles <= 1) {
     return fare;
-  } else if (distanceInMiles > 2) {
-    return fare + RATE_OVER_DISTANCE * (distanceInMiles - 2);
+  } else if (distanceInMiles > 1) {
+    return fare + RATE_OVER_DISTANCE * (distanceInMiles - 1);
   }
   return fare;
 };

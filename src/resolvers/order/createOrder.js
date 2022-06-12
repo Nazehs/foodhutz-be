@@ -34,6 +34,7 @@ const createOrder = async (_, { input }, { user }) => {
     // cascade the order id to the order items
     input.orderItems = input?.orderItems?.map((item) => {
       item.requestOrderId = input?.requestOrderId;
+      item.customerId = user.id;
       return item;
     });
     // create the order
@@ -98,6 +99,13 @@ const createOrder = async (_, { input }, { user }) => {
         populate: {
           path: "category",
           model: "Category",
+        },
+      })
+      .populate({
+        path: "orderItems",
+        populate: {
+          path: "customer",
+          model: "User",
         },
       });
     docs.restaurantLocation = restaurantsLocation;

@@ -1,4 +1,4 @@
-const { AuthenticationError } = require("apollo-server-express");
+const { AuthenticationError, ApolloError } = require("apollo-server-express");
 
 const { StoreOwner } = require("../../models");
 const { signToken } = require("../../utils/auth");
@@ -34,6 +34,16 @@ const storeOwnerLogin = async (_, { input }) => {
           },
         })
         .populate({
+          path: "orders",
+          populate: {
+            path: "orderItems",
+            populate: {
+              path: "restaurant",
+              model: "StoreOwner",
+            },
+          },
+        })
+        .populate({
           path: "invoices",
           populate: {
             path: "bankDetails",
@@ -65,6 +75,16 @@ const storeOwnerLogin = async (_, { input }) => {
           },
         })
         .populate({
+          path: "orders",
+          populate: {
+            path: "orderItems",
+            populate: {
+              path: "restaurant",
+              model: "StoreOwner",
+            },
+          },
+        })
+        .populate({
           path: "menus",
           populate: {
             path: "category",
@@ -81,13 +101,17 @@ const storeOwnerLogin = async (_, { input }) => {
     }
 
     if (!user) {
-      console.log("[ERROR]: Failed to login | User does not exist");
+      console.log(
+        "[ERROR - storeOwnerLogin]: Failed to login | User does not exist"
+      );
       throw new AuthenticationError("Failed to login || No such user!");
     }
     const isValidPassword = await user.checkPassword(input.password);
 
     if (!isValidPassword) {
-      console.log("[ERROR]: Failed to login | Incorrect password");
+      console.log(
+        "[ERROR - storeOwnerLogin: Failed to login | Incorrect password"
+      );
       throw new AuthenticationError(`Failed to login || wrong credentials`);
     }
 
@@ -96,8 +120,13 @@ const storeOwnerLogin = async (_, { input }) => {
       user,
     };
   } catch (error) {
-    console.log(`[ERROR]: Failed to login | ${error.message}`);
-    throw new AuthenticationError(`Failed to login || ${error.message}`);
+    console.log(
+      `[ERROR - storeOwnerLogin]: Failed to login | ${error.message}`
+    );
+    if (error.message.includes("duplicate key error")) {
+      throw new ApolloError(`Phone number or email already exist`);
+    }
+    throw new ApolloError(`Failed to login || ${error.message}`);
   }
 };
 
