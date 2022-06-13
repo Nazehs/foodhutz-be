@@ -9,10 +9,48 @@ const getStoreOwner = async (_, { restaurantId }, { user }) => {
     }
 
     return await StoreOwner.findById(restaurantId)
+      .populate("feedbacks")
       .populate("categories")
       .populate("orders")
       .populate("menus")
-      .populate("coupons");
+      .populate("invoices")
+      .populate("coupons")
+      .populate("bankDetails")
+      .populate("documents")
+      .populate({
+        path: "orders",
+        populate: {
+          path: "orderItems",
+          populate: {
+            path: "category",
+            model: "Category",
+          },
+        },
+      })
+      .populate({
+        path: "menus",
+        populate: {
+          path: "category",
+          model: "Category",
+        },
+      })
+      .populate({
+        path: "orders",
+        populate: {
+          path: "orderItems",
+          populate: {
+            path: "restaurant",
+            model: "StoreOwner",
+          },
+        },
+      })
+      .populate({
+        path: "invoices",
+        populate: {
+          path: "bankDetails",
+          model: "BankDetail",
+        },
+      });
   } catch (error) {
     console.log(`[ERROR]: Failed to get StoreOwner details | ${error.message}`);
     throw new ApolloError(
