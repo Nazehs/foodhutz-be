@@ -1,6 +1,40 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
   maxNetworkRetries: 2,
 });
+
+const payoutUser = async (params) => {
+  try {
+    const payout = await stripe.payouts.create(
+      {
+        amount: params.amount,
+        currency: params.currency,
+        statement_descriptor: process.env.STRIPE_PAYOUT_DESCRIPTOR,
+      },
+      { stripe_account: params.stripeAccountId }
+    );
+
+    console.log(`[INFO]: Payout created for user ${user._id}`);
+
+    return payout;
+  } catch (error) {
+    console.log(
+      `[ERROR - payoutUser]: Failed to create payout | ${error.message}`
+    );
+  }
+};
+
+const getCustomerStripeBalance = async (user) => {
+  try {
+    const balance = await stripe.balance.retrieve({
+      stripe_account: user.stripeAccountId,
+    });
+    return balance;
+  } catch (error) {
+    console.log(
+      `[ERROR - getCustomerStripeBalance]: Failed to get customer balance | ${error.message}`
+    );
+  }
+};
 // STRIPE_PUBLISHABLE_KEY
 // Function that returns a test card token for Stripe
 const getTestSource = (behavior) => {
@@ -18,72 +52,35 @@ const getTestSource = (behavior) => {
   return source;
 };
 
-const testAccountTransferFunds = async () => {
-  // Generate a test ride with sample data for the logged-in pilot.
-
+const testAccountTransferFunds = async (user) => {
   try {
-    // Get a test source, using the given testing behavior
     let source;
-    // if (req.body.immediate_balance) {
     source = getTestSource("immediate_balance");
-    // } else if (req.body.payout_limit) {
-    //   source = getTestSource("payout_limit");
-    // }
-    let charge;
-    // Accounts created in Japan have the `full` service agreement and must create their own card payments
-    // if (pilot.country === 'JP') {
-    //   // Create a Destination Charge to the pilot's account
-    //   charge = await stripe.charges.create({
-    //     source: source,
-    //     amount: ride.amount,
-    //     currency: ride.currency,
-    //     description: config.appName,
-    //     statement_descriptor: config.appName,
-    //     on_behalf_of: pilot.stripeAccountId,
-    //     // The destination parameter directs the transfer of funds from platform to pilot
-    //     transfer_data: {
-    //       // Send the amount for the pilot after collecting a 20% platform fee:
-    //       // the `amountForPilot` method simply computes `ride.amount * 0.8`
-    //       amount: ride.amountForPilot(),
-    //       // The destination of this charge is the pilot's Stripe account
-    //       destination: pilot.stripeAccountId,
-    //     },
-    //   });
-    // } else {
 
-    // Accounts created in any other country use the more limited `recipients` service agreement (with a simpler
-    // onboarding flow): the platform creates the charge and then separately transfers the funds to the recipient.
-    charge = await stripe.charges.create({
+    const charge = await stripe.charges.create({
       source: source,
       amount: 10 * 100,
-      currency: "gpb",
-      description: process.env.APP_NAME,
-      statement_descriptor: process.env.APP_NAME,
+      currency: "gbp",
+      description: "process.env.APP_NAME",
+      statement_descriptor: "process.env.APP_NAME",
       // The `transfer_group` parameter must be a unique id for the ride; it must also match between the charge and transfer
-      transfer_group: "ride.id",
+      transfer_group: "cvbnklhvbjnklvhbjnk",
     });
-
-    console.log("charge", charge);
     const transfer = await stripe.transfers.create({
       amount: 5 * 100,
-      currency: "gpb",
+      currency: "gbp",
       destination: user.stripeAccountId,
-      transfer_group: "ride.id",
+      transfer_group: "cvbnklhvbjnklvhbjnk",
     });
     console.log("transfer", transfer);
-    // Add the Stripe charge reference to the ride and save it
-    // ride.stripeChargeId = charge.id;
-    // ride.save();
+
+    return charge;
   } catch (err) {
     console.log(err);
     console.log(
       `[ERROR - testAccountTransferFunds]: Failed to create charge | ${err.message}`
     );
-    // Return a 402 Payment Required error code
-    res.sendStatus(402);
-    next(`Error adding token to customer: ${err.message}`);
   }
-  // res.redirect("/pilots/dashboard");
 };
 
 // Return a random int between two numbers
@@ -591,5 +588,7 @@ module.exports = {
   retrievePayout,
   getCustomerPaymentMethods,
   testAccountTransferFunds,
+  payoutUser,
+  getCustomerStripeBalance,
   // connectUserToPlatform,
 };

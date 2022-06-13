@@ -123,9 +123,9 @@ const typeDefs = gql`
   type Order {
     id: ID!
     discount: Float
-    driverLocation: Location!
-    deliveryAddress: Location!
-    actualDeliveryTime: Date!
+    driverLocation: Location
+    deliveryAddress: Location
+    actualDeliveryTime: Date
     comment: String
     isMultipleRestaurant: Boolean
     estimatedDeliveryTime: Date
@@ -849,6 +849,10 @@ const typeDefs = gql`
     email: String
     userType: String
   }
+  input PaymentTransferInput {
+    amount: Float
+    stripeAccountId: String
+  }
   type Query {
     checkUserExist(input: CheckUserInput): CheckUserExistResponse
     getAllUsers(limit: Int, skip: Int): AllUsers
@@ -987,6 +991,7 @@ const typeDefs = gql`
     createCustomer(input: ID): PaymentResponse
     makeOrderPayment(input: PaymentIntentConfirmInput): PaymentResponse
     connectUserToPlatform(input: ID): PaymentResponse
+    testPaymentTransfer(input: PaymentTransferInput): PaymentResponse
   }
   type Subscription {
     NewOrder(restaurantId: ID!): Order

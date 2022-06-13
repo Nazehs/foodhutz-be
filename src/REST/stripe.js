@@ -91,11 +91,8 @@ router.get("/token", pilotRequired, async (req, res, next) => {
     req.user.stripeAccountId = expressAuthorized.stripe_user_id;
     console.log("Stripe account ID:", stripeAccountId);
     console.log("Stripe account ID:", req.user);
-    // // await req.user.save();
 
     // Redirect to the Rocket Rides dashboard
-    // req.flash("showBanner", "true");
-    // res.redirect("/pilots/dashboard");
   } catch (err) {
     console.log("The Stripe onboarding process has not succeeded.");
     next(err);
@@ -131,37 +128,6 @@ router.get("/dashboard", pilotRequired, async (req, res) => {
     console.log(err);
     console.log("Failed to create a Stripe login link.");
     return res.redirect("/pilots/signup");
-  }
-});
-
-/**
- * POST /pilots/stripe/payout
- *
- * Generate a payout with Stripe for the available balance.
- */
-router.post("/payout", pilotRequired, async (req, { user }) => {
-  try {
-    // Fetch the account balance to determine the available funds
-    const balance = await stripe.balance.retrieve({
-      stripe_account: user.stripeAccountId,
-    });
-    // This demo app only uses USD so we'll just use the first available balance
-    // (Note: there is one balance for each currency used in your application)
-    const { amount, currency } = balance.available[0];
-    // Create a payout
-    const payout = await stripe.payouts.create(
-      {
-        amount: amount,
-        currency: currency,
-        statement_descriptor: process.env.STRIPE_PAYOUT_DESCRIPTOR,
-      },
-      { stripe_account: user.stripeAccountId }
-    );
-
-    console.log("Payout created:", payout);
-  } catch (err) {
-    console.log(`[ERROR - payout]: Failed to create a Stripe payout: ${err}`);
-    console.log(err);
   }
 });
 

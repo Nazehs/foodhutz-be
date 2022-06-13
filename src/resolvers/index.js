@@ -24,6 +24,7 @@ const createContactUs = require("./contactus/createContactUs");
 const createReferralCode = require("./referralCode/createReferralCode");
 const createRestaurant = require("./restaurant/createRestaurant");
 const createPayment = require("./payment/createPayment");
+const testPaymentTransfer = require("./payment/testPaymentTransfer");
 const createCustomer = require("./payment/stripePaymentHelpers");
 const createUserPaymentIntent = require("./payment/createUserPaymentIntent");
 const confirmUserPayment = require("./payment/confirmUserPayment");
@@ -252,6 +253,7 @@ const resolvers = {
     createCustomer,
     makeOrderPayment,
     connectUserToPlatform,
+    testPaymentTransfer,
   },
   Subscription: {
     NewOrder: {

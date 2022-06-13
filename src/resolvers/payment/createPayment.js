@@ -1,5 +1,9 @@
 const { ApolloError, AuthenticationError } = require("apollo-server-express");
 const { Payment, Driver, StoreOwner } = require("../../models");
+const {
+  payoutUser,
+  getCustomerStripeBalance,
+} = require("./stripePaymentHelpers");
 
 const createPayment = async (_, { input }, { user }) => {
   try {
@@ -19,14 +23,12 @@ const createPayment = async (_, { input }, { user }) => {
 
     input.email = user.email;
     const { wallet } = userData;
-    // TODO:
-    // check if the user has upto the requested amount before proceeding otherwise throw error
-    // initiate 3PP payment request
-    //
+    const balance = await getCustomerStripeBalance(user);
 
-    if (input.amount >= wallet) {
+    const { amount, currency } = balance.available[0];
+
+    if (input.amount <= wallet && amount >= wallet) {
       const doc = await Payment.create(input);
-      // update the payment status after the completion of the payment
 
       // add the transaction to user invoices
       if (user.userType.toUpperCase() === "RESTAURANT") {
@@ -40,12 +42,26 @@ const createPayment = async (_, { input }, { user }) => {
         });
       }
 
-      return Payment.findById(doc._id)
+      const payout = await payoutUser({
+        amount: input.amount,
+        currency,
+        stripe_account: userData.stripeAccountId,
+      });
+
+      return Payment.findByIdAndUpdate(
+        doc._id,
+        {
+          $set: { paymentRef: payout.id },
+        },
+        { new: true }
+      )
         .populate("bankDetails")
         .populate("driver")
         .populate("restaurant");
     } else {
-      throw new ApolloError(`Failed to payment || ${error.message}`);
+      throw new ApolloError(
+        `Failed to payment you don't have enough balance in your wallet`
+      );
     }
   } catch (error) {
     console.log(`[ERROR]: Failed to payment | ${error.message}`);

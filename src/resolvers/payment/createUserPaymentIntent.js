@@ -3,7 +3,6 @@ const { Order, User } = require("../../models");
 const {
   createPaymentIntent,
   createCustomer,
-  getCustomerPaymentMethods,
 } = require("./stripePaymentHelpers");
 
 const createUserPaymentIntent = async (_, { input }, { user }) => {
@@ -36,6 +35,13 @@ const createUserPaymentIntent = async (_, { input }, { user }) => {
       customer: customer?.stripeCustomerId || user?.stripeCustomerId,
       metadata: { orderId: customerOrder?._id, user: JSON.stringify(user) },
       receipt_email: user?.email,
+      // transfer_data: {
+      // Send the amount for the pilot after collecting a 20% platform fee:
+      // the `computeDriverAmount` method simply computes `trip.amount * 0.8`
+      // amount: computeDriverAmount(customerOrder.finalPrice),
+      // The destination of this Payment Intent is the pilot's Stripe account
+      // destination: user.stripeAccountId,
+      // },
     });
 
     return {

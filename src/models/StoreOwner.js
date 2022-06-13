@@ -190,17 +190,12 @@ schema.pre("findOneAndUpdate", async function (next) {
   next();
 });
 
-schema.pre("find", async function (next) {
-  this.populate("categories");
-  this.populate("menus");
-  this.populate("invoices");
-  this.populate("documents");
-  this.populate("bankDetails");
-  this.populate("notifications");
-  this.populate("orders");
-  this.populate("feedbacks");
-  next();
-});
+// schema.pre("find", async function (next) {
+// this.aggregate([
+//   {$lookup: {from: "categories", localField: "categories", foreignField: "_id", as: "categories"}},
+// ])
+//   next();
+// });
 
 schema.methods.checkPassword = async function (password) {
   return bcrypt.compare(password, this.password);
