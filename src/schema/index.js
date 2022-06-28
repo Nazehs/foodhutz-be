@@ -517,7 +517,24 @@ const typeDefs = gql`
     distance: Distance!
     amount: Float!
   }
-
+  type RestaurantEarningsResponse {
+    status: Int!
+    success: Boolean!
+    invoice: Invoice
+    paymentSchedule: String!
+    totalPayout: Float!
+    nextPaymentDate: Date!
+    totalFees: Float!
+  }
+  type Invoice {
+    id: ID!
+    amount: Float!
+    email: String
+    paymentType: String
+    fees: Float!
+    status: String!
+    bankDetails: BankDetail
+  }
   type Distance {
     duration: DistanceObject
     distance: DistanceObject
@@ -563,6 +580,10 @@ const typeDefs = gql`
     discount: Float
     category: ID!
     amount: Float!
+  }
+  input RestaurantEarningsInput {
+    startDate: String
+    endDate: String
   }
   input RestaurantInputUpdate {
     firstName: String
@@ -888,6 +909,9 @@ const typeDefs = gql`
     getMyTrips(status: String): AllTrips
     getRestaurantFeedbackStats: FeedbackStatsResponse
     getRestaurantStats: RestaurantStatsResponse
+    getRestaurantEarnings(
+      input: RestaurantEarningsInput!
+    ): RestaurantEarningsResponse
     getMyPayments: AllPayments
     getPayment(paymentId: ID!): PaymentResponse
     getDriverStats: DriverStatsResponse

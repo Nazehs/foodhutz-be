@@ -2,7 +2,7 @@ require("dotenv").config();
 require("./db/db");
 const session = require("cookie-session");
 const cookieParser = require("cookie-parser");
-const passport = require("passport");
+// const passport = require("passport");
 const bodyParser = require("body-parser");
 
 const typeDefs = require("./schema");
@@ -11,7 +11,7 @@ const { authMiddleware } = require("./utils/auth");
 const { ApolloServer } = require("apollo-server-express");
 const {
   ApolloServerPluginDrainHttpServer,
-  ApolloServerPluginUsageReporting,
+  // ApolloServerPluginUsageReporting,
 } = require("apollo-server-core");
 
 const { graphqlUploadExpress } = require("graphql-upload");
@@ -246,3 +246,31 @@ async function startApolloServer(typeDefs, resolvers) {
   }
 }
 startApolloServer(typeDefs, resolvers);
+const arr = [3, 7, 5, 6, 2];
+
+const subset = (arr) => {
+  const sub1 = arr.slice(0, Math.floor(arr.length / 2));
+  const sub2 = arr.slice(Math.floor(arr.length / 2));
+  const sum1 = sub1.reduce((acc, cur) => acc + cur, 0);
+  const sum2 = sub2.reduce((acc, cur) => acc + cur, 0);
+
+  return sum1 > sum2 ? sub1 : sub2;
+};
+// check how many times a character appears in a string
+
+const check = (str, elem) => {
+  let count = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === elem) {
+      count++;
+    }
+  }
+  if (str[str.length - 2] === "|") {
+    return count - 1;
+  }
+  return count;
+};
+
+console.log(check("|**|*|", "*"));
+
+console.log(subset(arr));

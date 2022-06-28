@@ -8,7 +8,6 @@ const confirmUserPayment = async (_, { input }, { user }) => {
     }
 
     const confirmPayment = await confirmCardPayment(input);
-    console.log(confirmPayment);
 
     return confirmPayment;
   } catch (error) {

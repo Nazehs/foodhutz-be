@@ -57,6 +57,7 @@ const getRestaurant = require("./restaurant/getRestaurant");
 const getRestaurantStats = require("./restaurant/getRestaurantStats");
 const getCoupon = require("./coupon/getCoupon");
 const getMyPayments = require("./payment/getMyPayments");
+const getRestaurantEarnings = require("./payment/getRestaurantEarnings");
 const getPayment = require("./payment/getPayment");
 const getCategory = require("./category/getCategory");
 const getReferAndEarn = require("./referAndEarn/getReferAndEarn");
@@ -152,6 +153,7 @@ const resolvers = {
     getRestaurant,
     getRestaurantFeedbackStats,
     getRestaurantStats,
+    getRestaurantEarnings,
     getBankDetails,
     getAllNotification,
     getReferAndEarn,

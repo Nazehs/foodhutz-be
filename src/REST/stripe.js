@@ -3,6 +3,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const request = require("request-promise-native");
 const querystring = require("querystring");
 const express = require("express");
+const { authMiddleware } = require("../utils/auth");
 const router = express.Router();
 
 // Middleware that requires a logged-in pilot
@@ -20,7 +21,7 @@ function pilotRequired(req, res, next) {
  * Redirect to Stripe to set up payments.
  */
 //  authMiddleware
-router.get("/authorize", (req, res) => {
+router.get("/authorize", authMiddleware, (req, res) => {
   // Generate a random string as `state` to protect from CSRF and include it in the session
   req.session.state = Math.random().toString(36).slice(2);
   // Define the mandatory Stripe parameters: make sure to include our platform's client ID

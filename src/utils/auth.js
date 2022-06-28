@@ -12,7 +12,11 @@ const signToken = ({
   id,
   userType,
   stripeCustomerId,
+  wallet,
+  paymentSchedule,
+  paymentType,
   stripeAccountId,
+  nextPaymentDate,
 }) => {
   const payload = {
     firstName,
@@ -20,8 +24,12 @@ const signToken = ({
     email,
     username,
     stripeCustomerId,
+    paymentSchedule,
     stripeAccountId,
+    paymentType,
     id,
+    wallet,
+    nextPaymentDate,
     userType,
   };
   // tokenExpiresIn: expiration,

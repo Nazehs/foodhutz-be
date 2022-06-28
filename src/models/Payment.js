@@ -1,7 +1,8 @@
 const { model, Schema } = require("mongoose");
 const paymentSchema = {
   fees: {
-    type: String,
+    type: Number,
+    default: 0,
   },
   paymentType: {
     type: String,

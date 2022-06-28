@@ -98,6 +98,8 @@ const storeOwnerSchema = {
       ref: "Payment",
     },
   ],
+  paymentType: { type: String, default: "Bank Payment" },
+
   deliveryTime: { type: String, default: "15 Minutes" },
   postCode: { type: String },
   businessType: {
@@ -111,6 +113,15 @@ const storeOwnerSchema = {
   },
   stripeAccountId: {
     type: String,
+  },
+  nextPaymentDate: {
+    type: Date,
+    default: Date.now,
+  },
+  paymentSchedule: {
+    type: String,
+    enum: ["Monthly", "Weekly", "Daily"],
+    default: "Weekly",
   },
   dateOfJoin: { type: Date, default: Date.now() },
   description: { type: String },
