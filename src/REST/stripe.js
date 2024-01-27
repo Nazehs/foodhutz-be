@@ -6,17 +6,8 @@ const express = require("express");
 const { authMiddleware } = require("../utils/auth");
 const router = express.Router();
 
-// Middleware that requires a logged-in pilot
-function pilotRequired(req, res, next) {
-  // if (!req.isAuthenticated()) {
-  //   console.log("pilotRequired: not authenticated");
-  //   return res.redirect("/pilots/login");
-  // }
-  next();
-}
-
 /**
- * GET /pilots/stripe/authorize
+ * GET /payment/authorize
  *
  * Redirect to Stripe to set up payments.
  */
@@ -24,6 +15,7 @@ function pilotRequired(req, res, next) {
 router.get("/authorize", authMiddleware, (req, res) => {
   // Generate a random string as `state` to protect from CSRF and include it in the session
   req.session.state = Math.random().toString(36).slice(2);
+  console.log("req.user", req.user);
   // Define the mandatory Stripe parameters: make sure to include our platform's client ID
   let parameters = {
     client_id: process.env.STRIPE_CLIENT_ID,
@@ -59,15 +51,15 @@ router.get("/authorize", authMiddleware, (req, res) => {
 });
 
 /**
- * GET /pilots/stripe/token
+ * GET /payment/token
  *
  * Connect the new Stripe account to the platform account.
  */
-router.get("/token", pilotRequired, async (req, res, next) => {
+router.get("/token", async (req, res, next) => {
   // Check the `state` we got back equals the one we generated before proceeding (to protect from CSRF)
   if (req.session.state != req.query.state) {
     console.log("[ERROR]: Stripe state mismatch");
-    // return res.redirect("/pilots/signup");
+    // return res.redirect("/signup");
   }
   try {
     // Post the authorization code to Stripe to complete the Express onboarding flow
@@ -90,8 +82,6 @@ router.get("/token", pilotRequired, async (req, res, next) => {
     // Update the model and store the Stripe account ID in the datastore:
     // this Stripe account ID will be used to issue payouts to the pilot
     req.user.stripeAccountId = expressAuthorized.stripe_user_id;
-    console.log("Stripe account ID:", stripeAccountId);
-    console.log("Stripe account ID:", req.user);
 
     // Redirect to the Rocket Rides dashboard
   } catch (err) {
@@ -101,22 +91,22 @@ router.get("/token", pilotRequired, async (req, res, next) => {
 });
 
 /**
- * GET /pilots/stripe/dashboard
+ * GET /payment/dashboard
  *
  * Redirect to the pilots' Stripe Express dashboard to view payouts and edit account details.
  */
-router.get("/dashboard", pilotRequired, async (req, res) => {
+router.get("/dashboard", authMiddleware, async (req, res) => {
   const pilot = req.user;
   // Make sure the logged-in pilot completed the Express onboarding
   if (!pilot.stripeAccountId) {
-    return res.redirect("/pilots/signup");
+    return res.redirect("/signup");
   }
   try {
     // Generate a unique login link for the associated Stripe account to access their Express dashboard
     const loginLink = await stripe.accounts.createLoginLink(
       pilot.stripeAccountId,
       {
-        redirect_url: config.publicDomain + "/pilots/dashboard",
+        redirect_url: config.publicDomain + "/dashboard",
       }
     );
     // Directly link to the account tab
@@ -128,7 +118,7 @@ router.get("/dashboard", pilotRequired, async (req, res) => {
   } catch (err) {
     console.log(err);
     console.log("Failed to create a Stripe login link.");
-    return res.redirect("/pilots/signup");
+    return res.redirect("/signup");
   }
 });
 

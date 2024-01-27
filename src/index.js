@@ -188,10 +188,6 @@ async function startApolloServer(typeDefs, resolvers) {
   // WebSocketServer start listening.
   const serverCleanup = useServer({ schema }, wsServer);
 
-  const userSuppliedLogic = (req, res, next) => {
-    // const
-  };
-
   // Same ApolloServer initialization as before, plus the drain plugin.
   const server = new ApolloServer({
     schema,
@@ -246,31 +242,3 @@ async function startApolloServer(typeDefs, resolvers) {
   }
 }
 startApolloServer(typeDefs, resolvers);
-const arr = [3, 7, 5, 6, 2];
-
-const subset = (arr) => {
-  const sub1 = arr.slice(0, Math.floor(arr.length / 2));
-  const sub2 = arr.slice(Math.floor(arr.length / 2));
-  const sum1 = sub1.reduce((acc, cur) => acc + cur, 0);
-  const sum2 = sub2.reduce((acc, cur) => acc + cur, 0);
-
-  return sum1 > sum2 ? sub1 : sub2;
-};
-// check how many times a character appears in a string
-
-const check = (str, elem) => {
-  let count = 0;
-  for (let i = 0; i < str.length; i++) {
-    if (str[i] === elem) {
-      count++;
-    }
-  }
-  if (str[str.length - 2] === "|") {
-    return count - 1;
-  }
-  return count;
-};
-
-console.log(check("|**|*|", "*"));
-
-console.log(subset(arr));

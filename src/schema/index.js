@@ -522,16 +522,16 @@ const typeDefs = gql`
     success: Boolean!
     invoice: Invoice
     paymentSchedule: String!
-    totalPayout: Float!
-    nextPaymentDate: Date!
-    totalFees: Float!
+    totalPayout: Float
+    nextPaymentDate: Date
+    totalFees: Float
   }
   type Invoice {
     id: ID!
     amount: Float!
     email: String
     paymentType: String
-    fees: Float!
+    fees: Float
     status: String!
     bankDetails: BankDetail
   }
